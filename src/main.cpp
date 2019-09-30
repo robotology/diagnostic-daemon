@@ -2,8 +2,9 @@
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
 
-using boost::asio::ip::udp;
+#include "ServerUdp.h"
 
+using boost::asio::ip::udp;
 
 int main()
 {
@@ -13,7 +14,10 @@ int main()
     boost::asio::io_service ios;
 
     using namespace std; // For atoi.
-//    server s(io_service, atoi(argv[1]));
+    ServerUdp server(ios);
+
+    std::array<unsigned char,1024> message{65,65};
+    server.send(message);
 
     ios.run();
   }

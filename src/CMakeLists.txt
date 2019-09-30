@@ -8,10 +8,11 @@
 # @author Luca Tricerri <luca.tricerri@iit.it> 
 include(CMakePackageConfigHelpers)
 
-set(DiagnosticDaemonSrc    main.cpp
+set(DiagnosticDaemonSrc     main.cpp
+                            ServerUdp.cpp
                         )
 
-set(DiagnosticDaemonHdr   
+set(DiagnosticDaemonHdr     ServerUdp.h
                        )
 
 
@@ -23,6 +24,7 @@ find_package(Boost COMPONENTS system filesystem REQUIRED)
 target_link_libraries(diagnosticdaemon 
   ${Boost_FILESYSTEM_LIBRARY}
   ${Boost_SYSTEM_LIBRARY}
+  pthread
 )
 
 
