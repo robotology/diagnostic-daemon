@@ -11,14 +11,14 @@ class ServerUdp
 {
 private:
     constexpr static unsigned int dataLenght_=1024;
-    constexpr static const char pc104Address_[]="127.0.0.1";//"10.0.1.104";
+    constexpr static const char emsAddress_[]="10.0.1.1";
     constexpr static unsigned int port_{11000}; 
 
 public:
     ServerUdp(boost::asio::io_service &io_service);
 
-    void handle_receive_from(const boost::system::error_code &error, size_t bytes_recvd);
-    void handle_send_to(const boost::system::error_code &error, size_t bytes_sent);
+    void handleReceiveFrom(const boost::system::error_code &error, size_t bytes_recvd);
+    void handleSendTo(const boost::system::error_code &error, size_t bytes_sent);
 
     void send(std::array<unsigned char,dataLenght_>& message);
 

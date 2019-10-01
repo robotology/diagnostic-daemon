@@ -10,9 +10,11 @@ include(CMakePackageConfigHelpers)
 
 set(DiagnosticDaemonSrc     main.cpp
                             ServerUdp.cpp
+                            ConsoleCommand.cpp
                         )
 
 set(DiagnosticDaemonHdr     ServerUdp.h
+                            ConsoleCommand.h
                        )
 
 

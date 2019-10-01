@@ -3,6 +3,7 @@
 #include <boost/asio.hpp>
 
 #include "ServerUdp.h"
+#include "ConsoleCommand.h"
 
 using boost::asio::ip::udp;
 
@@ -15,9 +16,10 @@ int main()
 
     using namespace std; // For atoi.
     ServerUdp server(ios);
+    ConsoleCommand console;
 
-    std::array<unsigned char,1024> message{65,65};
-    server.send(message);
+    //std::array<unsigned char,1024> message{65,65};
+    //server.send(message);
 
     ios.run();
   }
