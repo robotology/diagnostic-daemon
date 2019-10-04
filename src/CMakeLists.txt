@@ -20,6 +20,7 @@ set(DiagnosticDaemonHdr     ServerUdp.h
 
 
 include_directories(${Boost_INCLUDE_DIRS})
+include_directories(../../icub-firmware-shared/eth/embot ../../icub-firmware-shared/eth/embobj/core/core)
 add_executable(diagnosticdaemon ${DiagnosticDaemonSrc} ${DiagnosticDaemonHdr} )
 
 find_package(Boost COMPONENTS system filesystem REQUIRED)

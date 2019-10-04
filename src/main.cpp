@@ -4,6 +4,7 @@
 
 #include "ServerUdp.h"
 #include "ConsoleCommand.h"
+#include "DiagnosticParser.h"
 
 using boost::asio::ip::udp;
 
@@ -11,15 +12,11 @@ int main()
 {
   try
   {
-
     boost::asio::io_service ios;
 
-    using namespace std; // For atoi.
-    ServerUdp server(ios);
-    ConsoleCommand console;
-
-    //std::array<unsigned char,1024> message{65,65};
-    //server.send(message);
+    DiagnosticParser parser;
+    ServerUdp server(ios,parser);
+    ConsoleCommand console(server);
 
     ios.run();
   }

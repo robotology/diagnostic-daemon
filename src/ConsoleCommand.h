@@ -3,10 +3,12 @@
 #include <memory>
 #include <thread>
 
+class ServerUdp;
+
 class ConsoleCommand
 {
     public:
-        ConsoleCommand();
+        ConsoleCommand(ServerUdp& server);
 
     private:
         std::unique_ptr<std::thread> thread_;        
@@ -14,4 +16,6 @@ class ConsoleCommand
         bool active_{true};
 
         std::string data_;
+
+        ServerUdp& server_;
 };
