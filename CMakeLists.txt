@@ -11,7 +11,7 @@ cmake_minimum_required(VERSION 3.5)
 
 project(DiagnosticDaemon
         LANGUAGES C CXX
-        VERSION 2.1.0)
+        VERSION 1.0.0)
 
 set(CMAKE_AUTOMOC ON)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
@@ -24,13 +24,8 @@ include(GNUInstallDirs)
 set(Boost_NO_BOOST_CMAKE ON)
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREAD ON)
-set(BOOST_MIN_VERSION "1.65.0")
 
-find_package(Boost ${BOOST_MIN_VERSION} REQUIRED COMPONENTS filesystem system)
-
-if (NOT Boost_FOUND)
-      message(FATAL_ERROR "Fatal error: Boost (version >= ${BOOST_MIN_VERSION}) required.\n")
-endif (NOT Boost_FOUND)
+find_package(Boost REQUIRED COMPONENTS system)
 
 # Control where libraries and executables are placed during the build.
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR}")
