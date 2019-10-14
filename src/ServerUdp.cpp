@@ -5,13 +5,12 @@
 #include <boost/asio.hpp>
 
 #include "ServerUdp.h"
-#include "DiagnosticParser.h"
+#include "MsgDescriptionExt.h"
 
 using namespace boost::asio;
 
-ServerUdp::ServerUdp(boost::asio::io_service &io_service,DiagnosticParser& parser)
+ServerUdp::ServerUdp(boost::asio::io_service &io_service)
     : ios_(io_service),
-      parser_(parser),
       rxSocket_(io_service, udp::endpoint(udp::v4(), port_)),
       txSocket_(io_service),
       receiverEndpoint_(udp::endpoint(ip::address::from_string(emsAddress_), port_))
@@ -27,6 +26,7 @@ ServerUdp::ServerUdp(boost::asio::io_service &io_service,DiagnosticParser& parse
 
 void ServerUdp::handleReceiveFrom(const boost::system::error_code &error, size_t bytes_recvd)
 {
+  std::cout << "****"<< std::endl;
   if (!error && bytes_recvd > 0)
   {
     std::cout << "Rx from:"<<senderEndpoint_  << " received bytes:"<<std::hex<<bytes_recvd<< std::endl; //test
@@ -47,7 +47,9 @@ void ServerUdp::handleReceiveFrom(const boost::system::error_code &error, size_t
     std::copy(rxData_.begin()+72,rxData_.begin()+76,std::ostream_iterator<int>(ss," "));
     std::cout<<"F:"<<std::hex<<ss.str()<<std::endl;    
 */
-    parser_.parse(rxData_);
+    EOMDiagnosticUdpMsg msg;
+    msg.parse(rxData_);
+    msg.dump(&ropSeverity,&ropCode,&ropString);
   }
 
   rxSocket_.async_receive_from(
@@ -57,9 +59,9 @@ void ServerUdp::handleReceiveFrom(const boost::system::error_code &error, size_t
       boost::asio::placeholders::bytes_transferred));
 }
 
-void ServerUdp::handleSendTo(const boost::system::error_code &, size_t)
+void ServerUdp::handleSendTo(const boost::system::error_code &, size_t size)
 {
-  std::cout << "Sent to" << std::endl; //test
+  std::cout << "Sent size:"<<size<< std::endl; //test
 }
 
 void ServerUdp::send(std::array<uint8_t,EOMDiagnosticUdpMsg::getSize()>& message)

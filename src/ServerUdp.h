@@ -9,8 +9,6 @@
 
 using boost::asio::ip::udp;
 
-class DiagnosticParser;
-
 class ServerUdp
 {
 public:
@@ -18,16 +16,15 @@ public:
     constexpr static const char emsAddress_[]="10.0.1.1";
     constexpr static unsigned int port_{11000}; 
 
-    ServerUdp(boost::asio::io_service &io_service,DiagnosticParser& parser);
+    ServerUdp(boost::asio::io_service &io_service);
 
     void handleReceiveFrom(const boost::system::error_code &error, size_t bytes_recvd);
     void handleSendTo(const boost::system::error_code &error, size_t bytes_sent);
 
     void send(std::array<uint8_t,EOMDiagnosticUdpMsg::getSize()>& message);
-
+    void pippo(boost::system::error_code, long unsigned int);
 private:
     boost::asio::io_service &ios_;
-    DiagnosticParser& parser_; 
     udp::socket rxSocket_;
     udp::socket txSocket_;
     udp::endpoint senderEndpoint_;

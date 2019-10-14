@@ -1,0 +1,9 @@
+<severity>
+    <param conditionname="severity" conditionvalue="0" name="empty" size="0" value="empty" longdescription="" show="true"/> 
+    <param conditionname="severity" conditionvalue="1" name="debug" size="0" value="debug" longdescription="" show="true"/> 
+    <param conditionname="severity" conditionvalue="2" name="trace" size="0" value="trace" longdescription="" show="true"/> 
+    <param conditionname="severity" conditionvalue="3" name="info" size="0" value="info" longdescription="" show="true"/> 
+    <param conditionname="severity" conditionvalue="4" name="warning" size="0" value="warning" longdescription="" show="true"/> 
+    <param conditionname="severity" conditionvalue="5" name="error" size="0" value="error" longdescription="" show="true"/> 
+    <param conditionname="severity" conditionvalue="6" name="critical" size="0" value="critical" longdescription="" show="true"/> 
+</severity>

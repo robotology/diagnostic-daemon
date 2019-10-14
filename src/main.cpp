@@ -4,7 +4,7 @@
 
 #include "ServerUdp.h"
 #include "ConsoleCommand.h"
-#include "DiagnosticParser.h"
+#include "RopParser.h"
 
 using boost::asio::ip::udp;
 
@@ -14,8 +14,12 @@ int main()
   {
     boost::asio::io_service ios;
 
-    DiagnosticParser parser;
-    ServerUdp server(ios,parser);
+    EOMDiagnosticRopMsg rop=EOMDiagnosticRopMsg(EOMDiagnosticRopMsg::Info{(uint16_t)DiagnosticRopCode::stoplog,(uint16_t)DiagnosticRopSeverity::critical,3,4,5,6,7,8,9});
+    RopParser parser;
+    parser.parse(rop);
+    parser.dump();
+    return 1;
+    ServerUdp server(ios);
     ConsoleCommand console(server);
 
     ios.run();

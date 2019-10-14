@@ -11,10 +11,13 @@ include(CMakePackageConfigHelpers)
 set(DiagnosticDaemonSrc     main.cpp
                             ServerUdp.cpp
                             ConsoleCommand.cpp
+                            RopParser.cpp
+                            pugixml.cpp
                         )
 
 set(DiagnosticDaemonHdr     ServerUdp.h
                             ConsoleCommand.h
+                            RopParser.h
                        )
 
 
@@ -30,6 +33,8 @@ target_link_libraries(diagnosticdaemon
   pthread
 )
 
+file(COPY ${PROJECT_SOURCE_DIR}/msgdepot
+         DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 
 # install
 install(TARGETS diagnosticdaemon RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})

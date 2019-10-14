@@ -1,0 +1,73 @@
+<rop>
+    <param conditionname="none" name="code" size="16" value="" longdescription="" show="false"/>
+
+    <msg name="empty">    
+        <param conditionname="code" conditionvalue="0" name="empty" size="0" value="empty" longdescription="" show="true"/> 
+        <param conditionname="code" conditionvalue="0" name="severity" size="16" value="" longdescription="" show="false"/> 
+        <xi:include href="msgdepot/severity.xml" parse="xml" xpointer="title"/>
+        <param conditionname="code" conditionvalue="0" name="param2" size="16" value="" longdescription="" show="true"/> 
+        <param conditionname="code" conditionvalue="0" name="param3" size="16" value="" longdescription="" show="true"/> 
+        <param conditionname="code" conditionvalue="0" name="param4" size="16" value="" longdescription="" show="true"/> 
+        <param conditionname="code" conditionvalue="0" name="param5" size="16" value="" longdescription="" show="true"/> 
+    </msg>
+    
+    <msg name="startlog">       
+        <param conditionname="code" conditionvalue="1" name="startlog" size="0" value="startlog" longdescription="" show="true"/>   
+        <param conditionname="code" conditionvalue="1" name="severity" size="16" value="" longdescription="" show="false"/> 
+        <xi:include href="msgdepot/severity.xml" parse="xml" xpointer="title"/>
+        <param conditionname="code" conditionvalue="1" name="param2" size="16" value="" longdescription="" show="true"/> 
+        <param conditionname="code" conditionvalue="1" name="param3" size="16" value="" longdescription="" show="true"/> 
+        <param conditionname="code" conditionvalue="1" name="param4" size="16" value="" longdescription="" show="true"/> 
+        <param conditionname="code" conditionvalue="1" name="param5" size="16" value="" longdescription="" show="true"/> 
+   </msg>        
+
+    <msg name="stoplog">    
+        <param conditionname="code" conditionvalue="2" name="stoplog" size="0" value="stoplog" longdescription="" show="true"/>
+        <param conditionname="code" conditionvalue="2" name="severity" size="16" value="" longdescription="" show="false"/> 
+        <xi:include href="msgdepot/severity.xml" parse="xml" xpointer="title"/>
+        <param conditionname="code" conditionvalue="2" name="param2" size="16" value="" longdescription="" show="true"/> 
+        <param conditionname="code" conditionvalue="2" name="param3" size="16" value="" longdescription="" show="true"/> 
+        <param conditionname="code" conditionvalue="2" name="param4" size="16" value="" longdescription="" show="true"/> 
+        <param conditionname="code" conditionvalue="2" name="param5" size="16" value="" longdescription="" show="true"/> 
+      </msg>        
+
+    <msg name="ethlog">    
+        <param  conditionname="code" conditionvalue="3" name="ethlog" size="0" value="ethlog" longdescription="" show="true"/>
+        <param  conditionname="code" conditionvalue="3" name="severity" size="16" value="" longdescription="" show="false"/> 
+        <xi:include href="msgdepot/severity.xml" parse="xml" xpointer="title"/>
+        <param  conditionname="code" conditionvalue="3" name="param2" size="16" value="" longdescription="" show="true"/> 
+        <param  conditionname="code" conditionvalue="3" name="param3" size="16" value="" longdescription="" show="true"/> 
+        <param  conditionname="code" conditionvalue="3" name="param4" size="16" value="" longdescription="" show="true"/> 
+        <param  conditionname="code" conditionvalue="3" name="param5" size="16" value="" longdescription="" show="true"/> 
+       </msg>        
+
+    <msg name="diag">    
+        <param conditionname="code" conditionvalue="4" name="diag" size="0" value="diag" longdescription="" show="true"/>
+        <param conditionname="code" conditionvalue="4" name="severity" size="16" value="" longdescription="" show="false"/> 
+        <xi:include href="msgdepot/severity.xml" parse="xml" xpointer="title"/>
+        <param conditionname="code" conditionvalue="4" name="param2" size="16" value="" longdescription="" show="true"/> 
+        <param conditionname="code" conditionvalue="4" name="param3" size="16" value="" longdescription="" show="true"/> 
+        <param conditionname="code" conditionvalue="4" name="param4" size="16" value="" longdescription="" show="true"/> 
+        <param conditionname="code" conditionvalue="4" name="param5" size="16" value="" longdescription="" show="true"/> 
+    </msg>        
+
+    <msg name="forceflush">    
+        <param conditionname="code" conditionvalue="5" name="forceflush" size="0" value="forceflush" longdescription="" show="true"/>
+        <param conditionname="code" conditionvalue="5" name="severity" size="16" value="" longdescription="" show="false"/> 
+        <xi:include href="msgdepot/severity.xml" parse="xml" xpointer="title"/>
+        <param conditionname="code" conditionvalue="5" name="param2" size="16" value="" longdescription="" show="true"/> 
+        <param conditionname="code" conditionvalue="5" name="param3" size="16" value="" longdescription="" show="true"/> 
+        <param conditionname="code" conditionvalue="5" name="param4" size="16" value="" longdescription="" show="true"/> 
+        <param conditionname="code" conditionvalue="5" name="param5" size="16" value="" longdescription="" show="true"/> 
+    </msg>        
+
+    <msg name="unforceflush">    
+        <param conditionname="code" conditionvalue="6" name="unforceflush" size="0" value="unforceflush" longdescription="" show="true"/>
+        <param conditionname="code" conditionvalue="6" name="severity" size="16" value="" longdescription="" show="false"/> 
+        <xi:include href="msgdepot/severity.xml" parse="xml" xpointer="title"/>
+        <param conditionname="code" conditionvalue="6" name="param2" size="16" value="" longdescription="" show="true"/> 
+        <param conditionname="code" conditionvalue="6" name="param3" size="16" value="" longdescription="" show="true"/> 
+        <param conditionname="code" conditionvalue="6" name="param4" size="16" value="" longdescription="" show="true"/> 
+        <param conditionname="code" conditionvalue="6" name="param5" size="16" value="" longdescription="" show="true"/> 
+    </msg>        
+</rop>
