@@ -15,7 +15,6 @@ class RopParser
     private:
         std::list<std::pair<std::string,std::string>> msg_;
         pugi::xml_document doc_;
-        pugi::xpath_node_set params_;
 
         bool checkIfParamIsToBeDeleted(const pugi::xml_node& node);
         void includePreparser();

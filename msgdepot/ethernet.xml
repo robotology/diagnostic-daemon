@@ -1,0 +1,5 @@
+<boardtype>
+    <param conditionname="ethernet" conditionvalue="0" name="ethernetposition" size="0" value="input" longdescription="" show="true"/> 
+    <param conditionname="ethernet" conditionvalue="1" name="ethernetposition" size="0" value="output" longdescription="" show="true"/> 
+    <param conditionname="ethernet" conditionvalue="2" name="ethernetposition" size="0" value="local" longdescription="" show="true"/> 
+</boardtype>

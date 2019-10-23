@@ -2,21 +2,24 @@
 #include "EOMDiagnosticRopMsg.h"
 
 #include <iostream>
+#include <iomanip>
 
 
 RopParser::RopParser()
 {
     pugi::xml_parse_result result = doc_.load_file("msgdepot/rop.xml");
     includePreparser();
-    //doc_.save(std::cout);
-    params_= doc_.select_nodes(paramkey_);    
+    //doc_.save(std::cout);    
 }
 
 void RopParser::parse(const EOMDiagnosticRopMsg& rop)
 {
     uint16_t index{0};
+    pugi::xml_document currentDoc_;
+    currentDoc_.reset(doc_);
+    pugi::xpath_node_set params = currentDoc_.select_nodes(paramkey_); 
 
-    for(auto current:params_)
+    for(auto current:params)
     {
         pugi::xml_node node=current.node();
         bool deleted=checkIfParamIsToBeDeleted(node);
@@ -27,18 +30,27 @@ void RopParser::parse(const EOMDiagnosticRopMsg& rop)
             continue;
         }
     
-        if(node.attribute(sizekey_).as_int()!=0)
+        uint8_t size=node.attribute(sizekey_).as_int();
+        if(size!=0)
         {
-            node.attribute(valuekey_)=rop.data_.param_[index];
-            ++index;
+            if(size==16)
+            {
+                node.attribute(valuekey_)=rop.data_.param_[index];
+                ++index;
+            }
+            else if(size==64)
+            {
+                node.attribute(valuekey_)=rop.data_.time_;
+             }
         }
+        
         std::string name=node.attribute(namekey_).value();
         std::string value=node.attribute(valuekey_).value();
         bool show=node.attribute(showkey_).as_bool();
         if(show)
             msg_.push_back({name,value});
     }
-    doc_.save(std::cout);
+    //currentDoc_.save(std::cout);
 }
 
 bool RopParser::checkIfParamIsToBeDeleted(const pugi::xml_node& node)
@@ -109,7 +121,7 @@ void RopParser::dump()
 {
     for(auto current:msg_)
     {
-        std::cout<<"P_name:"<<current.first<<" P_value:"<<current.second<<std::endl;
+        std::cout<<std::setfill('-')<<std::setw(20)<<current.first<<current.second<<std::endl;
     }
 
 }

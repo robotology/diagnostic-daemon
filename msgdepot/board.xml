@@ -1,0 +1,5 @@
+<boardtype>
+    <param conditionname="board" conditionvalue="0" name="boardtype" size="0" value="local" longdescription="" show="true"/> 
+    <param conditionname="board" conditionvalue="1" name="boardtype" size="0" value="can1" longdescription="" show="true"/> 
+    <param conditionname="board" conditionvalue="2" name="boardtype" size="0" value="can2" longdescription="" show="true"/> 
+</boardtype>

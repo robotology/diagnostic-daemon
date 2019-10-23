@@ -1,0 +1,9 @@
+<errorstringtype>
+    <param conditionname="errorstring" conditionvalue="0" name="description" size="0" value="empty" longdescription="" show="true"/> 
+    <param conditionname="errorstring" conditionvalue="1" name="description" size="0" value="link goes down" longdescription="" show="true"/> 
+    <param conditionname="errorstring" conditionvalue="2" name="description" size="0" value="link goes up" longdescription="" show="true"/> 
+    <param conditionname="errorstring" conditionvalue="3" name="description" size="0" value="eth just started" longdescription="" show="true"/> 
+    <param conditionname="errorstring" conditionvalue="4" name="description" size="0" value="tx sequence number missing" longdescription="" show="true"/> 
+    <param conditionname="errorstring" conditionvalue="5" name="description" size="0" value="rx crc" longdescription="" show="true"/> 
+    <param conditionname="errorstring" conditionvalue="6" name="description" size="0" value="wrong command" longdescription="" show="true"/> 
+</errorstringtype>

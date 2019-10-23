@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <array>
 
 #include <boost/array.hpp>
@@ -6,15 +7,20 @@
 
 #include "ServerUdp.h"
 #include "MsgDescriptionExt.h"
+#include "ConfigurationDepot.h"
+#include "RopParser.h"
 
 using namespace boost::asio;
 
-ServerUdp::ServerUdp(boost::asio::io_service &io_service)
-    : ios_(io_service),
-      rxSocket_(io_service, udp::endpoint(udp::v4(), port_)),
+ServerUdp::ServerUdp(boost::asio::io_service &io_service,const pugi::xml_node& node,ConfigurationDepot& depot)
+    : Server(io_service,node,depot),
+      rxSocket_(io_service, udp::endpoint(udp::v4(), node.attribute(confsintax::port).as_int())),
       txSocket_(io_service),
-      receiverEndpoint_(udp::endpoint(ip::address::from_string(emsAddress_), port_))
+      receiverEndpoint_(udp::endpoint(ip::address::from_string(node.attribute(confsintax::address).value()), port_))
 {
+  port_=node.attribute(confsintax::port).as_int();
+  emsAddress_=node.attribute(confsintax::address).value();
+  
   txSocket_.open(boost::asio::ip::udp::v4());
 
   rxSocket_.async_receive_from(
@@ -30,26 +36,37 @@ void ServerUdp::handleReceiveFrom(const boost::system::error_code &error, size_t
   if (!error && bytes_recvd > 0)
   {
     std::cout << "Rx from:"<<senderEndpoint_  << " received bytes:"<<std::hex<<bytes_recvd<< std::endl; //test
-/*
-    std::stringstream ss;
-    std::copy(rxData_.begin()+0,rxData_.begin()+24,std::ostream_iterator<int>(ss," "));
-    std::cout<<"H:"<<std::hex<<ss.str()<<std::endl;
 
-    ss.str("");
-    std::copy(rxData_.begin()+24,rxData_.begin()+48,std::ostream_iterator<int>(ss," "));
-    std::cout<<"B:"<<std::hex<<ss.str()<<std::endl;
-
-    ss.str("");
-    std::copy(rxData_.begin()+48,rxData_.begin()+72,std::ostream_iterator<int>(ss," "));
-    std::cout<<"B:"<<std::hex<<ss.str()<<std::endl;
-
-    ss.str("");
-    std::copy(rxData_.begin()+72,rxData_.begin()+76,std::ostream_iterator<int>(ss," "));
-    std::cout<<"F:"<<std::hex<<ss.str()<<std::endl;    
-*/
     EOMDiagnosticUdpMsg msg;
     msg.parse(rxData_);
-    msg.dump(&ropSeverity,&ropCode,&ropString);
+    depot_.route(msg,destination_);
+    /*
+    if(dumpToConsole_)
+    {
+      std::ostream &stream=std::cout;
+      msg.dump(&ropSeverity,&ropCode,&ropString,stream);
+    }
+
+    if(dumpToFile_)
+    {
+      msg.dump(&ropSeverity,&ropCode,&ropString,fstream_);
+    }
+
+    std::cout<<"***************************************"<<std::endl;
+    std::cout<<"***************XML PARSER**************"<<std::endl;
+    for(uint8_t index=0;index<msg.getCurrentRopNumber();++index)
+    {
+      RopParser parser;
+      EOMDiagnosticRopMsg rop;
+      std::cout<<"**************ROP_BEGIN**************"<<std::endl;
+      msg.getRop(rop,index);
+      parser.parse(rop);
+      parser.dump();
+      std::cout<<"**************ROP_END****************"<<std::endl;
+    }
+    std::cout<<"***************************************"<<std::endl;
+    std::cout<<"***************************************"<<std::endl;
+    */
   }
 
   rxSocket_.async_receive_from(
