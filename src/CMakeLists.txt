@@ -9,22 +9,20 @@
 include(CMakePackageConfigHelpers)
 
 set(DiagnosticDaemonSrc     main.cpp
-                            ServerUdp.cpp
-                            ServerFile.cpp
-                            ServerConsole.cpp
-                            ConsoleCommand.cpp
+                            ComponentUdp.cpp
+                            ComponentFile.cpp
+                            ComponentConsole.cpp
                             RopParser.cpp
                             pugixml.cpp
-                            Server.cpp
+                            Component.cpp
                             ConfigurationDepot.cpp
                         )
 
-set(DiagnosticDaemonHdr     ServerUdp.h
-                            ServerFile.h
-                            ServerConsole.h
-                            ConsoleCommand.h
+set(DiagnosticDaemonHdr     ComponentUdp.h
+                            ComponentFile.h
+                            ComponentConsole.h
                             RopParser.h
-                            Server.h
+                            Component.h
                             ConfigurationDepot.h
                        )
 

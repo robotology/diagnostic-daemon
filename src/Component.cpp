@@ -1,6 +1,6 @@
-#include "Server.h"
+#include "Component.h"
 
-Server::Server(boost::asio::io_service &ios,const pugi::xml_node& node,ConfigurationDepot& depot):ios_(ios),parameters_(node),depot_(depot)
+Component::Component(boost::asio::io_service &ios,const pugi::xml_node& node,ConfigurationDepot& depot):ios_(ios),depot_(depot),parameters_(node)
 {
     name_=node.attribute(confsintax::name).value();
     protocol_=node.attribute(confsintax::protocol).value();

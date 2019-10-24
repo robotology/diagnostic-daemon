@@ -1,7 +1,7 @@
 <configuration>
-    <server protocol="udp-broadcast"  name="boards"     port="11000" address="10.0.1.1"   mask="255.255.255.0" mode="copy-raw"    filter="all" enable="true"  value="" destination="file console"/>  
-    <server protocol="udp"            name="gui"        port="9000"  address="127.0.0.1"  mask=""              mode="copy-raw"    filter="all" enable="false" value="" destination=""/>
-    <server protocol="udp"            name="yarplogger" port="9001"  address="127.0.0.1"  mask=""              mode="copy-parser" filter="all" enable="false" value="" destination=""/>
-    <server protocol="file"           name="file"       port=""      address=""           mask=""              mode="copy-parser" filter="all" enable="true"  value="logger.log" destination=""/>
-    <server protocol="console"        name="console"    port=""      address=""           mask=""              mode="copy-parser" filter="all" enable="true"  value="" destination="boards"/>
+    <component protocol="udp-broadcast"  name="boards"     port="11000" txport="11000" address="10.0.1.1"   mask="255.255.255.0" mode="copy-raw"    filter="all" enable="true"  value="" destination="file console gui"/>  
+    <component protocol="udp"            name="gui"        port="9000"  txport="9001"  address="127.0.0.1"  mask=""              mode="copy-raw"    filter="all" enable="true" value="" destination=""/>
+    <component protocol="udp"            name="yarplogger" port="9005"  txport=""      address="127.0.0.1"  mask=""              mode="copy-parser" filter="all" enable="false" value="" destination=""/>
+    <component protocol="file"           name="file"       port=""      txport=""      address=""           mask=""              mode="copy-parser" filter="all" enable="true"  value="logger.log" destination=""/>
+    <component protocol="console"        name="console"    port=""      txport=""      address=""           mask=""              mode="copy-parser" filter="all" enable="true"  value="" destination="boards"/>
 </configuration>

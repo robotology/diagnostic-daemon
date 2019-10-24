@@ -1,18 +1,18 @@
-#include "ServerConsole.h"
+#include "ComponentConsole.h"
 #include "MsgDescriptionExt.h"
 #include "ConfigurationDepot.h"
 
-ServerConsole::ServerConsole(boost::asio::io_service &io_service,const pugi::xml_node& node,ConfigurationDepot& depot):Server(io_service,node,depot)
+ComponentConsole::ComponentConsole(boost::asio::io_service &io_service,const pugi::xml_node& node,ConfigurationDepot& depot):Component(io_service,node,depot)
 {
-    thread_=std::make_unique<std::thread>(&ServerConsole::inputLoop,this);
+    thread_=std::make_unique<std::thread>(&ComponentConsole::inputLoop,this);
 }
 
-void ServerConsole::acceptMsg(EOMDiagnosticUdpMsg& msg) 
+void ComponentConsole::acceptMsg(EOMDiagnosticUdpMsg& msg) 
 {
     msg.dump(&ropSeverity,&ropCode,&ropString,std::cout);
 };
 
-void ServerConsole::inputLoop()
+void ComponentConsole::inputLoop()
 {
     std::array<uint8_t, EOMDiagnosticUdpMsg::getSize()> udpMsg;
     EOMDiagnosticUdpMsg msg;

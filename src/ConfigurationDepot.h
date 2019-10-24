@@ -7,7 +7,7 @@
 #include <list>
 #include <map>
 
-#include "Server.h"
+#include "Component.h"
 #include "ConfigurationConst.h"
 
 class ConfigurationDepot

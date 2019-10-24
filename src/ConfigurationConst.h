@@ -4,8 +4,9 @@ namespace confsintax
 {
     static constexpr char configurationFile[]{"./config.xml"}; 
     static constexpr char in[]{"in"};       
-    static constexpr char server[]{"//server"}; 
+    static constexpr char component[]{"//component"}; 
     static constexpr char port[]{"port"}; 
+    static constexpr char txport[]{"txport"}; 
     static constexpr char mode[]{"mode"};
     static constexpr char name[]{"name"};
     static constexpr char address[]{"address"};
@@ -21,7 +22,7 @@ namespace confsintax
     static constexpr char console[]{"console"};
 };
 
-enum class ServerType: uint8_t
+enum class ComponentType: uint8_t
 {
     udpbroadcast,
     udp,
@@ -29,7 +30,7 @@ enum class ServerType: uint8_t
     console,
 };
 inline std::map<std::string,uint8_t> protocolTypeLookup{
-                                                        {confsintax::udpbroadcast,(uint8_t)ServerType::udpbroadcast},
-                                                        {confsintax::udp,(uint8_t)ServerType::udp},
-                                                        {confsintax::file,(uint8_t)ServerType::file},
-                                                        {confsintax::console,(uint8_t)ServerType::console}};
+                                                        {confsintax::udpbroadcast,(uint8_t)ComponentType::udpbroadcast},
+                                                        {confsintax::udp,(uint8_t)ComponentType::udp},
+                                                        {confsintax::file,(uint8_t)ComponentType::file},
+                                                        {confsintax::console,(uint8_t)ComponentType::console}};

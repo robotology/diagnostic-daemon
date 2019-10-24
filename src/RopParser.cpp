@@ -8,6 +8,7 @@
 RopParser::RopParser()
 {
     pugi::xml_parse_result result = doc_.load_file("msgdepot/rop.xml");
+    result=result;
     includePreparser();
     //doc_.save(std::cout);    
 }
@@ -111,6 +112,7 @@ void RopParser::includePreparser()
         std::string file=node.attribute("href").value();
         pugi::xml_document includedoc;
         pugi::xml_parse_result result=includedoc.load_file(file.c_str());
+        result=result;
         pugi::xml_node includeroot=includedoc.root().first_child();
         node.parent().insert_copy_after(includeroot,node);
         node.parent().remove_child(node);

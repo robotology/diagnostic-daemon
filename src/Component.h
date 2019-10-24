@@ -11,11 +11,11 @@
 
 class ConfigurationDepot;;
 
-class Server
+class Component
 {
     public:
-        Server(boost::asio::io_service &ios,const pugi::xml_node&,ConfigurationDepot&);
-        virtual ~Server(){};
+        Component(boost::asio::io_service &ios,const pugi::xml_node&,ConfigurationDepot&);
+        virtual ~Component(){};
         virtual void acceptMsg(EOMDiagnosticUdpMsg&)=0;
         std::string getName() const {return name_;};
 
@@ -32,4 +32,4 @@ class Server
 
 };
 
-using InOut_sptr=std::shared_ptr<Server>;
+using InOut_sptr=std::shared_ptr<Component>;

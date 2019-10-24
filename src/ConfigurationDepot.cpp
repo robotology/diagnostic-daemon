@@ -1,7 +1,7 @@
 #include "ConfigurationDepot.h"
-#include "ServerUdp.h"
-#include "ServerFile.h"
-#include "ServerConsole.h"
+#include "ComponentUdp.h"
+#include "ComponentFile.h"
+#include "ComponentConsole.h"
 
 ConfigurationDepot::ConfigurationDepot(boost::asio::io_service &io_service): ios_(io_service)
 {}
@@ -9,16 +9,17 @@ ConfigurationDepot::ConfigurationDepot(boost::asio::io_service &io_service): ios
 bool ConfigurationDepot::createConfiguration()
 {
     pugi::xml_parse_result result = doc_.load_file("config.xml"/*confsintax::configurationFile*/);
+    result=result;
 
-    pugi::xpath_node_set servers = doc_.select_nodes(confsintax::server);   
-    for(auto currentServer:servers)
+    pugi::xpath_node_set components = doc_.select_nodes(confsintax::component);   
+    for(auto currentComponent:components)
     {
-        pugi::xml_node node=currentServer.node();    
+        pugi::xml_node node=currentComponent.node();    
       
-        auto server=createInOut(node);
-        if(server)
+        auto components=createInOut(node);
+        if(components)
         {
-            depot_.push_back(server);
+            depot_.push_back(components);
         }
     }
     
@@ -27,7 +28,7 @@ bool ConfigurationDepot::createConfiguration()
 
 InOut_sptr ConfigurationDepot::createInOut(const pugi::xml_node& node)
 {
-    InOut_sptr server;
+    InOut_sptr components;
     std::string protocol=node.attribute(confsintax::protocol).value();
     bool enable=node.attribute(confsintax::enable).as_bool();
     if(!enable)
@@ -35,21 +36,21 @@ InOut_sptr ConfigurationDepot::createInOut(const pugi::xml_node& node)
 
     switch(protocolTypeLookup[protocol])
         {
-            case (uint8_t)ServerType::udpbroadcast:
-            case (uint8_t)ServerType::udp:
+            case (uint8_t)ComponentType::udpbroadcast:
+            case (uint8_t)ComponentType::udp:
             {
-                server=std::make_shared<ServerUdp>(ios_,node,*this);
-                return server;
+                components=std::make_shared<ComponentUdp>(ios_,node,*this);
+                return components;
             }
-            case (uint8_t)ServerType::file:                
+            case (uint8_t)ComponentType::file:                
             {
-                server=std::make_shared<ServerFile>(ios_,node,*this);
-                return server;
+                components=std::make_shared<ComponentFile>(ios_,node,*this);
+                return components;
             }
-            case (uint8_t)ServerType::console:                
+            case (uint8_t)ComponentType::console:                
             {
-                server=std::make_shared<ServerConsole>(ios_,node,*this);
-                return server;
+                components=std::make_shared<ComponentConsole>(ios_,node,*this);
+                return components;
             }            
             default:
             {}
