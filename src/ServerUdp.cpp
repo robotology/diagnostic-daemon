@@ -89,3 +89,11 @@ void ServerUdp::send(std::array<uint8_t,EOMDiagnosticUdpMsg::getSize()>& message
       boost::asio::placeholders::error,
       boost::asio::placeholders::bytes_transferred));
 }
+
+void ServerUdp::acceptMsg(EOMDiagnosticUdpMsg& msg) 
+{
+    std::array<uint8_t, EOMDiagnosticUdpMsg::getSize()> udpMsg;
+    udpMsg.fill(0);
+    msg.createUdpPacketData(udpMsg);
+    send(udpMsg);
+};

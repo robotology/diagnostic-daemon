@@ -11,7 +11,7 @@ class ConsoleCommand
         ConsoleCommand(ServerUdp& server);
 
     private:
-        std::unique_ptr<std::thread> thread_;        
+        std::unique_ptr<std::thread> thread_;
         void inputLoop();
         bool active_{true};
 

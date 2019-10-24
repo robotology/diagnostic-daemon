@@ -12,7 +12,7 @@ class ServerFile: public Server
         ServerFile(boost::asio::io_service &io_service,const pugi::xml_node& node,ConfigurationDepot&);
         virtual ~ServerFile(){};
 
-        void acceptMsg(const EOMDiagnosticUdpMsg&) override;
+        void acceptMsg(EOMDiagnosticUdpMsg&) override;
 
     private:        
         std::ofstream fstream_;

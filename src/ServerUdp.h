@@ -30,7 +30,7 @@ public:
     bool dumpToFile_{true};
     bool dumpToConsole_{true};
 
-    void acceptMsg(const EOMDiagnosticUdpMsg&) override {};
+    void acceptMsg(EOMDiagnosticUdpMsg&) override;
 
 private:
     

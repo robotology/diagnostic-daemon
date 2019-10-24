@@ -58,7 +58,7 @@ InOut_sptr ConfigurationDepot::createInOut(const pugi::xml_node& node)
     return InOut_sptr();
 }
 
-bool ConfigurationDepot::route(const EOMDiagnosticUdpMsg& msg,const std::string& destinations)
+bool ConfigurationDepot::route(EOMDiagnosticUdpMsg& msg,const std::string& destinations)
 {
     auto tokenizedDestination=tokenize<std::string>(destinations);
 

@@ -16,7 +16,7 @@ class ConfigurationDepot
         ConfigurationDepot(boost::asio::io_service &io_service);
         bool createConfiguration();
 
-        bool route(const EOMDiagnosticUdpMsg&,const std::string& destination);
+        bool route(EOMDiagnosticUdpMsg&,const std::string& destination);
 
     private:
         pugi::xml_document doc_;

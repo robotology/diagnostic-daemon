@@ -16,7 +16,7 @@ class Server
     public:
         Server(boost::asio::io_service &ios,const pugi::xml_node&,ConfigurationDepot&);
         virtual ~Server(){};
-        virtual void acceptMsg(const EOMDiagnosticUdpMsg&)=0;
+        virtual void acceptMsg(EOMDiagnosticUdpMsg&)=0;
         std::string getName() const {return name_;};
 
     protected:

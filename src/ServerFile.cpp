@@ -7,7 +7,7 @@ ServerFile::ServerFile(boost::asio::io_service &io_service,const pugi::xml_node&
     fstream_.open(filename_);
 }
 
-void ServerFile::acceptMsg(const EOMDiagnosticUdpMsg& msg) 
+void ServerFile::acceptMsg(EOMDiagnosticUdpMsg& msg) 
 {
     msg.dump(&ropSeverity,&ropCode,&ropString,fstream_);
 };
