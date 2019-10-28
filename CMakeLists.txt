@@ -64,9 +64,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # https://eli.thegreenplace.net/2011/11/03/position-independent-code-pic-in-shared-libraries/
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+add_subdirectory(diagnosticdaemonUI)
 
-#-------Important
-#Let the singleton to be unique
 #-------Important
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 set(CMAKE_EXE_LINKER_FLAGS  "-rdynamic")

@@ -9,11 +9,10 @@ class RopParser
 {
     public:
         RopParser();
-        void parse(const EOMDiagnosticRopMsg&);
-        void dump();
+        std::list<std::pair<std::string,std::string>> parse(const EOMDiagnosticRopMsg&);
+        static void dump(const std::list<std::pair<std::string,std::string>>& msg);
 
     private:
-        std::list<std::pair<std::string,std::string>> msg_;
         pugi::xml_document doc_;
 
         bool checkIfParamIsToBeDeleted(const pugi::xml_node& node);
