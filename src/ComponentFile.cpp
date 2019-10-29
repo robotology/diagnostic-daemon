@@ -10,4 +10,11 @@ ComponentFile::ComponentFile(boost::asio::io_service &io_service,const pugi::xml
 void ComponentFile::acceptMsg(EOMDiagnosticUdpMsg& msg) 
 {
     msg.dump(&ropSeverity,&ropCode,&ropString,fstream_);
-};
+}
+
+void ComponentFile::acceptMsg(std::array<uint8_t,EOMDiagnosticUdpMsg::getSize()>& udpMsg)
+{
+    EOMDiagnosticUdpMsg msg;
+    msg.parse(udpMsg);
+    acceptMsg(msg);
+}

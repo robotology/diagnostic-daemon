@@ -24,11 +24,17 @@ private:
 
     MsgListTableModel *tableListViewModel_;
     ParamTableModel *paramTableModel_;
-    QUdpSocket *udpSocket_;
+    QUdpSocket *rxudpSocket_;
+    QUdpSocket *txudpSocket_;
+
+    static constexpr uint16_t rxport_{9001};
+    static constexpr uint16_t txport_{9000};
 
 private slots:
     void readMsg();
 
     void on_msglist_clicked(const QModelIndex &index);
+    void on_stoptrace_clicked();
+    void on_starttrace_clicked();
 };
 #endif // MAINWINDOW_H

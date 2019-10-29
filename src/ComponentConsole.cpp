@@ -12,6 +12,13 @@ void ComponentConsole::acceptMsg(EOMDiagnosticUdpMsg& msg)
     msg.dump(&ropSeverity,&ropCode,&ropString,std::cout);
 };
 
+void ComponentConsole::acceptMsg(std::array<uint8_t,EOMDiagnosticUdpMsg::getSize()>& udpMsg)
+{
+    EOMDiagnosticUdpMsg msg;
+    msg.parse(udpMsg);
+    acceptMsg(msg);
+}
+
 void ComponentConsole::inputLoop()
 {
     std::array<uint8_t, EOMDiagnosticUdpMsg::getSize()> udpMsg;

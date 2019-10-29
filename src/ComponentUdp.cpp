@@ -34,36 +34,7 @@ void ComponentUdp::handleReceiveFrom(const boost::system::error_code &error, siz
   {
     std::cout << "Rx from:"<<senderEndpoint_  << " received bytes:"<<std::hex<<bytes_recvd<< std::endl; //test
 
-    EOMDiagnosticUdpMsg msg;
-    msg.parse(rxData_);
-    depot_.route(msg,destination_);
-    /*
-    if(dumpToConsole_)
-    {
-      std::ostream &stream=std::cout;
-      msg.dump(&ropSeverity,&ropCode,&ropString,stream);
-    }
-
-    if(dumpToFile_)
-    {
-      msg.dump(&ropSeverity,&ropCode,&ropString,fstream_);
-    }
-
-    std::cout<<"***************************************"<<std::endl;
-    std::cout<<"***************XML PARSER**************"<<std::endl;
-    for(uint8_t index=0;index<msg.getCurrentRopNumber();++index)
-    {
-      RopParser parser;
-      EOMDiagnosticRopMsg rop;
-      std::cout<<"**************ROP_BEGIN**************"<<std::endl;
-      msg.getRop(rop,index);
-      parser.parse(rop);
-      parser.dump();
-      std::cout<<"**************ROP_END****************"<<std::endl;
-    }
-    std::cout<<"***************************************"<<std::endl;
-    std::cout<<"***************************************"<<std::endl;
-    */
+    depot_.route(rxData_,destination_);
   }
 
   rxSocket_.async_receive_from(
@@ -78,7 +49,7 @@ void ComponentUdp::handleSendTo(const boost::system::error_code &err, size_t siz
   std::cout << "Sent size:"<<size<<" error:"<<err<< std::endl; //test
 }
 
-void ComponentUdp::send(std::array<uint8_t,EOMDiagnosticUdpMsg::getSize()>& message)
+void ComponentUdp::send(const std::array<uint8_t,EOMDiagnosticUdpMsg::getSize()>& message)
 {
     txSocket_.async_send_to(
       boost::asio::buffer(message), receiverEndpoint_,
@@ -87,10 +58,15 @@ void ComponentUdp::send(std::array<uint8_t,EOMDiagnosticUdpMsg::getSize()>& mess
       boost::asio::placeholders::bytes_transferred));
 }
 
+void ComponentUdp::acceptMsg(std::array<uint8_t,EOMDiagnosticUdpMsg::getSize()>& msg)
+{
+    send(msg);
+}
+
 void ComponentUdp::acceptMsg(EOMDiagnosticUdpMsg& msg) 
 {
     std::array<uint8_t, EOMDiagnosticUdpMsg::getSize()> udpMsg;
     udpMsg.fill(0);
     msg.createUdpPacketData(udpMsg);
-    send(udpMsg);
+    acceptMsg(udpMsg);
 };

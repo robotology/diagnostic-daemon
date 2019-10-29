@@ -13,6 +13,7 @@ class ComponentConsole: public Component
         virtual ~ComponentConsole(){};
 
         void acceptMsg(EOMDiagnosticUdpMsg&) override;
+        void acceptMsg(std::array<uint8_t,EOMDiagnosticUdpMsg::getSize()>&) override;
 
     private:
         std::unique_ptr<std::thread> thread_;

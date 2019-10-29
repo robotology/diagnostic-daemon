@@ -10,6 +10,7 @@ MsgListTableModel::MsgListTableModel()
 
 void MsgListTableModel::InserRops(const QByteArray& buffer)
 {
+    unsigned char tmp=buffer[1];
     EOMDiagnosticUdpMsg msg;
     msg.parse((uint8_t *)buffer.data(),buffer.size());
 
@@ -59,7 +60,5 @@ void MsgListTableModel::InsertSingleRop(const QByteArray& buffer)
          ropItem->setIcon(QIcon(":/icons/debug.png"));
         break;
     }
-
-    QStandardItem *root = invisibleRootItem();
-    root->appendRow(toInsert);
+    insertRow(0,toInsert);
 }

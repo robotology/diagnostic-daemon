@@ -14,6 +14,7 @@ public:
     virtual ~ComponentUdp(){};
 
     void acceptMsg(EOMDiagnosticUdpMsg&) override;
+    void acceptMsg(std::array<uint8_t,EOMDiagnosticUdpMsg::getSize()>&) override;
 
 private:
 
@@ -31,7 +32,7 @@ private:
     void handleReceiveFrom(const boost::system::error_code &error, size_t bytes_recvd);
     void handleSendTo(const boost::system::error_code &error, size_t bytes_sent);
 
-    void send(std::array<uint8_t,EOMDiagnosticUdpMsg::getSize()>& message);
+    void send(const std::array<uint8_t,EOMDiagnosticUdpMsg::getSize()>& message);
 
     bool dumpToFile_{true};
     bool dumpToConsole_{true};    

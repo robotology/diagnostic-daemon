@@ -63,7 +63,7 @@
      <enum>QAbstractScrollArea::AdjustIgnored</enum>
     </property>
     <attribute name="horizontalHeaderVisible">
-     <bool>true</bool>
+     <bool>false</bool>
     </attribute>
     <attribute name="verticalHeaderVisible">
      <bool>false</bool>
@@ -109,7 +109,7 @@
      <string>Parsered ROP</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="xxx">
+   <widget class="QPushButton" name="stoptrace">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -122,7 +122,7 @@
      <string>Stop Trace</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="xxx_2">
+   <widget class="QPushButton" name="starttrace">
     <property name="geometry">
      <rect>
       <x>110</x>
@@ -148,7 +148,7 @@
      <string>Always flush</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="xxx_4">
+   <widget class="QPushButton" name="stoptrace_2">
     <property name="geometry">
      <rect>
       <x>450</x>

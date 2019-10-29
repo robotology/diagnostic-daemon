@@ -13,6 +13,7 @@ class ComponentFile: public Component
         virtual ~ComponentFile(){};
 
         void acceptMsg(EOMDiagnosticUdpMsg&) override;
+        void acceptMsg(std::array<uint8_t,EOMDiagnosticUdpMsg::getSize()>&) override;
 
     private:        
         std::ofstream fstream_;
