@@ -8,9 +8,8 @@ MsgListTableModel::MsgListTableModel()
     setHorizontalHeaderLabels(list);
 }
 
-void MsgListTableModel::InserRops(const QByteArray& buffer)
+void MsgListTableModel::InsertRops(const QByteArray& buffer)
 {
-    unsigned char tmp=buffer[1];
     EOMDiagnosticUdpMsg msg;
     msg.parse((uint8_t *)buffer.data(),buffer.size());
 

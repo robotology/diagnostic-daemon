@@ -36,5 +36,8 @@ private slots:
     void on_msglist_clicked(const QModelIndex &index);
     void on_stoptrace_clicked();
     void on_starttrace_clicked();
+    void on_alwaysflush_clicked();
+    void on_noflush_clicked();
+    void on_clear_clicked();
 };
 #endif // MAINWINDOW_H

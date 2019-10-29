@@ -9,7 +9,7 @@ class MsgListTableModel : public QStandardItemModel
 {
 public:
     MsgListTableModel();
-    void InserRops(const QByteArray& buffer);
+    void InsertRops(const QByteArray& buffer);
 
 private:
     void InsertSingleRop(const QByteArray& buffer);

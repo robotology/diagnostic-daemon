@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(diagnosticdaemonUI LANGUAGES CXX)
+project(diagnosticdaemonui LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -17,9 +17,9 @@ set(resource_qrc resource.qrc)
 qt5_add_resources(qrc_moc ${resource_qrc})
 
 
-include_directories(~/Documents/icub-firmware-shared/eth/embot ~/Documents/icub-firmware-shared/eth/embobj/core/core ~/Documents/DiagnosticDaemon/src)
+include_directories(../diagnosticdaemon ../../../icub-firmware-shared/eth/embot ../../../icub-firmware-shared/eth/embobj/core/core)
 
-add_executable(diagnosticdaemonUI
+add_executable(diagnosticdaemonui
   main.cpp
   mainwindow.cpp
   mainwindow.h
@@ -28,10 +28,11 @@ add_executable(diagnosticdaemonUI
   msglisttablemodel.h
   paramtablemodel.cpp
   paramtablemodel.h
-  ../src/RopParser.cpp
-  ../src/RopParser.h
-  ../src/pugixml.cpp
+  ../diagnosticdaemon/RopParser.cpp
+  ../diagnosticdaemon/RopParser.h
+  ../diagnosticdaemon/pugixml.cpp
   ${qrc_moc}
+  app.rc
 )
 
-target_link_libraries(diagnosticdaemonUI PRIVATE Qt5::Widgets Qt5::Network)
+target_link_libraries(diagnosticdaemonui PRIVATE Qt5::Widgets Qt5::Network)

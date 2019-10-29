@@ -5,5 +5,7 @@
         <file>icons/critical.png</file>
         <file>icons/info.png</file>
         <file>icons/trace.png</file>
+        <file>icons/clear.png</file>
+        <file>icons/magnify.ico</file>
     </qresource>
 </RCC>

@@ -33,6 +33,8 @@ std::list<std::pair<std::string,std::string>> RopParser::parse(const EOMDiagnost
         }
     
         uint8_t size=node.attribute(sizekey_).as_int();
+        std::string encoding=node.attribute(encoding_).value();
+        
         if(size!=0)
         {
             if(size==16)
@@ -42,7 +44,15 @@ std::list<std::pair<std::string,std::string>> RopParser::parse(const EOMDiagnost
             }
             else if(size==64)
             {
-                node.attribute(valuekey_)=rop.data_.time_;
+                if(encoding==littleendian_)
+                {
+                    uint64_t tmp=rop.data_.time_;
+                    node.attribute(valuekey_)=swapBinary(tmp);
+                }
+                else
+                {
+                    node.attribute(valuekey_)=rop.data_.time_;
+                }
              }
         }
         
@@ -128,4 +138,12 @@ void RopParser::dump(const std::list<std::pair<std::string,std::string>>& msg)
     {
         std::cout<<std::setfill('-')<<std::setw(20)<<current.first<<current.second<<std::endl;
     }
+}
+
+uint64_t RopParser::swapBinary(uint64_t value)  const
+{
+    value = ((value & 0x00000000FFFFFFFFull) << 32) | ((value & 0xFFFFFFFF00000000ull) >> 32);
+    value = ((value & 0x0000FFFF0000FFFFull) << 16) | ((value & 0xFFFF0000FFFF0000ull) >> 16);
+    value = ((value & 0x00FF00FF00FF00FFull) << 8)  | ((value & 0xFF00FF00FF00FF00ull) >> 8);
+    return value;
 }

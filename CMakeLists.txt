@@ -64,12 +64,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # https://eli.thegreenplace.net/2011/11/03/position-independent-code-pic-in-shared-libraries/
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-add_subdirectory(diagnosticdaemonUI)
-
 #-------Important
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 set(CMAKE_EXE_LINKER_FLAGS  "-rdynamic")
 
 set(Common_LIBRARIES dl pthread)
+
+file(COPY ${CMAKE_CURRENT_LIST_DIR}/msgdepot DESTINATION ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 
 add_subdirectory(src)

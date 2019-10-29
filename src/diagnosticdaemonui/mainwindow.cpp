@@ -41,7 +41,7 @@ void MainWindow::readMsg()
         quint16 senderPort;
         rxudpSocket_->readDatagram(buffer.data(), buffer.size(),&sender, &senderPort);
 
-        tableListViewModel_->InserRops(buffer);
+        tableListViewModel_->InsertRops(buffer);
     }
 }
 
@@ -78,7 +78,46 @@ void MainWindow::on_starttrace_clicked()
 
     // Build a packet to send
     QByteArray buffer((char*)udpMsg.data(),EOMDiagnosticUdpMsg::getSize());
-    //txudpSocket_->writeDatagram(buffer.data(), EOMDiagnosticUdpMsg::getSize(),QHostAddress::LocalHost, txport_);
+    txudpSocket_->writeDatagram(buffer.data(), EOMDiagnosticUdpMsg::getSize(),QHostAddress::LocalHost, txport_);
 
-    tableListViewModel_->InserRops(buffer);
+    //tableListViewModel_->InserRops(buffer);
+}
+
+void MainWindow::on_alwaysflush_clicked()
+{
+    std::array<uint8_t, EOMDiagnosticUdpMsg::getSize()> udpMsg;
+    EOMDiagnosticUdpMsg msg;
+    EOMDiagnosticRopMsg::Info rop;
+    rop=EOMDiagnosticRopMsg::Info{(uint16_t)DiagnosticRopCode::forceflush,(uint16_t)DiagnosticRopSeverity::trace,1,1,14,15,16,17,18};
+    msg.addRop(rop);
+    udpMsg.fill(0);
+    msg.createUdpPacketData(udpMsg);
+
+    // Build a packet to send
+    QByteArray buffer((char*)udpMsg.data(),EOMDiagnosticUdpMsg::getSize());
+    txudpSocket_->writeDatagram(buffer.data(), EOMDiagnosticUdpMsg::getSize(),QHostAddress::LocalHost, txport_);
+
+    //tableListViewModel_->InserRops(buffer);
+}
+
+void MainWindow::on_noflush_clicked()
+{
+    std::array<uint8_t, EOMDiagnosticUdpMsg::getSize()> udpMsg;
+    EOMDiagnosticUdpMsg msg;
+    EOMDiagnosticRopMsg::Info rop;
+    rop=EOMDiagnosticRopMsg::Info{(uint16_t)DiagnosticRopCode::unforceflush,(uint16_t)DiagnosticRopSeverity::trace,1,1,14,15,16,17,18};
+    msg.addRop(rop);
+    udpMsg.fill(0);
+    msg.createUdpPacketData(udpMsg);
+
+    // Build a packet to send
+    QByteArray buffer((char*)udpMsg.data(),EOMDiagnosticUdpMsg::getSize());
+    txudpSocket_->writeDatagram(buffer.data(), EOMDiagnosticUdpMsg::getSize(),QHostAddress::LocalHost, txport_);
+
+    //tableListViewModel_->InserRops(buffer);
+}
+
+void MainWindow::on_clear_clicked()
+{
+    tableListViewModel_->clear();
 }
