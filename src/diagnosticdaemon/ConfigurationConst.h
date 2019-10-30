@@ -2,10 +2,10 @@
 
 namespace confsintax
 {
-    static constexpr char configurationFile[]{"./config.xml"}; 
+    static constexpr char configurationfile[]{"./config.xml"}; 
     static constexpr char in[]{"in"};       
     static constexpr char component[]{"//component"}; 
-    static constexpr char port[]{"port"}; 
+    static constexpr char rxport[]{"rxport"}; 
     static constexpr char txport[]{"txport"}; 
     static constexpr char mode[]{"mode"};
     static constexpr char name[]{"name"};

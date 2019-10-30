@@ -1,6 +1,14 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include <QStandardItem>
+#include "pugixml.hpp"
+#include "settingstablemodel.h"
+
+namespace uiconfsintax
+{
+    static constexpr char configurationfile[]{"./uiconfig.xml"}; 
+    static constexpr char udp[]{"//udp"};
+};
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -15,16 +23,51 @@ MainWindow::MainWindow(QWidget *parent)
     paramTableModel_= new ParamTableModel();
     ui->paramTable->setModel(paramTableModel_);
 
+    settingsTableModel_= new SettingsTableModel();
+    ui->settings->setModel(settingsTableModel_);
+
     //View property
     //ui->msglist->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
     //ui->msglist->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
     ui->paramTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->settings->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+    //Settings
+    pugi::xml_document doc;
+    pugi::xml_parse_result result = doc.load_file(uiconfsintax::configurationfile);
+    if(result.status == pugi::status_file_not_found)
+    {
+        std::cout<<"ERROR: config.xml not found"<<std::endl;
+        return;
+    }
+    if(result.status != pugi::status_ok)
+    {
+        std::cout<<"ERROR: config.xml reading"<<std::endl;
+        return;
+    }
+
+    pugi::xpath_node udpconf = doc.select_node(uiconfsintax::udp);   
+    pugi::xml_node node=udpconf.node();
+    rxport_=node.attribute("rxport").as_int();    
+    txport_=node.attribute("txport").as_int();
+    address_=node.attribute("address").value();
 
     //UDP channel
     rxudpSocket_=new QUdpSocket(this);
     rxudpSocket_->bind(QHostAddress::LocalHost, rxport_);
     connect(rxudpSocket_,SIGNAL(readyRead()),this,SLOT(readMsg()));
     txudpSocket_=new QUdpSocket(this);
+
+    //**Show net config
+    std::stringstream ss;
+    ss<<rxport_;
+    settingsTableModel_->ShowSettings("rxport",ss.str());
+    ss.str("");
+    ss<<txport_;
+    settingsTableModel_->ShowSettings("txport",ss.str());
+    ss.str("");
+    ss<<address_;
+    settingsTableModel_->ShowSettings("address",ss.str());
 }
 
 MainWindow::~MainWindow()

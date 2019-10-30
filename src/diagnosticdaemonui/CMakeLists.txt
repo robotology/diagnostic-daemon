@@ -26,6 +26,8 @@ add_executable(diagnosticdaemonui
   mainwindow.ui
   msglisttablemodel.cpp
   msglisttablemodel.h
+  settingstablemodel.h
+  settingstablemodel.cpp
   paramtablemodel.cpp
   paramtablemodel.h
   ../diagnosticdaemon/RopParser.cpp
@@ -34,5 +36,6 @@ add_executable(diagnosticdaemonui
   ${qrc_moc}
   app.rc
 )
+file(COPY ${CMAKE_CURRENT_LIST_DIR}/uiconfig.xml DESTINATION ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 
 target_link_libraries(diagnosticdaemonui PRIVATE Qt5::Widgets Qt5::Network)

@@ -10,7 +10,7 @@ using namespace boost::asio;
 
 ComponentUdp::ComponentUdp(boost::asio::io_service &io_service,const pugi::xml_node& node,ConfigurationDepot& depot)
     : Component(io_service,node,depot),
-      port_(node.attribute(confsintax::port).as_int()),
+      port_(node.attribute(confsintax::rxport).as_int()),
       txport_(node.attribute(confsintax::txport).as_int()),
       rxSocket_(io_service, udp::endpoint(udp::v4(), port_)),
       txSocket_(io_service),

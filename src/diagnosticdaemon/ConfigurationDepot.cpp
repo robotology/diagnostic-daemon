@@ -8,8 +8,17 @@ ConfigurationDepot::ConfigurationDepot(boost::asio::io_service &io_service): ios
 
 bool ConfigurationDepot::createConfiguration()
 {
-    pugi::xml_parse_result result = doc_.load_file("config.xml"/*confsintax::configurationFile*/);
-    result=result;
+    pugi::xml_parse_result result = doc_.load_file(confsintax::configurationfile);
+    if(result.status == pugi::status_file_not_found)
+    {
+        std::cout<<"ERROR: config.xml not found"<<std::endl;
+        return false;
+    }
+    if(result.status != pugi::status_ok)
+    {
+        std::cout<<"ERROR: config.xml reading"<<std::endl;
+        return false;
+    }
 
     pugi::xpath_node_set components = doc_.select_nodes(confsintax::component);   
     for(auto currentComponent:components)

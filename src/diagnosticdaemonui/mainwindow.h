@@ -6,6 +6,7 @@
 #include "msglisttablemodel.h"
 #include "paramtablemodel.h"
 
+class SettingsTableModel;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -24,11 +25,13 @@ private:
 
     MsgListTableModel *tableListViewModel_;
     ParamTableModel *paramTableModel_;
+    SettingsTableModel *settingsTableModel_;
     QUdpSocket *rxudpSocket_;
     QUdpSocket *txudpSocket_;
 
-    static constexpr uint16_t rxport_{9001};
-    static constexpr uint16_t txport_{9000};
+    uint16_t rxport_{9001};
+    uint16_t txport_{9000};
+    std::string address_;
 
 private slots:
     void readMsg();
