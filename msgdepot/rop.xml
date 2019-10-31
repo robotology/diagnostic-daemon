@@ -11,7 +11,7 @@
         <param conditionname="code" conditionvalue="0" name="unused" size="16" value="" longdescription="" show="true"/> 
         <param conditionname="code" conditionvalue="0" name="unused" size="16" value="" longdescription="" show="true"/> 
         <param conditionname="code" conditionvalue="0" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="0" name="time" size="64" value="" encoding="bigendian" longdescription="" show="true"/>
+        <param conditionname="code" conditionvalue="0" name="time" size="64" value="" encoding="bigendian" longdescription="board life time in microseconds" show="true"/>
     </msg>
     
     <msg name="startlog">       
@@ -23,7 +23,7 @@
         <param conditionname="code" conditionvalue="1" name="unused" size="16" value="" longdescription="" show="true"/> 
         <param conditionname="code" conditionvalue="1" name="unused" size="16" value="" longdescription="" show="true"/> 
         <param conditionname="code" conditionvalue="1" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="1" name="time" size="64" value="" encoding="bigendian" longdescription="" show="true"/>
+        <param conditionname="code" conditionvalue="1" name="time" size="64" value="" encoding="bigendian" longdescription="board life time in microseconds" show="true"/>
    </msg>        
 
     <msg name="stoplog">    
@@ -35,7 +35,7 @@
         <param conditionname="code" conditionvalue="2" name="unused" size="16" value="" longdescription="" show="true"/> 
         <param conditionname="code" conditionvalue="2" name="unused" size="16" value="" longdescription="" show="true"/> 
         <param conditionname="code" conditionvalue="2" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="2" name="time" size="64" value="" encoding="bigendian" longdescription="" show="true"/>
+        <param conditionname="code" conditionvalue="2" name="time" size="64" value="" encoding="bigendian" longdescription="board life time in microseconds" show="true"/>
       </msg>        
 
     <msg name="ethlog">    
@@ -50,7 +50,7 @@
         <param conditionname="code" conditionvalue="3" name="ethernet" size="16" value="" longdescription="" show="false"/> 
             <xi:include href="msgdepot/ethernet.xml" parse="xml" xpointer="title"/>
         <param conditionname="code" conditionvalue="3" name="unused" size="16" value="" longdescription="" show="true"/>         
-        <param conditionname="code" conditionvalue="3" name="time" size="64" value="" encoding="bigendian" longdescription="" show="true"/>
+        <param conditionname="code" conditionvalue="3" name="time" size="64" value="" encoding="bigendian" longdescription="board life time in microseconds" show="true"/>
        </msg>        
 
     <msg name="command">    
@@ -62,7 +62,7 @@
         <param conditionname="code" conditionvalue="4" name="unused" size="16" value="" longdescription="" show="true"/> 
         <param conditionname="code" conditionvalue="4" name="unused" size="16" value="" longdescription="" show="true"/> 
         <param conditionname="code" conditionvalue="4" name="unused" size="16" value="" longdescription="" show="true"/>
-        <param conditionname="code" conditionvalue="4" name="time" size="64" value="" encoding="bigendian" longdescription="" show="true"/>
+        <param conditionname="code" conditionvalue="4" name="time" size="64" value="" encoding="bigendian" longdescription="board life time in microseconds" show="true"/>
     </msg>        
 
     <msg name="forceflush">    
@@ -74,7 +74,7 @@
         <param conditionname="code" conditionvalue="5" name="unused" size="16" value="" longdescription="" show="true"/> 
         <param conditionname="code" conditionvalue="5" name="unused" size="16" value="" longdescription="" show="true"/> 
         <param conditionname="code" conditionvalue="5" name="unused" size="16" value="" longdescription="" show="true"/>   
-        <param conditionname="code" conditionvalue="5" name="time" size="64" value="" encoding="bigendian" longdescription="" show="true"/>      
+        <param conditionname="code" conditionvalue="5" name="time" size="64" value="" encoding="bigendian" longdescription="board life time in microseconds" show="true"/>      
     </msg>        
 
     <msg name="unforceflush">    
@@ -86,6 +86,6 @@
         <param conditionname="code" conditionvalue="6" name="unused" size="16" value="" longdescription="" show="true"/> 
         <param conditionname="code" conditionvalue="6" name="unused" size="16" value="" longdescription="" show="true"/> 
         <param conditionname="code" conditionvalue="6" name="unused" size="16" value="" longdescription="" show="true"/>   
-        <param conditionname="code" conditionvalue="6" name="time" size="64" value="" encoding="bigendian" longdescription="" show="true"/>      
+        <param conditionname="code" conditionvalue="6" name="time" size="64" value="" encoding="bigendian" longdescription="board life time in microseconds" show="true"/>      
     </msg>        
 </rop>
