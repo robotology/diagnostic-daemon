@@ -13,9 +13,9 @@ RopParser::RopParser()
     //doc_.save(std::cout);    
 }
 
-std::list<std::pair<std::string,std::string>> RopParser::parse(const EOMDiagnosticRopMsg& rop)
+std::list<std::tuple<std::string,std::string,std::string>> RopParser::parse(const EOMDiagnosticRopMsg& rop)
 {
-    std::list<std::pair<std::string,std::string>> msg;
+    std::list<std::tuple<std::string,std::string,std::string>> msg;
     uint16_t index{0};
     pugi::xml_document currentDoc_;
     currentDoc_.reset(doc_);
@@ -58,9 +58,10 @@ std::list<std::pair<std::string,std::string>> RopParser::parse(const EOMDiagnost
         
         std::string name=node.attribute(namekey_).value();
         std::string value=node.attribute(valuekey_).value();
+        std::string longdescription=node.attribute(longdescription_).value();
         bool show=node.attribute(showkey_).as_bool();
         if(show)
-            msg.push_back({name,value});
+            msg.push_back({name,value,longdescription});
     }
 
     return msg;
@@ -132,11 +133,11 @@ void RopParser::includePreparser()
     }
 }
 
-void RopParser::dump(const std::list<std::pair<std::string,std::string>>& msg)
+void RopParser::dump(const std::list<std::tuple<std::string,std::string,std::string>>& msg)
 {
     for(auto current:msg)
     {
-        std::cout<<std::setfill('-')<<std::setw(20)<<current.first<<current.second<<std::endl;
+        std::cout<<std::setfill('-')<<std::setw(20)<<std::get<0>(current)<<std::get<1>(current)<<std::endl;
     }
 }
 

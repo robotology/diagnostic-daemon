@@ -21,7 +21,7 @@ ComponentUdp::ComponentUdp(boost::asio::io_service &io_service,const pugi::xml_n
   txSocket_.open(boost::asio::ip::udp::v4());
 
   rxSocket_.async_receive_from(
-      boost::asio::buffer(rxData_, EOMDiagnosticUdpMsg::getSize()), senderEndpoint_,
+      boost::asio::buffer(rxData_, maxMsgLenght_), senderEndpoint_,
       boost::bind(&ComponentUdp::handleReceiveFrom, this,
                   boost::asio::placeholders::error,
                   boost::asio::placeholders::bytes_transferred));
@@ -32,13 +32,16 @@ void ComponentUdp::handleReceiveFrom(const boost::system::error_code &error, siz
   std::cout << "****"<< std::endl;
   if (!error && bytes_recvd > 0)
   {
-    std::cout << "Rx from:"<<senderEndpoint_  << " received bytes:"<<std::hex<<bytes_recvd<< std::endl; //test
-
+    std::cout << "Rx from:"<<senderEndpoint_  << " received bytes:"<<std::hex<<bytes_recvd<<" Max byte:"<<(int)maxMsgLenght_<< std::endl; //test
     depot_.route(rxData_,destination_);
+  }
+  else
+  {
+    std::cout << "Error rx:"<<error<< std::endl;
   }
 
   rxSocket_.async_receive_from(
-      boost::asio::buffer(rxData_, EOMDiagnosticUdpMsg::getSize()), senderEndpoint_,
+      boost::asio::buffer(rxData_, maxMsgLenght_), senderEndpoint_,
       boost::bind(&ComponentUdp::handleReceiveFrom, this,
       boost::asio::placeholders::error,
       boost::asio::placeholders::bytes_transferred));
@@ -49,7 +52,7 @@ void ComponentUdp::handleSendTo(const boost::system::error_code &err, size_t siz
   std::cout << "Sent size:"<<size<<" error:"<<err<< std::endl; //test
 }
 
-void ComponentUdp::send(const std::array<uint8_t,EOMDiagnosticUdpMsg::getSize()>& message)
+void ComponentUdp::send(const std::array<uint8_t,maxMsgLenght_>& message)
 {
     txSocket_.async_send_to(
       boost::asio::buffer(message), receiverEndpoint_,
@@ -58,15 +61,17 @@ void ComponentUdp::send(const std::array<uint8_t,EOMDiagnosticUdpMsg::getSize()>
       boost::asio::placeholders::bytes_transferred));
 }
 
-void ComponentUdp::acceptMsg(std::array<uint8_t,EOMDiagnosticUdpMsg::getSize()>& msg)
+void ComponentUdp::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg)
 {
     send(msg);
 }
 
-void ComponentUdp::acceptMsg(EOMDiagnosticUdpMsg& msg) 
+void ComponentUdp::acceptMsg(EOMDiagnosticUdpMsg&) 
 {
-    std::array<uint8_t, EOMDiagnosticUdpMsg::getSize()> udpMsg;
+  return;
+  //Luca TODO
+    /*std::array<uint8_t, maxMsgLenght_> udpMsg;
     udpMsg.fill(0);
     msg.createUdpPacketData(udpMsg);
-    acceptMsg(udpMsg);
+    acceptMsg(udpMsg);*/
 };

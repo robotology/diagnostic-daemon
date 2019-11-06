@@ -13,11 +13,13 @@ class ConfigurationDepot;;
 
 class Component
 {
+    protected:
+        static constexpr unsigned int maxMsgLenght_{EOMDiagnosticUdpMsg::getSize()};//TODO Luca
     public:
         Component(boost::asio::io_service &ios,const pugi::xml_node&,ConfigurationDepot&);
         virtual ~Component(){};
         virtual void acceptMsg(EOMDiagnosticUdpMsg&)=0;
-        virtual void acceptMsg(std::array<uint8_t,EOMDiagnosticUdpMsg::getSize()>&)=0;
+        virtual void acceptMsg(std::array<uint8_t,maxMsgLenght_>&)=0;
         std::string getName() const {return name_;};
 
     protected:

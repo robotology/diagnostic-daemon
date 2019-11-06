@@ -28,19 +28,18 @@ void ParamTableModel::ShowRop(const QModelIndex &index)
     {
         QStandardItem * name{nullptr};
         QStandardItem * value{nullptr};
-        name = new QStandardItem(current.first.c_str());
-        value = new QStandardItem(current.second.c_str());
+        name = new QStandardItem(std::get<0>(current).c_str());
+        value = new QStandardItem(std::get<1>(current).c_str());
         name->setData(QColor(255,245,230), Qt::BackgroundRole);
         auto myfont=QFont("Monospace",9,1,true);
         myfont.setBold(true);
         name->setFont(myfont);
         value->setFont(QFont("Monospace",9,1,false));
-        if(current.second.c_str()==ropSeverity.at(DiagnosticRopSeverity::error))
+        if(std::get<1>(current).c_str()==ropSeverity.at(DiagnosticRopSeverity::error))
         {
             value->setData(QColor(212,30,30), Qt::ForegroundRole);
         }
-        auto tmp=current.first.c_str();
-        if(current.first!="time")
+        if(std::get<0>(current)!="time")
         {
             value->setFlags(Qt::NoItemFlags|Qt::ItemIsEnabled);
         }

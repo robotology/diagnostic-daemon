@@ -2,6 +2,7 @@
 
 #include "pugixml.hpp"
 #include <list>
+#include <tuple>
 
 class EOMDiagnosticRopMsg;
 
@@ -9,8 +10,8 @@ class RopParser
 {
     public:
         RopParser();
-        std::list<std::pair<std::string,std::string>> parse(const EOMDiagnosticRopMsg&);
-        static void dump(const std::list<std::pair<std::string,std::string>>& msg);
+        std::list<std::tuple<std::string,std::string,std::string>> parse(const EOMDiagnosticRopMsg&);
+        static void dump(const std::list<std::tuple<std::string,std::string,std::string>>& msg);
 
     private:
         pugi::xml_document doc_;
@@ -22,6 +23,7 @@ class RopParser
 
         //sintax key
         static constexpr char paramkey_[]{"//param"}; 
+
         static constexpr char namekey_[]{"name"}; 
         static constexpr char valuekey_[]{"value"};
         static constexpr char sizekey_[]{"size"};
@@ -32,4 +34,5 @@ class RopParser
         static constexpr char nonekey_[]{"none"};
         static constexpr char encoding_[]{"encoding"};
         static constexpr char littleendian_[]{"littleendian"};
+        static constexpr char longdescription_[]{"longdescription"};
 };

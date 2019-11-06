@@ -14,7 +14,7 @@ public:
     virtual ~ComponentUdp(){};
 
     void acceptMsg(EOMDiagnosticUdpMsg&) override;
-    void acceptMsg(std::array<uint8_t,EOMDiagnosticUdpMsg::getSize()>&) override;
+    void acceptMsg(std::array<uint8_t,maxMsgLenght_>&) override;
 
 private:
 
@@ -27,12 +27,12 @@ private:
     udp::endpoint senderEndpoint_;
     udp::endpoint receiverEndpoint_;
 
-    std::array<uint8_t,EOMDiagnosticUdpMsg::getSize()> rxData_;
+    std::array<uint8_t,/*EOMDiagnosticUdpMsg::getSize()*/maxMsgLenght_> rxData_;
 
     void handleReceiveFrom(const boost::system::error_code &error, size_t bytes_recvd);
     void handleSendTo(const boost::system::error_code &error, size_t bytes_sent);
 
-    void send(const std::array<uint8_t,EOMDiagnosticUdpMsg::getSize()>& message);
+    void send(const std::array<uint8_t,maxMsgLenght_>& message);
 
     bool dumpToFile_{true};
     bool dumpToConsole_{true};    

@@ -5,6 +5,7 @@
 #include <QtNetwork/QUdpSocket>
 #include "msglisttablemodel.h"
 #include "paramtablemodel.h"
+#include "longdescriptionmodel.h"
 
 class SettingsTableModel;
 
@@ -26,6 +27,7 @@ private:
     MsgListTableModel *tableListViewModel_;
     ParamTableModel *paramTableModel_;
     SettingsTableModel *settingsTableModel_;
+    LongdescriptionModel *longdescriptionModel_;
     QUdpSocket *rxudpSocket_;
     QUdpSocket *txudpSocket_;
 

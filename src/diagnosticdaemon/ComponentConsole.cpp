@@ -12,16 +12,22 @@ void ComponentConsole::acceptMsg(EOMDiagnosticUdpMsg& msg)
     msg.dump(&ropSeverity,&ropCode,&ropString,std::cout);
 };
 
-void ComponentConsole::acceptMsg(std::array<uint8_t,EOMDiagnosticUdpMsg::getSize()>& udpMsg)
+void ComponentConsole::acceptMsg(std::array<uint8_t,maxMsgLenght_>& udpMsg)
 {
-    EOMDiagnosticUdpMsg msg;
+    /*EOMDiagnosticUdpMsg msg;
     msg.parse(udpMsg);
     acceptMsg(msg);
+    */
+    for(uint8_t current:udpMsg)
+    {
+        std::cout<< std::hex<< std::setfill('0') << std::setw(2)<<(int)current<<" ";
+    }
+    std::cout<<std::endl;    
 }
 
 void ComponentConsole::inputLoop()
 {
-    std::array<uint8_t, EOMDiagnosticUdpMsg::getSize()> udpMsg;
+    std::array<uint8_t, maxMsgLenght_> udpMsg;
     EOMDiagnosticUdpMsg msg;
     while(active_)
     {
@@ -75,10 +81,8 @@ void ComponentConsole::inputLoop()
         msg.addRop(rop);
 
         udpMsg.fill(0);
-        msg.createUdpPacketData(udpMsg);
-
-        //server_.send(udpMsg);
-        depot_.route(msg,destination_);
+        //msg.createUdpPacketData(udpMsg);TODO LUCA
+        //depot_.route(msg,destination_);TODO LUCA
         msg.reset();
     }
 }

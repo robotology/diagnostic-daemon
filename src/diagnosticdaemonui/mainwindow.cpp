@@ -26,6 +26,9 @@ MainWindow::MainWindow(QWidget *parent)
     settingsTableModel_= new SettingsTableModel();
     ui->settings->setModel(settingsTableModel_);
 
+    longdescriptionModel_= new LongdescriptionModel();
+    ui->longdescription->setModel(longdescriptionModel_);
+
     //View property
     //ui->msglist->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
     //ui->msglist->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);

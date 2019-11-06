@@ -30,6 +30,8 @@ add_executable(diagnosticdaemonui
   settingstablemodel.cpp
   paramtablemodel.cpp
   paramtablemodel.h
+  longdescriptionmodel.cpp
+  longdescriptionmodel.h
   ../diagnosticdaemon/RopParser.cpp
   ../diagnosticdaemon/RopParser.h
   ../diagnosticdaemon/pugixml.cpp
