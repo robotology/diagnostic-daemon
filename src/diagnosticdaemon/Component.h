@@ -11,7 +11,6 @@
 
 #pragma once
 
-#include "EOMDiagnosticUdpMsg.h"
 #include "ConfigurationConst.h"
 
 #include "pugixml.hpp"
@@ -28,7 +27,6 @@ class Component
     public:
         Component(boost::asio::io_service &ios,const pugi::xml_node&,ConfigurationDepot&);
         virtual ~Component(){};
-        virtual void acceptMsg(EOMDiagnosticUdpMsg&)=0;
         virtual void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size)=0;
         std::string getName() const {return name_;};
 

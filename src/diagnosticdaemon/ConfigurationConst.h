@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <map>
+
 namespace confsintax
 {
     static constexpr char configurationfile[]{"./config.xml"}; 

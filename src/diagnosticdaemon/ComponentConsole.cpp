@@ -8,17 +8,14 @@
 #include "MsgDescriptionExt.h"
 #include "ConfigurationDepot.h"
 
+#include <iomanip>
+
 #include "Decoder.h"
 
 ComponentConsole::ComponentConsole(boost::asio::io_service &io_service,const pugi::xml_node& node,ConfigurationDepot& depot):Component(io_service,node,depot)
 {
     thread_=std::make_unique<std::thread>(&ComponentConsole::inputLoop,this);
 }
-
-void ComponentConsole::acceptMsg(EOMDiagnosticUdpMsg& msg) 
-{
-    msg.dump(&ropSeverity,&ropCode,&ropString,std::cout);
-};
 
 void ComponentConsole::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size)
 {
@@ -35,22 +32,22 @@ void ComponentConsole::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned
 
 void ComponentConsole::inputLoop()
 {
-    std::array<uint8_t, maxMsgLenght_> udpMsg;
-    EOMDiagnosticUdpMsg msg;
+    //std::array<uint8_t, maxMsgLenght_> udpMsg;
+    //EOMDiagnosticUdpMsg msg;
     while(active_)
     {
         std::string data_;
         std::cin>>data_;
         
-        EOMDiagnosticRopMsg::Info rop;
+        //EOMDiagnosticRopMsg::Info rop;
         if(data_=="start")
-            rop=EOMDiagnosticRopMsg::Info{(uint16_t)DiagnosticRopCode::startlog,(uint16_t)DiagnosticRopSeverity::trace,1,1,14,15,16,17,18};
+            ;//rop=EOMDiagnosticRopMsg::Info{(uint16_t)DiagnosticRopCode::startlog,(uint16_t)DiagnosticRopSeverity::trace,1,1,14,15,16,17,18};
         else if(data_=="stop")
-            rop=EOMDiagnosticRopMsg::Info{(uint16_t)DiagnosticRopCode::stoplog,(uint16_t)DiagnosticRopSeverity::trace,1,1,14,15,16,17,18};    
+            ;//rop=EOMDiagnosticRopMsg::Info{(uint16_t)DiagnosticRopCode::stoplog,(uint16_t)DiagnosticRopSeverity::trace,1,1,14,15,16,17,18};    
         else if(data_=="forceflush")
-            rop=EOMDiagnosticRopMsg::Info{(uint16_t)DiagnosticRopCode::forceflush,(uint16_t)DiagnosticRopSeverity::trace,1,1,14,15,16,17,18};                
+            ;//rop=EOMDiagnosticRopMsg::Info{(uint16_t)DiagnosticRopCode::forceflush,(uint16_t)DiagnosticRopSeverity::trace,1,1,14,15,16,17,18};                
         else if(data_=="unforceflush")
-            rop=EOMDiagnosticRopMsg::Info{(uint16_t)DiagnosticRopCode::unforceflush,(uint16_t)DiagnosticRopSeverity::trace,1,1,14,15,16,17,18};   
+            ;//rop=EOMDiagnosticRopMsg::Info{(uint16_t)DiagnosticRopCode::unforceflush,(uint16_t)DiagnosticRopSeverity::trace,1,1,14,15,16,17,18};   
         else if(data_=="dumptofile")
         {
             //server_.dumpToFile_=!server_.dumpToFile_;   
@@ -85,12 +82,12 @@ void ComponentConsole::inputLoop()
             continue;
         }            
         else 
-            rop=EOMDiagnosticRopMsg::Info{(uint16_t)254,(uint16_t)DiagnosticRopSeverity::trace,1,1,14,15,16,17,18};    
-        msg.addRop(rop);
+            ;//rop=EOMDiagnosticRopMsg::Info{(uint16_t)254,(uint16_t)DiagnosticRopSeverity::trace,1,1,14,15,16,17,18};    
+        //msg.addRop(rop);
 
-        udpMsg.fill(0);
+        //udpMsg.fill(0);
         //msg.createUdpPacketData(udpMsg);TODO LUCA
         //depot_.route(msg,destination_);TODO LUCA
-        msg.reset();
+        //msg.reset();
     }
 }

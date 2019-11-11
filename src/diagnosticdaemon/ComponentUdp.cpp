@@ -7,6 +7,8 @@
 #include <boost/array.hpp>
 #include <boost/bind.hpp>
 
+#include <iostream>
+
 #include "ComponentUdp.h"
 #include "MsgDescriptionExt.h"
 #include "ConfigurationDepot.h"
@@ -73,13 +75,3 @@ void ComponentUdp::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int
 {
     send(msg,size);
 }
-
-void ComponentUdp::acceptMsg(EOMDiagnosticUdpMsg&) 
-{
-  return;
-  //Luca TODO
-    /*std::array<uint8_t, maxMsgLenght_> udpMsg;
-    udpMsg.fill(0);
-    msg.createUdpPacketData(udpMsg);
-    acceptMsg(udpMsg);*/
-};
