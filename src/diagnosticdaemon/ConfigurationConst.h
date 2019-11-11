@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) 2019 iCub Tech - Istituto Italiano di Tecnologia
+ * Author:  Luca Tricerri
+ * email:   luca.tricerri@iit.it
+*/
+
 #pragma once
 
 namespace confsintax
@@ -33,4 +39,5 @@ inline std::map<std::string,uint8_t> protocolTypeLookup{
                                                         {confsintax::udpbroadcast,(uint8_t)ComponentType::udpbroadcast},
                                                         {confsintax::udp,(uint8_t)ComponentType::udp},
                                                         {confsintax::file,(uint8_t)ComponentType::file},
-                                                        {confsintax::console,(uint8_t)ComponentType::console}};
+                                                        {confsintax::console,(uint8_t)ComponentType::console}
+                                                        };

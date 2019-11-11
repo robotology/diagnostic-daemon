@@ -1,12 +1,22 @@
+/*
+ * Copyright (C) 2019 iCub Tech - Istituto Italiano di Tecnologia
+ * Author:  Luca Tricerri
+ * email:   luca.tricerri@iit.it
+*/
+
+// - brief
+//   base class for components
+//
+
+
 #pragma once
 
 #include "EOMDiagnosticUdpMsg.h"
 #include "ConfigurationConst.h"
 
-#include <boost/asio.hpp>
-
 #include "pugixml.hpp"
 
+#include <boost/asio.hpp>
 #include <memory>
 
 class ConfigurationDepot;;
@@ -14,12 +24,12 @@ class ConfigurationDepot;;
 class Component
 {
     protected:
-        static constexpr unsigned int maxMsgLenght_{EOMDiagnosticUdpMsg::getSize()};//TODO Luca
+        static constexpr unsigned int maxMsgLenght_{1500};
     public:
         Component(boost::asio::io_service &ios,const pugi::xml_node&,ConfigurationDepot&);
         virtual ~Component(){};
         virtual void acceptMsg(EOMDiagnosticUdpMsg&)=0;
-        virtual void acceptMsg(std::array<uint8_t,maxMsgLenght_>&)=0;
+        virtual void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size)=0;
         std::string getName() const {return name_;};
 
     protected:

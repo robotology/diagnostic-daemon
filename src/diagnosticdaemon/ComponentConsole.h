@@ -1,3 +1,13 @@
+/*
+ * Copyright (C) 2019 iCub Tech - Istituto Italiano di Tecnologia
+ * Author:  Luca Tricerri
+ * email:   luca.tricerri@iit.it
+*/
+
+// - brief
+//   Console component class
+//
+
 #pragma once
 
 #include <iostream>
@@ -13,7 +23,7 @@ class ComponentConsole: public Component
         virtual ~ComponentConsole(){};
 
         void acceptMsg(EOMDiagnosticUdpMsg&) override;
-        void acceptMsg(std::array<uint8_t,maxMsgLenght_>&) override;
+        void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size) override;
 
     private:
         std::unique_ptr<std::thread> thread_;

@@ -16,6 +16,11 @@ set(DiagnosticDaemonSrc     main.cpp
                             pugixml.cpp
                             Component.cpp
                             ConfigurationDepot.cpp
+                            ../../../icub-firmware-shared/eth/embot/DiagnosticsHost.cpp
+                            ../../../icub-firmware-shared/eth/embobj/plus/comm-v2/icub/EoError.c
+                            ../../../icub-firmware-shared/eth/embot/ROPstream.cpp
+                            ../../../icub-firmware-shared/eth/embot/ROPframe.cpp 
+                            ../../../icub-firmware-shared/eth/embot/ROPdescriptor.cpp
                         )
 
 set(DiagnosticDaemonHdr     ComponentUdp.h
@@ -23,13 +28,13 @@ set(DiagnosticDaemonHdr     ComponentUdp.h
                             ComponentConsole.h
                             RopParser.h
                             Component.h
-                            ConfigurationDepot.h
+                            ConfigurationDepot.h            
                        )
 
 
 
 include_directories(${Boost_INCLUDE_DIRS})
-include_directories(../../../icub-firmware-shared/eth/embot ../../../icub-firmware-shared/eth/embobj/core/core)
+include_directories(../../../icub-firmware-shared/eth/embobj/plus/comm-v2/icub ../../../icub-firmware-shared/eth/embot ../../../icub-firmware-shared/eth/embobj/core/core ../../../icub-firmware ../../../icub-firmware/emBODY/eBcode/arch-arm/embot/binary)
 add_executable(diagnosticdaemon ${DiagnosticDaemonSrc} ${DiagnosticDaemonHdr} )
 
 find_package(Boost COMPONENTS system filesystem REQUIRED)

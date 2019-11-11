@@ -1,3 +1,13 @@
+/*
+ * Copyright (C) 2019 iCub Tech - Istituto Italiano di Tecnologia
+ * Author:  Luca Tricerri
+ * email:   luca.tricerri@iit.it
+*/
+
+// - brief
+//   UDP component class
+//
+
 #pragma once
 
 #include <array>
@@ -14,7 +24,7 @@ public:
     virtual ~ComponentUdp(){};
 
     void acceptMsg(EOMDiagnosticUdpMsg&) override;
-    void acceptMsg(std::array<uint8_t,maxMsgLenght_>&) override;
+    void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size) override;
 
 private:
 
@@ -27,12 +37,12 @@ private:
     udp::endpoint senderEndpoint_;
     udp::endpoint receiverEndpoint_;
 
-    std::array<uint8_t,/*EOMDiagnosticUdpMsg::getSize()*/maxMsgLenght_> rxData_;
+    std::array<uint8_t,maxMsgLenght_> rxData_;
 
     void handleReceiveFrom(const boost::system::error_code &error, size_t bytes_recvd);
     void handleSendTo(const boost::system::error_code &error, size_t bytes_sent);
 
-    void send(const std::array<uint8_t,maxMsgLenght_>& message);
+    void send(const std::array<uint8_t,maxMsgLenght_>& message,unsigned int size);
 
     bool dumpToFile_{true};
     bool dumpToConsole_{true};    

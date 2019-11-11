@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) 2019 iCub Tech - Istituto Italiano di Tecnologia
+ * Author:  Luca Tricerri
+ * email:   luca.tricerri@iit.it
+*/
+
 #include "ConfigurationDepot.h"
 #include "ComponentUdp.h"
 #include "ComponentFile.h"

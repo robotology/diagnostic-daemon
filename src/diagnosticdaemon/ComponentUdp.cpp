@@ -1,10 +1,15 @@
+/*
+ * Copyright (C) 2019 iCub Tech - Istituto Italiano di Tecnologia
+ * Author:  Luca Tricerri
+ * email:   luca.tricerri@iit.it
+*/
+
 #include <boost/array.hpp>
 #include <boost/bind.hpp>
 
 #include "ComponentUdp.h"
 #include "MsgDescriptionExt.h"
 #include "ConfigurationDepot.h"
-#include "RopParser.h"
 
 using namespace boost::asio;
 
@@ -27,13 +32,13 @@ ComponentUdp::ComponentUdp(boost::asio::io_service &io_service,const pugi::xml_n
                   boost::asio::placeholders::bytes_transferred));
 }
 
-void ComponentUdp::handleReceiveFrom(const boost::system::error_code &error, size_t bytes_recvd)
+void ComponentUdp::handleReceiveFrom(const boost::system::error_code &error, size_t size)
 {
   std::cout << "****"<< std::endl;
-  if (!error && bytes_recvd > 0)
+  if (!error && size > 0)
   {
-    std::cout << "Rx from:"<<senderEndpoint_  << " received bytes:"<<std::hex<<bytes_recvd<<" Max byte:"<<(int)maxMsgLenght_<< std::endl; //test
-    depot_.route(rxData_,destination_);
+    std::cout << "Rx from:"<<senderEndpoint_  << " received bytes:"<<std::hex<<size<<" Max byte:"<<(int)maxMsgLenght_<< std::endl; //test
+    depot_.route(rxData_,size,destination_);
   }
   else
   {
@@ -52,18 +57,21 @@ void ComponentUdp::handleSendTo(const boost::system::error_code &err, size_t siz
   std::cout << "Sent size:"<<size<<" error:"<<err<< std::endl; //test
 }
 
-void ComponentUdp::send(const std::array<uint8_t,maxMsgLenght_>& message)
+void ComponentUdp::send(const std::array<uint8_t,maxMsgLenght_>& message,unsigned int size)
 {
+    //std::vector<uint8_t> toSend(size);
+    //std::copy_n(message.begin(),size,toSend.begin());
+
     txSocket_.async_send_to(
-      boost::asio::buffer(message), receiverEndpoint_,
+      boost::asio::buffer(message,size), receiverEndpoint_,
       boost::bind(&ComponentUdp::handleSendTo, this,
       boost::asio::placeholders::error,
       boost::asio::placeholders::bytes_transferred));
 }
 
-void ComponentUdp::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg)
+void ComponentUdp::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size)
 {
-    send(msg);
+    send(msg,size);
 }
 
 void ComponentUdp::acceptMsg(EOMDiagnosticUdpMsg&) 

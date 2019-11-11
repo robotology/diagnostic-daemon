@@ -1,3 +1,13 @@
+/*
+ * Copyright (C) 2019 iCub Tech - Istituto Italiano di Tecnologia
+ * Author:  Luca Tricerri
+ * email:   luca.tricerri@iit.it
+*/
+
+// - brief
+//   Depot for components
+//
+
 #pragma once
 
 #include "pugixml.hpp"
@@ -16,7 +26,7 @@ class ConfigurationDepot
         ConfigurationDepot(boost::asio::io_service &io_service);
         bool createConfiguration();
 
-        template <typename T> bool route(T&,const std::string& destination);
+        template <typename T> bool route(T&,unsigned int size,const std::string& destination);
 
     private:
         pugi::xml_document doc_;
@@ -32,7 +42,7 @@ template <typename T> static std::vector<T> tokenize(const std::string& destinat
     return out;
 }
 
-template <typename T> bool ConfigurationDepot::route(T& msg,const std::string& destinations)
+template <typename T> bool ConfigurationDepot::route(T& msg,unsigned int size,const std::string& destinations)
 {
     auto tokenizedDestination=tokenize<std::string>(destinations);
 
@@ -41,7 +51,7 @@ template <typename T> bool ConfigurationDepot::route(T& msg,const std::string& d
         for(const std::string& currentDestination:tokenizedDestination)
         {
             if(current->getName()==currentDestination)
-                current->acceptMsg(msg);
+                current->acceptMsg(msg,size);
         }  
     }
     

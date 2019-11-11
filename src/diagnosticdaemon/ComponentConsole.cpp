@@ -1,6 +1,14 @@
+/*
+ * Copyright (C) 2019 iCub Tech - Istituto Italiano di Tecnologia
+ * Author:  Luca Tricerri
+ * email:   luca.tricerri@iit.it
+*/
+
 #include "ComponentConsole.h"
 #include "MsgDescriptionExt.h"
 #include "ConfigurationDepot.h"
+
+#include "Decoder.h"
 
 ComponentConsole::ComponentConsole(boost::asio::io_service &io_service,const pugi::xml_node& node,ConfigurationDepot& depot):Component(io_service,node,depot)
 {
@@ -12,17 +20,17 @@ void ComponentConsole::acceptMsg(EOMDiagnosticUdpMsg& msg)
     msg.dump(&ropSeverity,&ropCode,&ropString,std::cout);
 };
 
-void ComponentConsole::acceptMsg(std::array<uint8_t,maxMsgLenght_>& udpMsg)
+void ComponentConsole::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size)
 {
-    /*EOMDiagnosticUdpMsg msg;
-    msg.parse(udpMsg);
-    acceptMsg(msg);
-    */
-    for(uint8_t current:udpMsg)
+    for(size_t index=0;index<size;++index)
     {
-        std::cout<< std::hex<< std::setfill('0') << std::setw(2)<<(int)current<<" ";
+        std::cout<< std::hex<< std::setfill('0') << std::setw(2)<<(int)msg[index]<<" ";
     }
-    std::cout<<std::endl;    
+    std::cout<<std::endl;  
+
+    Decoder decoder;
+    decoder.init({});
+    decoder.decode(msg.data(),size);  
 }
 
 void ComponentConsole::inputLoop()
