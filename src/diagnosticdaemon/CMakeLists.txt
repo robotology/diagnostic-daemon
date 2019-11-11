@@ -12,7 +12,6 @@ set(DiagnosticDaemonSrc     main.cpp
                             ComponentUdp.cpp
                             ComponentFile.cpp
                             ComponentConsole.cpp
-                            RopParser.cpp
                             pugixml.cpp
                             Component.cpp
                             ConfigurationDepot.cpp
@@ -26,9 +25,11 @@ set(DiagnosticDaemonSrc     main.cpp
 set(DiagnosticDaemonHdr     ComponentUdp.h
                             ComponentFile.h
                             ComponentConsole.h
-                            RopParser.h
                             Component.h
-                            ConfigurationDepot.h            
+                            ConfigurationDepot.h
+                            ElapsedTime.h
+                            pugixml.hpp
+                            pugiconfig.hpp            
                        )
 
 
@@ -37,9 +38,9 @@ include_directories(${Boost_INCLUDE_DIRS})
 include_directories(../../../icub-firmware-shared/eth/embobj/plus/comm-v2/icub ../../../icub-firmware-shared/eth/embot ../../../icub-firmware-shared/eth/embobj/core/core ../../../icub-firmware ../../../icub-firmware/emBODY/eBcode/arch-arm/embot/binary)
 add_executable(diagnosticdaemon ${DiagnosticDaemonSrc} ${DiagnosticDaemonHdr} )
 
-find_package(Boost COMPONENTS system filesystem REQUIRED)
+find_package(Boost 1.67 REQUIRED COMPONENTS system REQUIRED)
+
 target_link_libraries(diagnosticdaemon 
-  ${Boost_FILESYSTEM_LIBRARY}
   ${Boost_SYSTEM_LIBRARY}
   pthread
 )

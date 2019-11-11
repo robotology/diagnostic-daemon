@@ -11,13 +11,13 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt5 COMPONENTS Widgets Network REQUIRED)
+find_package(Qt5 COMPONENTS Core Widgets Network REQUIRED)
 
 set(resource_qrc resource.qrc)
 qt5_add_resources(qrc_moc ${resource_qrc})
 
 
-include_directories(../diagnosticdaemon ../../../icub-firmware-shared/eth/embot ../../../icub-firmware-shared/eth/embobj/core/core)
+include_directories(../diagnosticdaemon ../parser ../../../icub-firmware-shared/eth/embot ../../../icub-firmware-shared/eth/embobj/core/core)
 
 add_executable(diagnosticdaemonui
   main.cpp
@@ -32,8 +32,8 @@ add_executable(diagnosticdaemonui
   paramtablemodel.h
   longdescriptionmodel.cpp
   longdescriptionmodel.h
-  ../diagnosticdaemon/RopParser.cpp
-  ../diagnosticdaemon/RopParser.h
+  ../parser/RopParser.cpp
+  ../parser/RopParser.h
   ../diagnosticdaemon/pugixml.cpp
   ${qrc_moc}
   app.rc

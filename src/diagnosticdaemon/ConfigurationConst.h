@@ -35,7 +35,8 @@ enum class ComponentType: uint8_t
     file,
     console,
 };
-inline std::map<std::string,uint8_t> protocolTypeLookup{
+
+inline std::map<std::string,uint8_t> componentTypeLookup{
                                                         {confsintax::udpbroadcast,(uint8_t)ComponentType::udpbroadcast},
                                                         {confsintax::udp,(uint8_t)ComponentType::udp},
                                                         {confsintax::file,(uint8_t)ComponentType::file},

@@ -49,7 +49,7 @@ InOut_sptr ConfigurationDepot::createInOut(const pugi::xml_node& node)
     if(!enable)
         return InOut_sptr();
 
-    switch(protocolTypeLookup[protocol])
+    switch(componentTypeLookup[protocol])
         {
             case (uint8_t)ComponentType::udpbroadcast:
             case (uint8_t)ComponentType::udp:
