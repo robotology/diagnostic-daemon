@@ -20,13 +20,15 @@
 #include "Component.h"
 #include "ConfigurationConst.h"
 
+using boost::asio::ip::udp;
+
 class ConfigurationDepot
 {
     public:
         ConfigurationDepot(boost::asio::io_service &io_service);
         bool createConfiguration();
 
-        template <typename T> bool route(T&,unsigned int size,const std::string& destination);
+        template <typename T> bool route(T&,unsigned int size,const std::string& destination,udp::endpoint senderEndPoint);
 
     private:
         pugi::xml_document doc_;
@@ -42,16 +44,16 @@ template <typename T> static std::vector<T> tokenize(const std::string& destinat
     return out;
 }
 
-template <typename T> bool ConfigurationDepot::route(T& msg,unsigned int size,const std::string& destinations)
+template <typename T> bool ConfigurationDepot::route(T& msg,unsigned int size,const std::string& destinations,udp::endpoint senderEndPoint)
 {
-    auto tokenizedDestination=tokenize<std::string>(destinations);
+    const auto tokenizedDestination=tokenize<std::string>(destinations);
 
     for(auto current:depot_)
     {
         for(const std::string& currentDestination:tokenizedDestination)
         {
             if(current->getName()==currentDestination)
-                current->acceptMsg(msg,size);
+                current->acceptMsg(msg,size,senderEndPoint);
         }  
     }
     

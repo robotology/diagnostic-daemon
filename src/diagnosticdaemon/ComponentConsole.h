@@ -22,7 +22,7 @@ class ComponentConsole: public Component
         ComponentConsole(boost::asio::io_service &io_service,const pugi::xml_node& node,ConfigurationDepot&);
         virtual ~ComponentConsole(){};
 
-        void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size) override;
+        void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint) override;
 
     private:
         std::unique_ptr<std::thread> thread_;

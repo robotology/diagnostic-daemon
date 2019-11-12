@@ -11,11 +11,8 @@
 #pragma once
 
 #include <array>
-#include <boost/asio.hpp>
 
 #include "Component.h"
-
-using boost::asio::ip::udp;
 
 class ComponentUdp: public Component
 {
@@ -23,7 +20,7 @@ public:
     ComponentUdp(boost::asio::io_service &io_service,const pugi::xml_node& node,ConfigurationDepot&);
     virtual ~ComponentUdp(){};
 
-    void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size) override;
+    void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint) override;
 
 private:
 

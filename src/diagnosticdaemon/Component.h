@@ -18,6 +18,8 @@
 #include <boost/asio.hpp>
 #include <memory>
 
+using boost::asio::ip::udp;
+
 class ConfigurationDepot;;
 
 class Component
@@ -27,7 +29,7 @@ class Component
     public:
         Component(boost::asio::io_service &ios,const pugi::xml_node&,ConfigurationDepot&);
         virtual ~Component(){};
-        virtual void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size)=0;
+        virtual void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint)=0;
         std::string getName() const {return name_;};
 
     protected:

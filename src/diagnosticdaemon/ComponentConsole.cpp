@@ -17,7 +17,7 @@ ComponentConsole::ComponentConsole(boost::asio::io_service &io_service,const pug
     thread_=std::make_unique<std::thread>(&ComponentConsole::inputLoop,this);
 }
 
-void ComponentConsole::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size)
+void ComponentConsole::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint)
 {
     for(size_t index=0;index<size;++index)
     {
@@ -27,7 +27,9 @@ void ComponentConsole::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned
 
     Decoder decoder;
     decoder.init({});
-    decoder.decode(msg.data(),size);  
+    std::stringstream ss;
+    ss<<senderEndPoint;
+    decoder.decode(msg.data(),size,ss.str().c_str());  
 }
 
 void ComponentConsole::inputLoop()

@@ -14,7 +14,7 @@ ComponentFile::ComponentFile(boost::asio::io_service &io_service,const pugi::xml
     fstream_.open(filename_);
 }
 
-void ComponentFile::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size)
+void ComponentFile::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint)
 {
     for(size_t index=0;index<size;++index)
     {
