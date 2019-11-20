@@ -11,6 +11,7 @@
 #pragma once
 
 #include <array>
+#include "boost/asio.hpp"
 
 #include "Component.h"
 
@@ -40,8 +41,10 @@ private:
 
     void send(const std::array<uint8_t,maxMsgLenght_>& message,unsigned int size);
 
-    bool dumpToFile_{true};
-    bool dumpToConsole_{true};    
+    void analyzeAddress(const std::string& addresses);
+    std::set<boost::asio::ip::address> excludedAddresses_;
+    std::set<boost::asio::ip::address> includededAddresses_;
+    bool discardMsgByFilter(const boost::asio::ip::address& address);
 };
 
 using ComponentUdp_sptr=std::shared_ptr<ComponentUdp>;

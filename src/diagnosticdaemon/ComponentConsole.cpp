@@ -23,7 +23,6 @@ void ComponentConsole::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned
     {
         std::cout<< std::hex<< std::setfill('0') << std::setw(2)<<(int)msg[index]<<" ";
     }
-    std::cout<<std::endl;  
 
     Decoder decoder;
     decoder.init({});

@@ -23,6 +23,7 @@ namespace confsintax
     static constexpr char mask[]{"mask"};
     static constexpr char enable[]{"enable"};
     static constexpr char destination[]{"destination"};
+    static constexpr char addressfilter[]{"addressfilter"};
 
     static constexpr char udpbroadcast[]{"udp-broadcast"};
     static constexpr char udp[]{"udp"};

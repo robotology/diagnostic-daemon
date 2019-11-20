@@ -8,6 +8,7 @@
 #include <boost/bind.hpp>
 
 #include <iostream>
+#include <string>
 
 #include "ComponentUdp.h"
 #include "MsgDescriptionExt.h"
@@ -24,7 +25,9 @@ ComponentUdp::ComponentUdp(boost::asio::io_service &io_service,const pugi::xml_n
       receiverEndpoint_(udp::endpoint(ip::address::from_string(node.attribute(confsintax::address).value()), txport_))
 {
   emsAddress_=node.attribute(confsintax::address).value();
-  
+  std::string addressfilter=node.attribute(confsintax::addressfilter).value();
+  analyzeAddress(addressfilter);
+
   txSocket_.open(boost::asio::ip::udp::v4());
 
   rxSocket_.async_receive_from(
@@ -39,8 +42,17 @@ void ComponentUdp::handleReceiveFrom(const boost::system::error_code &error, siz
   std::cout << "****"<< std::endl;
   if (!error && size > 0)
   {
-    std::cout << "Rx from:"<<senderEndpoint_  << " received bytes:"<<std::hex<<size<<" Max byte:"<<(int)maxMsgLenght_<< std::endl; //test
-    depot_.route(rxData_,size,destination_,senderEndpoint_);
+    std::cout << "Rx from:"<<senderEndpoint_.address()  << " received bytes:"<<std::hex<<size<<" Max byte:"<<(int)maxMsgLenght_<< std::endl; //test
+
+    if(discardMsgByFilter(senderEndpoint_.address()))
+    {
+      std::cout << "Discard msg for filter"<<std::endl;
+    }
+    else
+    {
+      depot_.route(rxData_,size,destination_,senderEndpoint_);
+    }
+    
   }
   else
   {
@@ -61,9 +73,6 @@ void ComponentUdp::handleSendTo(const boost::system::error_code &err, size_t siz
 
 void ComponentUdp::send(const std::array<uint8_t,maxMsgLenght_>& message,unsigned int size)
 {
-    //std::vector<uint8_t> toSend(size);
-    //std::copy_n(message.begin(),size,toSend.begin());
-
     txSocket_.async_send_to(
       boost::asio::buffer(message,size), receiverEndpoint_,
       boost::bind(&ComponentUdp::handleSendTo, this,
@@ -74,4 +83,37 @@ void ComponentUdp::send(const std::array<uint8_t,maxMsgLenght_>& message,unsigne
 void ComponentUdp::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint)
 {
     send(msg,size);
+}
+
+void ComponentUdp::analyzeAddress(const std::string& addresses)
+{
+    std::set<std::string> tmp;
+    auto out=tokenize(addresses);
+    for(const std::string& current:out)
+    {
+        if(current.substr(0,2)=="x:")
+            excludedAddresses_.insert(boost::asio::ip::make_address(current.substr(2,current.size()-2)));
+        else if(current.substr(0,2)=="i:")
+            includededAddresses_.insert(boost::asio::ip::make_address(current.substr(2,current.size()-2)));
+        else
+        {
+            std::cout<<"Error filter"<<std::endl;
+        }
+    }
+}
+
+bool ComponentUdp::discardMsgByFilter(const boost::asio::ip::address& address)
+{
+  if(!excludedAddresses_.empty())
+  {
+    if(excludedAddresses_.find(address)==excludedAddresses_.end())
+    {
+      return false;
+    }
+    return true;
+  }
+
+  if(!includededAddresses_.empty())
+  {}
+  return false;
 }

@@ -6,6 +6,8 @@
 
 #include "Component.h"
 
+#include <iostream>
+
 Component::Component(boost::asio::io_service &ios,const pugi::xml_node& node,ConfigurationDepot& depot):ios_(ios),depot_(depot),parameters_(node)
 {
     name_=node.attribute(confsintax::name).value();

@@ -7,4 +7,4 @@
 
 # @author Luca Tricerri <luca.tricerri@iit.it> 
 add_subdirectory(diagnosticdaemon)
-add_subdirectory(diagnosticdaemonui)
+#add_subdirectory(diagnosticdaemonui)
