@@ -7,8 +7,11 @@
 #include "Component.h"
 
 #include <iostream>
-
-Component::Component(boost::asio::io_service &ios,const pugi::xml_node& node,ConfigurationDepot& depot):ios_(ios),depot_(depot),parameters_(node)
+/*
+Component::Component(const std::map<std::string,std::string>& attributes,ConfigurationDepot& depot):depot_(depot),parameters_(pugi::xml_node())
+{}
+*/
+Component::Component(const pugi::xml_node& node,ConfigurationDepot& depot):depot_(depot),parameters_(node)
 {
     name_=node.attribute(confsintax::name).value();
     protocol_=node.attribute(confsintax::protocol).value();

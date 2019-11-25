@@ -16,13 +16,14 @@
 
 using namespace boost::asio;
 
-ComponentUdp::ComponentUdp(boost::asio::io_service &io_service,const pugi::xml_node& node,ConfigurationDepot& depot)
-    : Component(io_service,node,depot),
+ComponentUdp::ComponentUdp(boost::asio::io_service &ios,const pugi::xml_node& node,ConfigurationDepot& depot)
+    : Component(node,depot),
       port_(node.attribute(confsintax::rxport).as_int()),
       txport_(node.attribute(confsintax::txport).as_int()),
-      rxSocket_(io_service, udp::endpoint(udp::v4(), port_)),
-      txSocket_(io_service),
-      receiverEndpoint_(udp::endpoint(ip::address::from_string(node.attribute(confsintax::address).value()), txport_))
+      rxSocket_(ios, udp::endpoint(udp::v4(), port_)),
+      txSocket_(ios),
+      receiverEndpoint_(udp::endpoint(ip::address::from_string(node.attribute(confsintax::address).value()), txport_)),
+      ios_(ios)
 {
   emsAddress_=node.attribute(confsintax::address).value();
   std::string addressfilter=node.attribute(confsintax::addressfilter).value();
@@ -39,7 +40,6 @@ ComponentUdp::ComponentUdp(boost::asio::io_service &io_service,const pugi::xml_n
 
 void ComponentUdp::handleReceiveFrom(const boost::system::error_code &error, size_t size)
 {
-  std::cout << "****"<< std::endl;
   if (!error && size > 0)
   {
     std::cout << "Rx from:"<<senderEndpoint_.address()  << " received bytes:"<<std::hex<<size<<" Max byte:"<<(int)maxMsgLenght_<< std::endl; //test

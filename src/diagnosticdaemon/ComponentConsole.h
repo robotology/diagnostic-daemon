@@ -15,11 +15,12 @@
 #include <thread>
 
 #include "Component.h"
+#include "Decoder.h"
 
 class ComponentConsole: public Component
 {
     public:
-        ComponentConsole(boost::asio::io_service &io_service,const pugi::xml_node& node,ConfigurationDepot&);
+        ComponentConsole(const pugi::xml_node& node,ConfigurationDepot&);
         virtual ~ComponentConsole(){};
 
         void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint) override;
@@ -28,6 +29,8 @@ class ComponentConsole: public Component
         std::unique_ptr<std::thread> thread_;
         void inputLoop();
         bool active_{true};
+
+        Decoder decoder_;
 };
 
 using ComponentConsole_sptr=std::shared_ptr<ComponentConsole>;

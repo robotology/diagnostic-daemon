@@ -20,7 +20,7 @@
 class ComponentFile: public Component
 {
     public:
-        ComponentFile(boost::asio::io_service &io_service,const pugi::xml_node& node,ConfigurationDepot&);
+        ComponentFile(const pugi::xml_node& node,ConfigurationDepot&);
         virtual ~ComponentFile(){};
 
         void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint) override;

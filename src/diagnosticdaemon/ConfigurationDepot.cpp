@@ -50,26 +50,36 @@ InOut_sptr ConfigurationDepot::createInOut(const pugi::xml_node& node)
         return InOut_sptr();
 
     switch(componentTypeLookup[protocol])
+    {
+        case (uint8_t)ComponentType::udpbroadcast:
+        case (uint8_t)ComponentType::udp:
         {
-            case (uint8_t)ComponentType::udpbroadcast:
-            case (uint8_t)ComponentType::udp:
-            {
-                components=std::make_shared<ComponentUdp>(ios_,node,*this);
-                return components;
-            }
-            case (uint8_t)ComponentType::file:                
-            {
-                components=std::make_shared<ComponentFile>(ios_,node,*this);
-                return components;
-            }
-            case (uint8_t)ComponentType::console:                
-            {
-                components=std::make_shared<ComponentConsole>(ios_,node,*this);
-                return components;
-            }            
-            default:
-            {}
-                //TODO error
+            components=std::make_shared<ComponentUdp>(ios_,node,*this);
+            return components;
         }
+        case (uint8_t)ComponentType::file:                
+        {
+            components=std::make_shared<ComponentFile>(node,*this);
+            return components;
+        }
+        case (uint8_t)ComponentType::console:                
+        {
+            components=std::make_shared<ComponentConsole>(node,*this);
+            return components;
+        }            
+        default:
+        {}
+            //TODO error
+    }
     return InOut_sptr();
+}
+
+std::map<std::string,std::string> ConfigurationDepot::xmlAttributeToMap(const pugi::xml_node& node)
+{
+    std::map<std::string,std::string> out;
+    for (pugi::xml_attribute attr: node.attributes())
+    {
+        out[attr.name()]=attr.value();
+    }
+    return out;
 }

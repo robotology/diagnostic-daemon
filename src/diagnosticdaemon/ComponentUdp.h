@@ -18,6 +18,7 @@
 class ComponentUdp: public Component
 {
 public:
+    ComponentUdp(boost::asio::io_service &io_service,const std::map<std::string,std::string>&,ConfigurationDepot&);
     ComponentUdp(boost::asio::io_service &io_service,const pugi::xml_node& node,ConfigurationDepot&);
     virtual ~ComponentUdp(){};
 
@@ -45,6 +46,8 @@ private:
     std::set<boost::asio::ip::address> excludedAddresses_;
     std::set<boost::asio::ip::address> includededAddresses_;
     bool discardMsgByFilter(const boost::asio::ip::address& address);
+
+    boost::asio::io_service &ios_;
 };
 
 using ComponentUdp_sptr=std::shared_ptr<ComponentUdp>;

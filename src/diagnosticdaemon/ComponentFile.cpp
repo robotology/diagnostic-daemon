@@ -8,7 +8,7 @@
 #include "MsgDescriptionExt.h"
 #include <iomanip>
 
-ComponentFile::ComponentFile(boost::asio::io_service &io_service,const pugi::xml_node& node,ConfigurationDepot& depot):Component(io_service,node,depot)
+ComponentFile::ComponentFile(const pugi::xml_node& node,ConfigurationDepot& depot):Component(node,depot)
 {
     filename_=node.attribute(confsintax::value).value();
     fstream_.open(filename_);

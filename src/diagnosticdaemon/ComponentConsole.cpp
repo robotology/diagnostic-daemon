@@ -12,23 +12,27 @@
 
 #include "Decoder.h"
 
-ComponentConsole::ComponentConsole(boost::asio::io_service &io_service,const pugi::xml_node& node,ConfigurationDepot& depot):Component(io_service,node,depot)
+ComponentConsole::ComponentConsole(const pugi::xml_node& node,ConfigurationDepot& depot):Component(node,depot)
 {
+    decoder_.init({});
     thread_=std::make_unique<std::thread>(&ComponentConsole::inputLoop,this);
 }
 
 void ComponentConsole::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint)
 {
+    std::cout<<"******RAW-MSG******"<<std::endl;
     for(size_t index=0;index<size;++index)
     {
         std::cout<< std::hex<< std::setfill('0') << std::setw(2)<<(int)msg[index]<<" ";
     }
-
-    Decoder decoder;
-    decoder.init({});
+    std::cout<<std::endl;
+    std::cout<<"******END RAW-MSG******"<<std::endl;    
+    std::cout<<"******DECODED-MSG******"<<std::endl;
     std::stringstream ss;
     ss<<senderEndPoint;
-    decoder.decode(msg.data(),size,ss.str().c_str());  
+    decoder_.decode(msg.data(),size,ss.str().c_str());  
+    std::cout<<"******END DECODED-MSG******"<<std::endl;
+    std::cout<<std::endl;
 }
 
 void ComponentConsole::inputLoop()

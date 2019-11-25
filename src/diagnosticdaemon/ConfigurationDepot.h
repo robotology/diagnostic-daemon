@@ -35,6 +35,8 @@ class ConfigurationDepot
         boost::asio::io_service &ios_;
         std::list<InOut_sptr> depot_;       
         InOut_sptr createInOut(const pugi::xml_node& node);
+
+        std::map<std::string,std::string> xmlAttributeToMap(const pugi::xml_node& node);
 };
 
 template <typename T> static std::vector<T> tokenize(const std::string& destinations) {

@@ -36,9 +36,10 @@ set(DiagnosticDaemonHdr     ComponentUdp.h
 
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories(~/Documents/robotology-superbuild/robotology/icub-firmware-shared/eth/embobj/plus/comm-v2/icub 
-                  ~/Documents/robotology-superbuild/robotology/icub-firmware-shared/eth/embot 
-                  ~/Documents/robotology-superbuild/robotology/icub-firmware-shared/eth/embobj/core/core
-                  ~/Documents/icub-firmware/emBODY/eBcode/arch-arm/embot/binary)
+                    ~/Documents/robotology-superbuild/robotology/icub-firmware-shared/eth/embot 
+                    ~/Documents/robotology-superbuild/robotology/icub-firmware-shared/eth/embobj/core/core
+                    ~/Documents/robotology-superbuild/build/install/icub-firmware/emBODY/eBcode/arch-arm/embot/binary)
+                    
 add_executable(diagnosticdaemon ${DiagnosticDaemonSrc} ${DiagnosticDaemonHdr} )
 
 find_package(Boost 1.67 REQUIRED COMPONENTS system REQUIRED)

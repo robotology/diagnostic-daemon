@@ -42,7 +42,7 @@ private:
 };
 
     
-Decoder *decoder {nullptr};
+inline Decoder *decoder {nullptr};
 
 struct Decoder::Impl
 {
@@ -69,6 +69,7 @@ struct Decoder::Impl
         // i accept only sig<>
         if(embot::eprot::rop::OPC::sig != rop.opcode)
         {
+            std::cout<<"Error Decoder::Impl"<<std::endl;
             return false;
         }
        
@@ -98,12 +99,39 @@ struct Decoder::Impl
                 // and use also ib->flags + ib->par16 + ib->par64
                
                 std::cout<<textout<<std::endl;
-            } break;
-           
+            } 
+            break;
+           case embot::eprot::diagnostics::Info::id32:
+            {
+                embot::eprot::diagnostics::Info *info = reinterpret_cast<embot::eprot::diagnostics::Info*>(rop.value.getU08ptr());
+
+                uint64_t tt = info->basic.timestamp;
+                uint32_t sec = tt/(1000*1000);
+                uint32_t tmp = tt%(1000*1000);
+                uint32_t msec = tmp / 1000;
+                uint32_t usec = tmp % 1000;                    
+                const char *text = eoerror_code2string(info->basic.code);
+                const char *mystring = (char*)info->extra;
+                char buf[16] = {0};
+                if(rop.hassignature() || rop.hastime())
+                {
+                    snprintf(textout, sizeof(textout), "from %s [sig = 0x%x, tim = %lld] -> @ s%d m%d u%d -> %s -- %s", ipv4.tostring(buf, sizeof(buf)), rop.signature, rop.time, sec, msec, usec, text,mystring);
+                }
+                else
+                {
+                    snprintf(textout, sizeof(textout), "from %s [no sig, no tim] -> @ s%d m%d u%d: %s -- %s", ipv4.tostring(buf, sizeof(buf)), sec, msec, usec, text,mystring);
+                }
+               
+                // and use also ib->flags + ib->par16 + ib->par64
+               
+                std::cout<<textout<<std::endl;
+                break;
+            }
             default:
             {
                 std::cout<<"unknown"<<std::endl;
-            } break;
+            } 
+            break;
         }
            
         return true;
@@ -141,6 +169,7 @@ struct Decoder::Impl
     {
         if(!initted())
         {
+            std::cout<<"Error Decoder::decode"<<std::endl;
             return false;
         }
        
@@ -150,27 +179,27 @@ struct Decoder::Impl
    
 };
 
-Decoder::Decoder()
+inline Decoder::Decoder()
 : pImpl(new Impl)
 {
 }
 
-Decoder::~Decoder()
+inline Decoder::~Decoder()
 {  
     delete pImpl;
 }
 
-bool Decoder::init(const Config &config)
+inline bool Decoder::init(const Config &config)
 {
     return pImpl->init(config);
 }
 
-bool Decoder::initted() const
+inline bool Decoder::initted() const
 {
     return pImpl->initted();
 }
 
-bool Decoder::decode(uint8_t *ropframe, uint16_t sizeofropframe, const embot::eprot::IPv4 &ipv4)
+inline bool Decoder::decode(uint8_t *ropframe, uint16_t sizeofropframe, const embot::eprot::IPv4 &ipv4)
 {
     return pImpl->decode(ropframe, sizeofropframe, ipv4);
 }

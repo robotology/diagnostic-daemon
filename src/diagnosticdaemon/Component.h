@@ -28,13 +28,14 @@ class Component
     protected:
         static constexpr unsigned int maxMsgLenght_{1500};
     public:
-        Component(boost::asio::io_service &ios,const pugi::xml_node&,ConfigurationDepot&);
+        Component(const std::map<std::string,std::string>& attributes,ConfigurationDepot&);
+        Component(const pugi::xml_node&,ConfigurationDepot&);
         virtual ~Component(){};
         virtual void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint)=0;
         std::string getName() const {return name_;};
 
     protected:
-        boost::asio::io_service &ios_;
+        
         ConfigurationDepot& depot_;
         const pugi::xml_node& parameters_;
 
