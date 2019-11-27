@@ -5,7 +5,6 @@
 */
 
 #include "ComponentConsole.h"
-#include "MsgDescriptionExt.h"
 #include "ConfigurationDepot.h"
 
 #include <iomanip>

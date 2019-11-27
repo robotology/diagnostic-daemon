@@ -11,7 +11,6 @@
 #include <string>
 
 #include "ComponentUdp.h"
-#include "MsgDescriptionExt.h"
 #include "ConfigurationDepot.h"
 
 using namespace boost::asio;

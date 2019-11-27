@@ -8,9 +8,45 @@ The DiagnosticDaemon application has been developed to get diagnostic messages f
 *Deploy diagram*
 
 
-## 1.2. Installation
+## 1.2. Installation from source on Linux system
 
-## 1.3. Configuration
+As prerequisite install:
+
+```bash
+sudo apt-get install build-essential g++ cmake libboost-system-dev
+```
+Clone the DiagnosticDaemon repository:
+
+```bash
+git clone https://github.com/icub-tech-iit/diagnostic-daemon.git
+```
+
+Clone the icub-firmware-shared repository
+```bash
+git clone https://github.com/icub-tech-iit/icub-firmware-shared.git
+```
+
+Clone the icub-firmware repository
+```bash
+git clone https://github.com/icub-tech-iit/icub-firmware.git
+```
+**<i>Temporary agreement</i>**: note that the DiagnosticDaemon,icub-firmware-shared and icub-firmware
+repository must be at the same level.
+
+Compile
+```bash
+cd ~DiagnosticDaemon
+mkdir build
+cmake ..
+make
+```
+
+
+## 1.3. Installation from source on Windows system
+
+Not available for now.
+
+## 1.4. Configuration
 
 The DiagnosticDaemon has a configuration file in xml.
 

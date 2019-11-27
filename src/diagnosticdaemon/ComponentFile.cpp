@@ -5,7 +5,6 @@
 */
 
 #include "ComponentFile.h"
-#include "MsgDescriptionExt.h"
 #include <iomanip>
 
 ComponentFile::ComponentFile(const pugi::xml_node& node,ConfigurationDepot& depot):Component(node,depot)

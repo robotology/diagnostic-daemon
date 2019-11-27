@@ -6,7 +6,8 @@
 ################################################################################
 
 # @author Luca Tricerri <luca.tricerri@iit.it> 
-include(CMakePackageConfigHelpers)
+set(EM_DIR ../../../icub-firmware/emBODY/eBcode/arch-arm/)
+set(FIRMWARE-SHARED_DIR ../../../icub-firmware-shared/eth/)
 
 set(DiagnosticDaemonSrc     main.cpp
                             ComponentUdp.cpp
@@ -15,13 +16,15 @@ set(DiagnosticDaemonSrc     main.cpp
                             pugixml.cpp
                             Component.cpp
                             ConfigurationDepot.cpp
-                            ~/Documents/robotology-superbuild/robotology/icub-firmware-shared/eth/embot/DiagnosticsHost.cpp
-                            ~/Documents/robotology-superbuild/robotology/icub-firmware-shared/eth/embobj/plus/comm-v2/icub/EoError.c
-                            ~/Documents/robotology-superbuild/robotology/icub-firmware-shared/eth/embot/ROPstream.cpp
-                            ~/Documents/robotology-superbuild/robotology/icub-firmware-shared/eth/embot/ROPframe.cpp 
-                            ~/Documents/robotology-superbuild/robotology/icub-firmware-shared/eth/embot/ROPdescriptor.cpp
+                            ${EM_DIR}/embot/eprot/ROPstream.cpp
+                            ${EM_DIR}/embot/eprot/ROPframe.cpp 
+                            ${EM_DIR}/embot/eprot/ROPdescriptor.cpp
+                            ${EM_DIR}/embot/eprot/DiagnosticsHost.cpp
+                            ${EM_DIR}/embot/common/embot_common.cpp
+                            ${EM_DIR}/embot/binary/embot_binary.cpp
+                            ${FIRMWARE-SHARED_DIR}/embobj/plus/comm-v2/icub/EoError.c
                         )
-
+                        
 set(DiagnosticDaemonHdr     ComponentUdp.h
                             ComponentFile.h
                             ComponentConsole.h
@@ -32,13 +35,13 @@ set(DiagnosticDaemonHdr     ComponentUdp.h
                             pugiconfig.hpp            
                        )
 
-
-
 include_directories(${Boost_INCLUDE_DIRS})
-include_directories(~/Documents/robotology-superbuild/robotology/icub-firmware-shared/eth/embobj/plus/comm-v2/icub 
-                    ~/Documents/robotology-superbuild/robotology/icub-firmware-shared/eth/embot 
-                    ~/Documents/robotology-superbuild/robotology/icub-firmware-shared/eth/embobj/core/core
-                    ~/Documents/robotology-superbuild/build/install/icub-firmware/emBODY/eBcode/arch-arm/embot/binary)
+include_directories(
+                    ../../../icub-firmware-shared/eth/embobj/core/core
+                    ../../../icub-firmware-shared/eth/embobj/plus/comm-v2/icub
+                    ../../../icub-firmware/emBODY/eBcode/arch-arm/embot/eprot
+                    ../../../icub-firmware/emBODY/eBcode/arch-arm/embot/common
+                    ../../../icub-firmware/emBODY/eBcode/arch-arm/embot/binary)
                     
 add_executable(diagnosticdaemon ${DiagnosticDaemonSrc} ${DiagnosticDaemonHdr} )
 
