@@ -77,14 +77,14 @@ Here is the default file:
 At the start the DiagnosticDaemon reads the file and create as many components as described in the
 config.xml file. In this case the following UML diagram describe the created objects:
 
-<figure style="display:block;margin-left:auto;margin-right:auto;width:80%">
+<figure style="display:block;margin-left:auto;margin-right:auto;width:80%;border:solid 1px">
     <img src="img/diagnosticdaemonobj.png" >
     <figcaption><i>UML Object diagram</i></figcaption>
 </figure>
 
 The message flow through the instantiated components:
 
-<figure style="display:block;margin-left:auto;margin-right:auto;width:80%">
+<figure style="display:block;margin-left:auto;margin-right:auto;width:80%;border:solid 1px">
     <img src="img/diagnosticdaemonmsgz.png" >
     <figcaption><i>UML msg diagram</i></figcaption>
 </figure>
@@ -119,7 +119,7 @@ The component tag has the following attributes:
 
 In figure the application class diagram.
 
-<figure style="display:block;margin-left:auto;margin-right:auto;width:80%">
+<figure style="display:block;margin-left:auto;margin-right:auto;width:80%;border:solid 1px">
     <img src="img/diagnosticdaemonclass.png" >
     <figcaption><i>UML class diagram</i></figcaption>
 </figure>
