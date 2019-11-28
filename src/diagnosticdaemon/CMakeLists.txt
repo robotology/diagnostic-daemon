@@ -16,6 +16,7 @@ set(DiagnosticDaemonSrc     main.cpp
                             pugixml.cpp
                             Component.cpp
                             ConfigurationDepot.cpp
+                            Decoder.cpp
                             ${EM_DIR}/embot/eprot/ROPstream.cpp
                             ${EM_DIR}/embot/eprot/ROPframe.cpp 
                             ${EM_DIR}/embot/eprot/ROPdescriptor.cpp
@@ -32,7 +33,8 @@ set(DiagnosticDaemonHdr     ComponentUdp.h
                             ConfigurationDepot.h
                             ElapsedTime.h
                             pugixml.hpp
-                            pugiconfig.hpp            
+                            pugiconfig.hpp    
+                            Decoder.h        
                        )
 
 include_directories(${Boost_INCLUDE_DIRS})
