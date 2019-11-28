@@ -8,7 +8,6 @@
 //   File component class
 //
 
-
 #pragma once
 
 #include <iostream>

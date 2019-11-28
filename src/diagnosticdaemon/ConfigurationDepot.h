@@ -39,7 +39,8 @@ class ConfigurationDepot
         std::map<std::string,std::string> xmlAttributeToMap(const pugi::xml_node& node);
 };
 
-template <typename T> static std::vector<T> tokenize(const std::string& destinations) {
+template <typename T> static std::vector<T> tokenize(const std::string& destinations) 
+{
     std::vector<T> out;
     std::istringstream ss{ destinations };
     out = std::vector<T>{ std::istream_iterator<T>{ss},std::istream_iterator<T>() };

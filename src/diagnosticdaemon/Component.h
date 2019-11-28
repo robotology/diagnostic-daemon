@@ -8,7 +8,6 @@
 //   base class for components
 //
 
-
 #pragma once
 
 #include "ConfigurationConst.h"
@@ -53,7 +52,5 @@ class Component
         }
 
 };
-
-
 
 using InOut_sptr=std::shared_ptr<Component>;
