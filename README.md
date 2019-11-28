@@ -79,14 +79,14 @@ config.xml file. In this case the following UML diagram describe the created obj
 
 <figure style="display:block;margin-left:auto;margin-right:auto;width:80%">
     <img src="img/diagnosticdaemonobj.png" >
-    <figcaption><b>UML Object diagram</b></figcaption>
+    <figcaption><i>UML Object diagram</i></figcaption>
 </figure>
 
 The message flow through the instantiated components:
 
 <figure style="display:block;margin-left:auto;margin-right:auto;width:80%">
     <img src="img/diagnosticdaemonmsgz.png" >
-    <figcaption><b>UML Msg diagram</b></figcaption>
+    <figcaption><i>UML msg diagram</i></figcaption>
 </figure>
 In the figure the message flow from RTOS and yarprobotinterface to the file/console/gui.
 
@@ -121,5 +121,5 @@ In figure the application class diagram.
 
 <figure style="display:block;margin-left:auto;margin-right:auto;width:80%">
     <img src="img/diagnosticdaemonclass.png" >
-    <figcaption><b>UML class diagram</b></figcaption>
+    <figcaption><i>UML class diagram</i></figcaption>
 </figure>
