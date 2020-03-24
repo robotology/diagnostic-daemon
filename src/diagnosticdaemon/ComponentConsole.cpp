@@ -17,6 +17,12 @@ ComponentConsole::ComponentConsole(const pugi::xml_node& node,ConfigurationDepot
     thread_=std::make_unique<std::thread>(&ComponentConsole::inputLoop,this);
 }
 
+ComponentConsole::ComponentConsole(const std::map<std::string,std::string>& attributes,ConfigurationDepot& depot):Component(attributes,depot)
+{
+    decoder_.init({});
+    thread_=std::make_unique<std::thread>(&ComponentConsole::inputLoop,this);
+}
+
 void ComponentConsole::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint)
 {
     std::cout<<"******RAW-MSG******"<<std::endl;

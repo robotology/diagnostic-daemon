@@ -5,11 +5,18 @@
 */
 
 #include "ComponentFile.h"
+#include "ConfigurationDepot.h"
 #include <iomanip>
 
 ComponentFile::ComponentFile(const pugi::xml_node& node,ConfigurationDepot& depot):Component(node,depot)
 {
     filename_=node.attribute(confsintax::value).value();
+    fstream_.open(filename_);
+}
+
+ComponentFile::ComponentFile(const std::map<std::string,std::string>& attributes,ConfigurationDepot& depot):Component(attributes,depot)
+{
+    filename_=asString(confsintax::value,attributes);
     fstream_.open(filename_);
 }
 

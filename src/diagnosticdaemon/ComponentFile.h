@@ -20,6 +20,7 @@ class ComponentFile: public Component
 {
     public:
         ComponentFile(const pugi::xml_node& node,ConfigurationDepot&);
+        ComponentFile(const std::map<std::string,std::string>& attributes,ConfigurationDepot& depot);        
         virtual ~ComponentFile(){};
 
         void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint) override;

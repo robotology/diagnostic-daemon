@@ -20,7 +20,7 @@
 
 using boost::asio::ip::udp;
 
-class ConfigurationDepot;;
+class ConfigurationDepot;
 
 class Component
 {
@@ -37,6 +37,7 @@ class Component
         
         ConfigurationDepot& depot_;
         const pugi::xml_node& parameters_;
+        const std::map<std::string,std::string> parametersMap_;
 
         std::string name_;
         std::string protocol_;

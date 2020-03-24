@@ -21,6 +21,7 @@ class ComponentConsole: public Component
 {
     public:
         ComponentConsole(const pugi::xml_node& node,ConfigurationDepot&);
+        ComponentConsole(const std::map<std::string,std::string>& attributes,ConfigurationDepot& depot);
         virtual ~ComponentConsole(){};
 
         void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint) override;
