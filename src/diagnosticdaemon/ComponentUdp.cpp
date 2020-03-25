@@ -15,28 +15,6 @@
 
 using namespace boost::asio;
 
-ComponentUdp::ComponentUdp(boost::asio::io_service &ios,const pugi::xml_node& node,ConfigurationDepot& depot)
-    : Component(node,depot),
-      port_(node.attribute(confsintax::rxport).as_int()),
-      txport_(node.attribute(confsintax::txport).as_int()),
-      rxSocket_(ios, udp::endpoint(udp::v4(), port_)),
-      txSocket_(ios),
-      receiverEndpoint_(udp::endpoint(ip::address::from_string(node.attribute(confsintax::address).value()), txport_)),
-      ios_(ios)
-{
-  emsAddress_=node.attribute(confsintax::address).value();
-  std::string addressfilter=node.attribute(confsintax::addressfilter).value();
-  analyzeAddress(addressfilter);
-
-  txSocket_.open(boost::asio::ip::udp::v4());
-
-  rxSocket_.async_receive_from(
-      boost::asio::buffer(rxData_, maxMsgLenght_), senderEndpoint_,
-      boost::bind(&ComponentUdp::handleReceiveFrom, this,
-                  boost::asio::placeholders::error,
-                  boost::asio::placeholders::bytes_transferred));
-}
-
 ComponentUdp::ComponentUdp(boost::asio::io_service &ios,const std::map<std::string,std::string>&attributes,ConfigurationDepot&depot)
     : Component(attributes,depot),
       port_(asInt(confsintax::rxport,attributes)),

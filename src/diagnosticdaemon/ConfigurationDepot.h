@@ -36,7 +36,6 @@ class ConfigurationDepot
         pugi::xml_document doc_;
         boost::asio::io_service &ios_;
         std::list<InOut_sptr> depot_;       
-        InOut_sptr createComponent(const pugi::xml_node& node);
         InOut_sptr createComponent(const std::map<std::string,std::string>& attributes);
 };
 

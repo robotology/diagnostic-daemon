@@ -11,12 +11,6 @@
 
 #include "Decoder.h"
 
-ComponentConsole::ComponentConsole(const pugi::xml_node& node,ConfigurationDepot& depot):Component(node,depot)
-{
-    decoder_.init({});
-    thread_=std::make_unique<std::thread>(&ComponentConsole::inputLoop,this);
-}
-
 ComponentConsole::ComponentConsole(const std::map<std::string,std::string>& attributes,ConfigurationDepot& depot):Component(attributes,depot)
 {
     decoder_.init({});

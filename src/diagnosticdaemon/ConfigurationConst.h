@@ -30,6 +30,7 @@ namespace confsintax
     static constexpr char udp[]{"udp"};
     static constexpr char file[]{"file"};
     static constexpr char console[]{"console"};
+    static constexpr char disabled[]{"disabled"};
 };
 
 enum class ComponentType: uint8_t
@@ -38,11 +39,13 @@ enum class ComponentType: uint8_t
     udp,
     file,
     console,
+    disabled
 };
 
 inline std::map<std::string,uint8_t> componentTypeLookup{
                                                         {confsintax::udpbroadcast,(uint8_t)ComponentType::udpbroadcast},
                                                         {confsintax::udp,(uint8_t)ComponentType::udp},
                                                         {confsintax::file,(uint8_t)ComponentType::file},
-                                                        {confsintax::console,(uint8_t)ComponentType::console}
+                                                        {confsintax::console,(uint8_t)ComponentType::console},
+                                                        {confsintax::disabled,(uint8_t)ComponentType::disabled}
                                                         };

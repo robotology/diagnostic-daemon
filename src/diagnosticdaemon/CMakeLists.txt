@@ -15,6 +15,7 @@ set(DiagnosticDaemonSrc     main.cpp
                             ComponentConsole.cpp
                             pugixml.cpp
                             Component.cpp
+                            ComponentDisabled.cpp
                             ConfigurationDepot.cpp
                             Decoder.cpp
                             ${EM_DIR}/embot/eprot/ROPstream.cpp
@@ -30,6 +31,7 @@ set(DiagnosticDaemonHdr     ComponentUdp.h
                             ComponentFile.h
                             ComponentConsole.h
                             Component.h
+                            ComponentDisabled.h
                             ConfigurationDepot.h
                             ElapsedTime.h
                             pugixml.hpp

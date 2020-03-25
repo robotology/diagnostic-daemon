@@ -9,22 +9,13 @@
 
 #include <iostream>
 
-Component::Component(const std::map<std::string,std::string>& attributes,ConfigurationDepot& depot):depot_(depot),parametersMap_(attributes),parameters_(pugi::xml_node())
+Component::Component(const std::map<std::string,std::string>& attributes,ConfigurationDepot& depot):depot_(depot),parametersMap_(attributes)
 {
     name_=asString(confsintax::name,attributes);
     protocol_=asString(confsintax::protocol,attributes);
     mode_=asString(confsintax::mode,attributes);
     enable_=asBool(confsintax::enable,attributes);
     destination_=asString(confsintax::destination,attributes);
-}
-
-Component::Component(const pugi::xml_node& node,ConfigurationDepot& depot):depot_(depot),parameters_(node)
-{
-    name_=node.attribute(confsintax::name).value();
-    protocol_=node.attribute(confsintax::protocol).value();
-    mode_=node.attribute(confsintax::mode).value();
-    enable_=node.attribute(confsintax::enable).as_bool();
-    destination_=node.attribute(confsintax::destination).value();
 }
 
 const std::map<std::string,std::string> Component::getParameterMap() const

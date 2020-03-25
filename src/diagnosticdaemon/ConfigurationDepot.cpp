@@ -8,6 +8,7 @@
 #include "ComponentUdp.h"
 #include "ComponentFile.h"
 #include "ComponentConsole.h"
+#include "ComponentDisabled.h"
 
 ConfigurationDepot::ConfigurationDepot(boost::asio::io_service &io_service): ios_(io_service)
 {}
@@ -52,7 +53,7 @@ InOut_sptr ConfigurationDepot::createComponent(const std::map<std::string,std::s
     bool enable =asBool(confsintax::enable,attributes);
     
     if(!enable)
-        return InOut_sptr();
+        protocol=confsintax::disabled;
 
     switch(componentTypeLookup[protocol])
     {
@@ -71,7 +72,12 @@ InOut_sptr ConfigurationDepot::createComponent(const std::map<std::string,std::s
         {
             components=std::make_shared<ComponentConsole>(attributes,*this);
             return components;
-        }            
+        }    
+        case (uint8_t)ComponentType::disabled:                
+        {
+            components=std::make_shared<ComponentDisabled>(attributes,*this);
+            return components;
+        }                  
         default:
         {
             //TODO error

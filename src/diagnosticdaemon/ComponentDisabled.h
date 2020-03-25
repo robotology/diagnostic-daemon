@@ -16,19 +16,13 @@
 
 #include "Component.h"
 
-class ComponentFile: public Component
+class ComponentDisabled: public Component
 {
     public:
-        ComponentFile(const std::map<std::string,std::string>& attributes,ConfigurationDepot& depot);        
-        virtual ~ComponentFile(){};
+        ComponentDisabled(const std::map<std::string,std::string>& attributes,ConfigurationDepot& depot);        
+        virtual ~ComponentDisabled(){};
 
         void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint) override;
-
-    private:        
-        std::ofstream fstream_;
-
-        std::string filename_;
-
 };
 
-using ComponentFile_sptr=std::shared_ptr<ComponentFile>;
+using ComponentDisabled_sptr=std::shared_ptr<ComponentDisabled>;

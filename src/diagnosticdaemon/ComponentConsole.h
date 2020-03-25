@@ -20,7 +20,6 @@
 class ComponentConsole: public Component
 {
     public:
-        ComponentConsole(const pugi::xml_node& node,ConfigurationDepot&);
         ComponentConsole(const std::map<std::string,std::string>& attributes,ConfigurationDepot& depot);
         virtual ~ComponentConsole(){};
 

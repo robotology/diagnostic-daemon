@@ -28,17 +28,15 @@ class Component
         static constexpr unsigned int maxMsgLenght_{1500};
     public:
         Component(const std::map<std::string,std::string>& attributes,ConfigurationDepot&);
-        Component(const pugi::xml_node& node,ConfigurationDepot& depot);
         virtual ~Component(){};
+
         virtual void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint)=0;
         std::string getName() const {return name_;};
-
         const std::map<std::string,std::string> getParameterMap() const;
 
     protected:
         
         ConfigurationDepot& depot_;
-        const pugi::xml_node& parameters_;
         const std::map<std::string,std::string> parametersMap_;
 
         std::string name_;
