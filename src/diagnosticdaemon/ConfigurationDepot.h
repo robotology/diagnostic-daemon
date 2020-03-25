@@ -5,7 +5,7 @@
 */
 
 // - brief
-//   Depot for components
+//   The class contains all the components.
 //
 
 #pragma once
@@ -30,12 +30,14 @@ class ConfigurationDepot
 
         template <typename T> bool route(T&,unsigned int size,const std::string& destination,udp::endpoint senderEndPoint);
 
+        bool save();
+
     private:
         pugi::xml_document doc_;
         boost::asio::io_service &ios_;
         std::list<InOut_sptr> depot_;       
-        InOut_sptr createInOut(const pugi::xml_node& node);
-        InOut_sptr createInOut(const std::map<std::string,std::string>& attributes);
+        InOut_sptr createComponent(const pugi::xml_node& node);
+        InOut_sptr createComponent(const std::map<std::string,std::string>& attributes);
 };
 
 template <typename T> static std::vector<T> tokenize(const std::string& destinations) 
@@ -66,3 +68,4 @@ std::map<std::string,std::string> xmlAttributeToMap(const pugi::xml_node& node);
 bool asBool(const std::string& name,const std::map<std::string,std::string>& attributes);
 std::string asString(const std::string& name,const std::map<std::string,std::string>& attributes);
 int asInt(const std::string& name,const std::map<std::string,std::string>& attributes);
+void mapAttributeToXml(pugi::xml_node& node,const std::map<std::string,std::string>& in);
