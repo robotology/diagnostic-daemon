@@ -7,7 +7,7 @@
 
 # @author Luca Tricerri <luca.tricerri@iit.it>
 
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.12)
 
 project(DiagnosticDaemon
         LANGUAGES C CXX
@@ -15,9 +15,6 @@ project(DiagnosticDaemon
 
 set(CMAKE_AUTOMOC ON)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-if (CMAKE_VERSION VERSION_LESS 3.11)
-  list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake-3.11)
-endif() 
 
 include(GNUInstallDirs)
 
@@ -31,11 +28,6 @@ find_package(Boost REQUIRED COMPONENTS system)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR}")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}")
-
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-if (CMAKE_VERSION VERSION_LESS 3.5)
-  list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake-3.5)
-endif() 
 
 # Encourage user to specify a build type (e.g. Release, Debug, etc.), otherwise set it to Debug.
 if(NOT CMAKE_CONFIGURATION_TYPES)
