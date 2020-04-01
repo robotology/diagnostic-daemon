@@ -22,7 +22,14 @@ set(Boost_NO_BOOST_CMAKE ON)
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREAD ON)
 
-find_package(Boost REQUIRED COMPONENTS system)
+find_package(Boost 1.65 REQUIRED COMPONENTS system REQUIRED)
+find_package(icub_firmware_shared REQUIRED)
+if(icub_firmware_shared_FOUND)
+  # icub-firmware-shared 4.0.7 was actually a wrong version exported by icub-firmware-shared <= 1.15
+  if(icub_firmware_shared_VERSION VERSION_GREATER 4 OR icub_firmware_shared_VERSION VERSION_LESS 1.15.100)
+    message(FATAL_ERROR "An old version of icub-firmware-shared has been detected, but at least 1.15.100 is required")
+  endif()
+endif()
 
 # Control where libraries and executables are placed during the build.
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR}")
