@@ -91,10 +91,11 @@ void ComponentUdp::analyzeAddress(const std::string& addresses)
     std::vector<std::string> out=tokenize<std::string>(addresses);
     for(const std::string& current:out)
     {
+        // TODO with boost 1.67 substitute from_string with make_address
         if(current.substr(0,2)=="x:")
-            excludedAddresses_.insert(boost::asio::ip::make_address(current.substr(2,current.size()-2)));
+            excludedAddresses_.insert(boost::asio::ip::address::from_string(current.substr(2,current.size()-2)));
         else if(current.substr(0,2)=="i:")
-            includededAddresses_.insert(boost::asio::ip::make_address(current.substr(2,current.size()-2)));
+            includededAddresses_.insert(boost::asio::ip::address::from_string(current.substr(2,current.size()-2)));
         else
         {
             Log(Severity::error)<<"filter not well configured"<<std::endl;
