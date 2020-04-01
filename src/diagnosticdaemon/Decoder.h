@@ -10,10 +10,10 @@
 
 #pragma once
 
-#include "DiagnosticsHost.h"
+#include "embot_prot_eth_diagnostic_Host.h"
 #include "EoError.h"
-#include "embot_eprot_diagnostics.h"
-#include "embot_eprot_ropframe.h"
+#include "embot_prot_eth_diagnostic.h"
+#include "embot_prot_eth_ropframe.h"
 
 
 // to be placed in the pimpl of the main object and conditionally included
@@ -34,13 +34,12 @@ public:
 
     bool init(const Config &config);
     bool initted() const;        
-    bool decode(uint8_t *ropframe, uint16_t sizeofropframe, const embot::eprot::IPv4 &ipv4 = {"10.0.1.98"});
+    bool decode(uint8_t *ropframe, uint16_t sizeofropframe, const embot::prot::eth::IPv4 &ipv4 = {"10.0.1.98"});
     
 private:    
     bool _initted {false};
     Config _config {};
-    embot::app::DiagnosticsHost *_host {nullptr};
-    embot::app::DiagnosticsHost::Config _configdiaghost { false, 513, ropdecode};  
-
-    static bool ropdecode(const embot::eprot::IPv4 &ipv4, const embot::eprot::rop::Descriptor &rop);     
+    embot::prot::eth::diagnostic::Host *_host {nullptr};
+    embot::prot::eth::diagnostic::Host::Config _configdiaghost { false, 513, ropdecode};
+    static bool ropdecode(const embot::prot::eth::IPv4 &ipv4, const embot::prot::eth::rop::Descriptor &rop);
 };

@@ -10,7 +10,7 @@
 #include <iostream>
 
 Decoder::Decoder()
-: _host(new embot::app::DiagnosticsHost)
+: _host(new embot::prot::eth::diagnostic::Host)
 {
 }
 
@@ -46,25 +46,25 @@ bool Decoder::initted() const
     return _initted;
 }
 
-bool Decoder::decode(uint8_t *ropframe, uint16_t sizeofropframe, const embot::eprot::IPv4 &ipv4)
+bool Decoder::decode(uint8_t *ropframe, uint16_t sizeofropframe, const embot::prot::eth::IPv4 &ipv4)
 {
     if(!initted())
     {
         Log(Severity::error)<<"Decoder::decode"<<std::endl;
         return false;
     }
-    
-    embot::utils::Data data(ropframe, sizeofropframe);
+
+    embot::core::Data data(ropframe, sizeofropframe);
     return _host->accept(ipv4, data);        
 }
 
-bool Decoder::ropdecode(const embot::eprot::IPv4 &ipv4, const embot::eprot::rop::Descriptor &rop)
+bool Decoder::ropdecode(const embot::prot::eth::IPv4 &ipv4, const embot::prot::eth::rop::Descriptor &rop)
 {      
     // in here we just print out, hence we use a string // or a std:;string
     char textout[128] = {0};
     
     // i accept only sig<>
-    if(embot::eprot::rop::OPC::sig != rop.opcode)
+    if(embot::prot::eth::rop::OPC::sig != rop.opcode)
     {
         Log(Severity::error)<<"Decoder::Impl"<<std::endl;
         return false;
@@ -73,9 +73,9 @@ bool Decoder::ropdecode(const embot::eprot::IPv4 &ipv4, const embot::eprot::rop:
     switch(rop.id32)
     {
         
-        case embot::eprot::diagnostics::InfoBasic::id32:
+        case embot::prot::eth::diagnostic::InfoBasic::id32:
         {
-            embot::eprot::diagnostics::InfoBasic *ib = reinterpret_cast<embot::eprot::diagnostics::InfoBasic*>(rop.value.getU08ptr());
+            embot::prot::eth::diagnostic::InfoBasic *ib = reinterpret_cast<embot::prot::eth::diagnostic::InfoBasic*>(rop.value.getU08ptr());
 
             uint64_t tt = ib->timestamp;
             uint32_t sec = tt/(1000*1000);
@@ -98,9 +98,9 @@ bool Decoder::ropdecode(const embot::eprot::IPv4 &ipv4, const embot::eprot::rop:
             std::cout<<textout<<std::endl;
         } 
         break;
-        case embot::eprot::diagnostics::Info::id32:
+        case embot::prot::eth::diagnostic::Info::id32:
         {
-            embot::eprot::diagnostics::Info *info = reinterpret_cast<embot::eprot::diagnostics::Info*>(rop.value.getU08ptr());
+            embot::prot::eth::diagnostic::Info *info = reinterpret_cast<embot::prot::eth::diagnostic::Info*>(rop.value.getU08ptr());
 
             uint64_t tt = info->basic.timestamp;
             uint32_t sec = tt/(1000*1000);
