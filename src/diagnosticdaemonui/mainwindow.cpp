@@ -40,12 +40,12 @@ MainWindow::MainWindow(QWidget *parent)
     pugi::xml_parse_result result = doc.load_file(uiconfsintax::configurationfile);
     if(result.status == pugi::status_file_not_found)
     {
-        std::cout<<"ERROR: config.xml not found"<<std::endl;
+        Log(Severity::error)<<"config.xml not found"<<std::endl;
         return;
     }
     if(result.status != pugi::status_ok)
     {
-        std::cout<<"ERROR: config.xml reading"<<std::endl;
+        Log(Severity::error)<<"config.xml reading"<<std::endl;
         return;
     }
 

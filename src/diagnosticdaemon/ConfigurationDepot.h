@@ -18,7 +18,8 @@
 #include <map>
 
 #include "Component.h"
-#include "ConfigurationConst.h"
+#include "Sintax.h"
+#include "const.h"
 
 using boost::asio::ip::udp;
 
@@ -33,19 +34,13 @@ class ConfigurationDepot
         bool save();
 
     private:
-        pugi::xml_document doc_;
         boost::asio::io_service &ios_;
-        std::list<InOut_sptr> depot_;       
-        InOut_sptr createComponent(const std::map<std::string,std::string>& attributes);
-};
+        std::list<Component_sptr> depot_;       
+        Component_sptr createComponent(const std::map<std::string,std::string>& attributes);
 
-template <typename T> static std::vector<T> tokenize(const std::string& destinations) 
-{
-    std::vector<T> out;
-    std::istringstream ss{ destinations };
-    out = std::vector<T>{ std::istream_iterator<T>{ss},std::istream_iterator<T>() };
-    return out;
-}
+        std::map<std::string,std::string> xmlAttributeToMap(const pugi::xml_node& node) const;
+        void mapAttributeToXml(pugi::xml_node& node,const std::map<std::string,std::string>& in) const;
+};
 
 template <typename T> bool ConfigurationDepot::route(T& msg,unsigned int size,const std::string& destinations,udp::endpoint senderEndPoint)
 {
@@ -62,9 +57,3 @@ template <typename T> bool ConfigurationDepot::route(T& msg,unsigned int size,co
     
     return true;
 }
-
-std::map<std::string,std::string> xmlAttributeToMap(const pugi::xml_node& node);
-bool asBool(const std::string& name,const std::map<std::string,std::string>& attributes);
-std::string asString(const std::string& name,const std::map<std::string,std::string>& attributes);
-int asInt(const std::string& name,const std::map<std::string,std::string>& attributes);
-void mapAttributeToXml(pugi::xml_node& node,const std::map<std::string,std::string>& in);

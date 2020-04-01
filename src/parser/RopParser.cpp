@@ -27,7 +27,7 @@ std::list<std::tuple<std::string,std::string,std::string>> RopParser::parse(cons
         bool deleted=checkIfParamIsToBeDeleted(node);
         if(deleted)
         {
-            //std::cout<<"Erase"<<std::endl;
+            //Log(Severity::none)<<"Erase"<<std::endl;
             node.parent().remove_child(node);
             continue;
         }
@@ -65,7 +65,7 @@ std::list<std::tuple<std::string,std::string,std::string>> RopParser::parse(cons
     }
 
     return msg;
-    //currentDoc_.save(std::cout);
+    //currentDoc_.save(Log(Severity::none));
 }
 
 bool RopParser::checkIfParamIsToBeDeleted(const pugi::xml_node& node)
@@ -75,7 +75,7 @@ bool RopParser::checkIfParamIsToBeDeleted(const pugi::xml_node& node)
     std::string conditionalvalue;
     if ((attr = node.attribute(conditionnamekey_)))
     {
-        //std::cout<<"Check conditional"<<std::endl;
+        //Log(Severity::none)<<"Check conditional"<<std::endl;
         conditionalname=attr.value();
         if(conditionalname==std::string(nonekey_))
             return false;
@@ -87,7 +87,7 @@ bool RopParser::checkIfParamIsToBeDeleted(const pugi::xml_node& node)
         else
         {
             //TODO error
-            //std::cout<<"Error:conditionvalue"<<std::endl;
+            //Log(Severity::none)<<"Error:conditionvalue"<<std::endl;
             return false;
         }
 
@@ -100,7 +100,7 @@ bool RopParser::checkIfParamIsToBeDeleted(const pugi::xml_node& node)
 
         if((attr = conditionalNode.attribute(valuekey_)))
         {
-            //std::cout<<"Check cond node"<<std::endl;
+            //Log(Severity::none)<<"Check cond node"<<std::endl;
             if(attr.value()==conditionalvalue)
                 return false;
             return true;
@@ -108,7 +108,7 @@ bool RopParser::checkIfParamIsToBeDeleted(const pugi::xml_node& node)
         else
         {
             //TODO error
-            //std::cout<<"Error:value"<<std::endl;
+            //Log(Severity::none)<<"Error:value"<<std::endl;
             return false;
         }        
     }
@@ -137,7 +137,7 @@ void RopParser::dump(const std::list<std::tuple<std::string,std::string,std::str
 {
     for(auto current:msg)
     {
-        std::cout<<std::setfill('-')<<std::setw(20)<<std::get<0>(current)<<std::get<1>(current)<<std::endl;
+        Log(Severity::none)<<std::setfill('-')<<std::setw(20)<<std::get<0>(current)<<std::get<1>(current)<<std::endl;
     }
 }
 

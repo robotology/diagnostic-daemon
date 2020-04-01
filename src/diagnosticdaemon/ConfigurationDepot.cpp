@@ -9,27 +9,29 @@
 #include "ComponentFile.h"
 #include "ComponentConsole.h"
 #include "ComponentDisabled.h"
+#include "Log.h"
 
 ConfigurationDepot::ConfigurationDepot(boost::asio::io_service &io_service): ios_(io_service)
 {}
 
 bool ConfigurationDepot::createConfiguration()
 {
-    pugi::xml_parse_result result = doc_.load_file(confsintax::configurationfile);
+    pugi::xml_document doc;
+    pugi::xml_parse_result result = doc.load_file(confsintax::configurationfile);
     if(result.status == pugi::status_file_not_found)
     {
-        std::cout<<"ERROR: config.xml not found"<<std::endl;
+        Log(Severity::error)<<"config.xml not found"<<std::endl;
         return false;
     }
     if(result.status != pugi::status_ok)
     {
-        std::cout<<"ERROR: config.xml reading"<<std::endl;
+        Log(Severity::error)<<"config.xml reading"<<std::endl;
         return false;
     }
 
     std::string tmp{"//"};
     tmp+=confsintax::component;
-    pugi::xpath_node_set components = doc_.select_nodes(tmp.c_str());   
+    pugi::xpath_node_set components = doc.select_nodes(tmp.c_str());   
     for(auto currentComponent:components)
     {
         pugi::xml_node node=currentComponent.node();    
@@ -46,9 +48,9 @@ bool ConfigurationDepot::createConfiguration()
     return true;
 }
 
-InOut_sptr ConfigurationDepot::createComponent(const std::map<std::string,std::string>& attributes)
+Component_sptr ConfigurationDepot::createComponent(const std::map<std::string,std::string>& attributes)
 {
-    InOut_sptr components;
+    Component_sptr components;
     std::string protocol=attributes.at(confsintax::protocol);
     bool enable =asBool(confsintax::enable,attributes);
     
@@ -83,7 +85,7 @@ InOut_sptr ConfigurationDepot::createComponent(const std::map<std::string,std::s
             //TODO error
         }     
     }
-    return InOut_sptr();
+    return Component_sptr();
 }
 
 bool ConfigurationDepot::save()
@@ -99,7 +101,7 @@ bool ConfigurationDepot::save()
     return true;
 }
 
-std::map<std::string,std::string> xmlAttributeToMap(const pugi::xml_node& node)
+std::map<std::string,std::string> ConfigurationDepot::xmlAttributeToMap(const pugi::xml_node& node) const
 {
     std::map<std::string,std::string> out;
     for (pugi::xml_attribute attr: node.attributes())
@@ -109,7 +111,7 @@ std::map<std::string,std::string> xmlAttributeToMap(const pugi::xml_node& node)
     return out;
 }
 
-void mapAttributeToXml(pugi::xml_node& node,const std::map<std::string,std::string>& in)
+void ConfigurationDepot::mapAttributeToXml(pugi::xml_node& node,const std::map<std::string,std::string>& in) const
 {
     pugi::xml_node mynode=node.append_child(confsintax::component);
 
@@ -117,25 +119,4 @@ void mapAttributeToXml(pugi::xml_node& node,const std::map<std::string,std::stri
     {
         mynode.append_attribute(current.first.c_str()) = current.second.c_str();
     }
-}
-
-bool asBool(const std::string& name,const std::map<std::string,std::string>& attributes)
-{
-    //TODO add check    
-    bool tmp;
-    std::istringstream(attributes.at(name)) >> std::boolalpha >> tmp;
-    return tmp;
-}
-
-std::string asString(const std::string& name,const std::map<std::string,std::string>& attributes)
-{
-    //TODO add check
-    return attributes.at(name);
-}
-
-int asInt(const std::string& name,const std::map<std::string,std::string>& attributes)
-{
-    //TODO add check
-    auto str=attributes.at(name);
-    return std::stoi(str);
 }

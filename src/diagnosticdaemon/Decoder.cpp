@@ -5,6 +5,7 @@
 */
 
 #include "Decoder.h"
+#include "Log.h"
 
 #include <iostream>
 
@@ -49,7 +50,7 @@ bool Decoder::decode(uint8_t *ropframe, uint16_t sizeofropframe, const embot::ep
 {
     if(!initted())
     {
-        std::cout<<"Error Decoder::decode"<<std::endl;
+        Log(Severity::error)<<"Decoder::decode"<<std::endl;
         return false;
     }
     
@@ -65,7 +66,7 @@ bool Decoder::ropdecode(const embot::eprot::IPv4 &ipv4, const embot::eprot::rop:
     // i accept only sig<>
     if(embot::eprot::rop::OPC::sig != rop.opcode)
     {
-        std::cout<<"Error Decoder::Impl"<<std::endl;
+        Log(Severity::error)<<"Decoder::Impl"<<std::endl;
         return false;
     }
     
@@ -120,12 +121,12 @@ bool Decoder::ropdecode(const embot::eprot::IPv4 &ipv4, const embot::eprot::rop:
             
             // and use also ib->flags + ib->par16 + ib->par64
             
-            std::cout<<textout<<std::endl;
+            Log(Severity::none)<<textout<<std::endl;
             break;
         }
         default:
         {
-            std::cout<<"unknown"<<std::endl;
+            Log(Severity::none)<<"unknown"<<std::endl;
         } 
         break;
     }

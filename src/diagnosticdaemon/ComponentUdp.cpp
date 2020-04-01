@@ -12,6 +12,7 @@
 
 #include "ComponentUdp.h"
 #include "ConfigurationDepot.h"
+#include "Log.h"
 
 using namespace boost::asio;
 
@@ -79,7 +80,7 @@ void ComponentUdp::send(const std::array<uint8_t,maxMsgLenght_>& message,unsigne
       boost::asio::placeholders::bytes_transferred));
 }
 
-void ComponentUdp::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint)
+void ComponentUdp::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint )
 {
     send(msg,size);
 }
@@ -87,7 +88,7 @@ void ComponentUdp::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int
 void ComponentUdp::analyzeAddress(const std::string& addresses)
 {
     std::set<std::string> tmp;
-    auto out=tokenize(addresses);
+    std::vector<std::string> out=tokenize<std::string>(addresses);
     for(const std::string& current:out)
     {
         if(current.substr(0,2)=="x:")
@@ -96,7 +97,7 @@ void ComponentUdp::analyzeAddress(const std::string& addresses)
             includededAddresses_.insert(boost::asio::ip::make_address(current.substr(2,current.size()-2)));
         else
         {
-            std::cout<<"Error filter"<<std::endl;
+            Log(Severity::error)<<"filter not well configured"<<std::endl;
         }
     }
 }

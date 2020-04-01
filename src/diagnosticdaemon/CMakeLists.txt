@@ -34,9 +34,11 @@ set(DiagnosticDaemonHdr     ComponentUdp.h
                             ComponentDisabled.h
                             ConfigurationDepot.h
                             ElapsedTime.h
+                            Sintax.h
                             pugixml.hpp
                             pugiconfig.hpp    
                             Decoder.h        
+                            Log.h
                        )
 
 include_directories(${Boost_INCLUDE_DIRS})

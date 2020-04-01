@@ -6,6 +6,7 @@
 
 #include "ComponentConsole.h"
 #include "ConfigurationDepot.h"
+#include "Log.h"
 
 #include <iomanip>
 
@@ -19,19 +20,19 @@ ComponentConsole::ComponentConsole(const std::map<std::string,std::string>& attr
 
 void ComponentConsole::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint)
 {
-    std::cout<<"******RAW-MSG******"<<std::endl;
+    Log(Severity::none)<<"******RAW-MSG******"<<std::endl;
     for(size_t index=0;index<size;++index)
     {
-        std::cout<< std::hex<< std::setfill('0') << std::setw(2)<<(int)msg[index]<<" ";
+        Log(Severity::none)<< std::hex<< std::setfill('0') << std::setw(2)<<(int)msg[index]<<" ";
     }
-    std::cout<<std::endl;
-    std::cout<<"******END RAW-MSG******"<<std::endl;    
-    std::cout<<"******DECODED-MSG******"<<std::endl;
+    Log(Severity::none)<<std::endl;
+    Log(Severity::none)<<"******END RAW-MSG******"<<std::endl;    
+    Log(Severity::none)<<"******DECODED-MSG******"<<std::endl;
     std::stringstream ss;
     ss<<senderEndPoint;
     decoder_.decode(msg.data(),size,ss.str().c_str());  
-    std::cout<<"******END DECODED-MSG******"<<std::endl;
-    std::cout<<std::endl;
+    Log(Severity::none)<<"******END DECODED-MSG******"<<std::endl;
+    Log(Severity::none)<<std::endl;
 }
 
 void ComponentConsole::inputLoop()
@@ -64,29 +65,31 @@ void ComponentConsole::inputLoop()
         }
         else if(data_=="show")
         {
-            //std::cout<<"local dumptofile:"<<server_.dumpToFile_<<std::endl;
-            //std::cout<<"local dumptoconsole:"<<server_.dumpToConsole_<<std::endl;
+            //Log(Severity::none)<<"local dumptofile:"<<server_.dumpToFile_<<std::endl;
+            //Log(Severity::none)<<"local dumptoconsole:"<<server_.dumpToConsole_<<std::endl;
             continue;            
         }        
         else if(data_=="help")
         {
-            std::cout<<std::endl;
-            std::cout<<"******************"<<std::endl;
-            std::cout<<"Available command:"<<std::endl;
-            std::cout<<"******************"<<std::endl;  
-            std::cout<<"*start"<<std::endl;
-            std::cout<<"*stop"<<std::endl;
-            std::cout<<"*forceflush"<<std::endl;
-            std::cout<<"*unforceflush"<<std::endl;
-            std::cout<<"*dumptofile"<<std::endl;
-            std::cout<<"*dumptoconsole"<<std::endl;
-            std::cout<<"*show"<<std::endl;
-            std::cout<<"*help"<<std::endl;
-            std::cout<<"******************"<<std::endl;
+            Log(Severity::none)<<std::endl;
+            Log(Severity::none)<<"******************"<<std::endl;
+            Log(Severity::none)<<"Available command:"<<std::endl;
+            Log(Severity::none)<<"******************"<<std::endl;  
+            Log(Severity::none)<<"*start"<<std::endl;
+            Log(Severity::none)<<"*stop"<<std::endl;
+            Log(Severity::none)<<"*forceflush"<<std::endl;
+            Log(Severity::none)<<"*unforceflush"<<std::endl;
+            Log(Severity::none)<<"*dumptofile"<<std::endl;
+            Log(Severity::none)<<"*dumptoconsole"<<std::endl;
+            Log(Severity::none)<<"*show"<<std::endl;
+            Log(Severity::none)<<"*help"<<std::endl;
+            Log(Severity::none)<<"******************"<<std::endl;
             continue;
         }            
         else 
-            ;//rop=EOMDiagnosticRopMsg::Info{(uint16_t)254,(uint16_t)DiagnosticRopSeverity::trace,1,1,14,15,16,17,18};    
+            {
+                ;//rop=EOMDiagnosticRopMsg::Info{(uint16_t)254,(uint16_t)DiagnosticRopSeverity::trace,1,1,14,15,16,17,18};
+            }    
         //msg.addRop(rop);
 
         //udpMsg.fill(0);

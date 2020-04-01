@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "ConfigurationConst.h"
+#include "Sintax.h"
 
 #include "pugixml.hpp"
 
@@ -25,7 +25,8 @@ class ConfigurationDepot;
 class Component
 {
     protected:
-        static constexpr unsigned int maxMsgLenght_{1500};
+        static constexpr unsigned int maxMsgLenght_{1500};        
+
     public:
         Component(const std::map<std::string,std::string>& attributes,ConfigurationDepot&);
         virtual ~Component(){};
@@ -35,7 +36,7 @@ class Component
         const std::map<std::string,std::string> getParameterMap() const;
 
     protected:
-        
+
         ConfigurationDepot& depot_;
         const std::map<std::string,std::string> parametersMap_;
 
@@ -45,13 +46,6 @@ class Component
         std::string mode_;
         std::string destination_;
 
-        static std::vector<std::string> tokenize(const std::string& value)
-        {
-            std::istringstream iss(value);
-            std::vector<std::string> results(std::istream_iterator<std::string>{iss},std::istream_iterator<std::string>());
-            return results;
-        }
-
 };
 
-using InOut_sptr=std::shared_ptr<Component>;
+using Component_sptr=std::shared_ptr<Component>;

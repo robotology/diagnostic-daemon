@@ -7,6 +7,7 @@
 #pragma once
 
 #include <map>
+#include <sstream>
 
 namespace confsintax
 {
@@ -31,21 +32,27 @@ namespace confsintax
     static constexpr char file[]{"file"};
     static constexpr char console[]{"console"};
     static constexpr char disabled[]{"disabled"};
+    static constexpr char configurator[]{"configurator"};
 };
 
-enum class ComponentType: uint8_t
+
+inline bool asBool(const std::string& name,const std::map<std::string,std::string>& attributes)
 {
-    udpbroadcast,
-    udp,
-    file,
-    console,
-    disabled
-};
+    //TODO add check    
+    bool tmp;
+    std::istringstream(attributes.at(name)) >> std::boolalpha >> tmp;
+    return tmp;
+}
 
-inline std::map<std::string,uint8_t> componentTypeLookup{
-                                                        {confsintax::udpbroadcast,(uint8_t)ComponentType::udpbroadcast},
-                                                        {confsintax::udp,(uint8_t)ComponentType::udp},
-                                                        {confsintax::file,(uint8_t)ComponentType::file},
-                                                        {confsintax::console,(uint8_t)ComponentType::console},
-                                                        {confsintax::disabled,(uint8_t)ComponentType::disabled}
-                                                        };
+inline std::string asString(const std::string& name,const std::map<std::string,std::string>& attributes)
+{
+    //TODO add check
+    return attributes.at(name);
+}
+
+inline int asInt(const std::string& name,const std::map<std::string,std::string>& attributes)
+{
+    //TODO add check
+    auto str=attributes.at(name);
+    return std::stoi(str);
+}
