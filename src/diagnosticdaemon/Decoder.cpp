@@ -519,11 +519,11 @@ static void s_process_category_Config(const embot::prot::eth::IPv4 &ipv4, embot:
             const char *canboardname = eoboards_type2string(static_cast<eObrd_type_t>(infobasic->par16 >> 8));
             uint64_t searchtime = (infobasic->par64 & 0xffff000000000000) >> 48;
             uint16_t maskofmissing = infobasic->par64 & 0x000000000000ffff;
-            const char *source = s_get_sourceofmessage(infobasic, NULL);
+            const char *source = s_get_sourceofmessage(infobasic, nullptr);
             uint8_t n = 1;
             uint8_t i = 0;
 
-            snprintf(str, sizeof(str), " from BOARD %s (%s) @ %ds %dm %du: CAN discovery after %d ms has detected %d missing %s boards in %s:",
+            snprintf(str, sizeof(str), " from BOARD %s (%s) @ %s: CAN discovery after %d ms has detected %d missing %s boards in %s:",
                                         ipv4.to_string().c_str(),
                                         ethboardstr,
                                         tf.to_string().c_str(),
