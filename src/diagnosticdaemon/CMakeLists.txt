@@ -37,7 +37,9 @@ add_executable(diagnosticdaemon ${DiagnosticDaemonSrc} ${DiagnosticDaemonHdr} )
 
 target_link_libraries(diagnosticdaemon pthread
                                        Boost::system
-                                       icub_firmware_shared::embot)
+                                       icub_firmware_shared::embot
+                                       icub_firmware_shared::embobj
+                                       )
 
 file(COPY ${CMAKE_CURRENT_LIST_DIR}/config.xml DESTINATION ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 

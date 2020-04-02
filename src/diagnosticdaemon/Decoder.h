@@ -8,15 +8,13 @@
 //   Decoder for rop msg
 //
 
-#pragma once
+
+// - include guard ----------------------------------------------------------------------------------------------------
+#ifndef _DECODER_H_
+#define _DECODER_H_
 
 #include "embot_prot_eth_diagnostic_Host.h"
-#include "EoError.h"
-#include "embot_prot_eth_diagnostic.h"
-#include "embot_prot_eth_ropframe.h"
 
-
-// to be placed in the pimpl of the main object and conditionally included
 class Decoder
 {
 public:
@@ -25,7 +23,7 @@ public:
         constexpr static size_t minropcapacity = 40;
         size_t ropcapacity {384};
         Config() = default;
-        constexpr Config(int t) : ropcapacity(t) {}
+        constexpr Config(size_t t) : ropcapacity(t) {}
         bool isvalid() const { return ropcapacity >= minropcapacity; }
     };      
     
@@ -43,3 +41,9 @@ private:
     embot::prot::eth::diagnostic::Host::Config _configdiaghost { false, 513, ropdecode};
     static bool ropdecode(const embot::prot::eth::IPv4 &ipv4, const embot::prot::eth::rop::Descriptor &rop);
 };
+
+
+#endif  // include-guard
+
+
+// - end-of-file (leave a blank line after)----------------------------------------------------------------------------
