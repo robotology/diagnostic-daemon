@@ -72,6 +72,8 @@ bool Decoder::initted() const
 
 bool Decoder::decode(uint8_t *ropframe, uint16_t sizeofropframe, const embot::prot::eth::IPv4 &ipv4,bool enableYarpLogger)
 {
+    Log(Severity::error)<<"forward to Yarp"<<std::endl;
+    forewardtoYarpLogger("Pippo",embot::prot::eth::diagnostic::TYP::error);
     enableYarpLogger_=enableYarpLogger;
     if(!initted())
     {
@@ -237,8 +239,9 @@ void Decoder::forewardtoYarpLogger(const std::string& data,embot::prot::eth::dia
         return;
 
     severity=severity;
-
 #ifdef COMPILE_WITHYARP_DEF 
+dasd
+    Log(Severity::error)<<"forward to Yarp"<<std::endl;
     switch (severity)
     {
         case embot::prot::eth::diagnostic::TYP::info:

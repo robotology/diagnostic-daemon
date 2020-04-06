@@ -6,8 +6,6 @@
 ################################################################################
 
 # @author Luca Tricerri <luca.tricerri@iit.it> 
-set(EM_DIR ../../../icub-firmware/emBODY/eBcode/arch-arm/)
-
 set(DiagnosticDaemonSrc     main.cpp
                             ComponentUdp.cpp
                             ComponentFile.cpp
