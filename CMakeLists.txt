@@ -24,12 +24,6 @@ set(Boost_USE_MULTITHREAD ON)
 
 option(COMPILE_WITHYARP_DEF "Compile diagnosticdaemon for YARP connection" OFF)
 
-if (COMPILE_WITHYARP_DEF)
-  add_definitions(-DCOMPILE_WITHYARP_DEF)
-  set(YARP_MINIMUM_REQUIRED_VERSION 3.0.102)
-  find_package(YARP REQUIRED COMPONENTS os conf dev sig name idl_tools)
-endif()
-
 find_package(Boost 1.65 REQUIRED COMPONENTS system REQUIRED)
 find_package(icub_firmware_shared REQUIRED)
 if(icub_firmware_shared_FOUND)

@@ -239,8 +239,7 @@ void Decoder::forewardtoYarpLogger(const std::string& data,embot::prot::eth::dia
         return;
 
     severity=severity;
-#ifdef COMPILE_WITHYARP_DEF 
-dasd
+#ifdef COMPILE_WITHYARP_DEF
     Log(Severity::error)<<"forward to Yarp"<<std::endl;
     switch (severity)
     {

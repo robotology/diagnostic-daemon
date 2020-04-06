@@ -5,7 +5,8 @@
 #                                                                              #
 ################################################################################
 
-# @author Luca Tricerri <luca.tricerri@iit.it> 
+# @author Luca Tricerri <luca.tricerri@iit.it>
+
 set(DiagnosticDaemonSrc     main.cpp
                             ComponentUdp.cpp
                             ComponentFile.cpp
@@ -38,6 +39,13 @@ target_link_libraries(diagnosticdaemon pthread
                                        icub_firmware_shared::embot
                                        icub_firmware_shared::embobj
                                        )
+
+if (COMPILE_WITHYARP_DEF)
+  target_compile_definitions(diagnosticdaemon PRIVATE -DCOMPILE_WITHYARP_DEF)
+  set(YARP_MINIMUM_REQUIRED_VERSION 3.0.102)
+  find_package(YARP REQUIRED COMPONENTS os conf)
+  target_link_libraries(diagnosticdaemon YARP::YARP_os)
+endif()
 
 file(COPY ${CMAKE_CURRENT_LIST_DIR}/config.xml DESTINATION ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 
