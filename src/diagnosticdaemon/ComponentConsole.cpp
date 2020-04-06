@@ -14,6 +14,7 @@
 
 ComponentConsole::ComponentConsole(const std::map<std::string,std::string>& attributes,ConfigurationDepot& depot):Component(attributes,depot)
 {
+    enableYarpLogger_= asBool(confsintax::enableyarplogger,attributes);
     decoder_.init({});
     thread_=std::make_unique<std::thread>(&ComponentConsole::inputLoop,this);
 }
@@ -30,7 +31,7 @@ void ComponentConsole::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned
     Log(Severity::none)<<"******DECODED-MSG******"<<std::endl;
     std::stringstream ss;
     ss<<senderEndPoint;
-    decoder_.decode(msg.data(),size,ss.str().c_str());  
+    decoder_.decode(msg.data(), static_cast<uint16_t>(size), embot::prot::eth::IPv4(ss.str().c_str()),enableYarpLogger_);
     Log(Severity::none)<<"******END DECODED-MSG******"<<std::endl;
     Log(Severity::none)<<std::endl;
 }

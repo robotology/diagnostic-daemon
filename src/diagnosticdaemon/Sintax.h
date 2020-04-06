@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 iCub Tech - Istituto Italiano di Tecnologia
+ * Copyright (C) 2020 iCub Tech - Istituto Italiano di Tecnologia
  * Author:  Luca Tricerri
  * email:   luca.tricerri@iit.it
 */
@@ -26,6 +26,7 @@ namespace confsintax
     static constexpr char enable[]{"enable"};
     static constexpr char destination[]{"destination"};
     static constexpr char addressfilter[]{"addressfilter"};
+    static constexpr char enableyarplogger[]{"enableyarplogger"};
 
     static constexpr char udpbroadcast[]{"udp-broadcast"};
     static constexpr char udp[]{"udp"};

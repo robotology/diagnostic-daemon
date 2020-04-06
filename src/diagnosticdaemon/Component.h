@@ -29,10 +29,10 @@ class Component
 
     public:
         Component(const std::map<std::string,std::string>& attributes,ConfigurationDepot&);
-        virtual ~Component(){};
+        virtual ~Component(){}
 
         virtual void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint)=0;
-        std::string getName() const {return name_;};
+        std::string getName() const {return name_;}
         const std::map<std::string,std::string> getParameterMap() const;
 
     protected:
