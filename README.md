@@ -1,3 +1,18 @@
+<!-- TOC -->
+
+- [1. DiagnosticDaemon](#1-diagnosticdaemon)
+  - [1.1. Introduction](#11-introduction)
+  - [1.2. Installation from source on Linux system](#12-installation-from-source-on-linux-system)
+    - [1.2.1. YarpLogger ready](#121-yarplogger-ready)
+  - [1.3. Execution](#13-execution)
+  - [1.4. Default configuration](#14-default-configuration)
+    - [1.4.1. Available components](#141-available-components)
+  - [1.5. Tags meaning](#15-tags-meaning)
+  - [1.6. Use with YarpLogger](#16-use-with-yarplogger)
+  - [1.7. Application structure](#17-application-structure)
+
+<!-- /TOC -->
+
 # 1. DiagnosticDaemon
 
 ## 1.1. Introduction
@@ -28,36 +43,42 @@ Clone the icub-firmware-shared repository
 git clone https://github.com/icub-tech-iit/icub-firmware-shared.git
 ```
 
-Clone the icub-firmware repository
+Compile the icub-firmware-shared:
 ```bash
-git clone https://github.com/icub-tech-iit/icub-firmware.git
-```
-**<i>Temporary agreement</i>**: note that the DiagnosticDaemon,icub-firmware-shared and icub-firmware
-repository must be at the same level.
-
-Compile:
-```bash
-cd DiagnosticDaemon
+cd icub-firmware-shared
 mkdir build
 cd build
 cmake ..
 make
-make rebuild_cache
+
 ```
 
-## 1.3. Installation from source on Windows system
+Compile:
+```bash
+cd diagnostic-daemon
+mkdir build
+cd build
+cmake ..
+make
 
-Not available for now.
+```
 
-## 1.4. Execution
+### 1.2.1. YarpLogger ready
+If you also need also the YarpLogger connection make sure to select in ccmake the following:
+
+```                                       
+COMPILE_WITHYARP                 ON                                                                                                                                             
+```                                                
+
+## 1.3. Execution
 
 To execute the application:
 ```bash
-cd DiagnosticDaemon/build/bin
+cd diagnostic-daemon/build/bin
 ./diagnosticdaemon
 ```
 
-## 1.5. Default configuration
+## 1.4. Default configuration
 
 The DiagnosticDaemon has a configuration file in xml called config.xml.
 The file must be located in the same folder of the diagnosticdaemon executable file.
@@ -90,9 +111,14 @@ The message flow through the instantiated components:
 </figure>
 In the figure the message flow from RTOS and yarprobotinterface to the file/console/gui.
 
-## 1.6. Tags meaning
+### 1.4.1. Available components
+**upd or udp-broadcast**: send and receive data on udp connection
+**console**: write data on console and accept input
+**file**: write data on file
 
-A component in the config.xml:
+## 1.5. Tags meaning
+
+An example component in the config.xml:
 
 ```xml
 <component protocol="udp-broadcast"  name="boards"     rxport="11000" txport="11000" address="10.0.1.1"   mask="255.255.255.0" mode="copy-raw"    filter="all" enable="true"  value="" destination="file file2 console gui gui2"/>
@@ -100,22 +126,37 @@ A component in the config.xml:
 
 The component tag has the following attributes:
 
-| parameter name | parameter value | note |
-|---------|--------|--------|
-|protocol|udp/file/console|component type|
-|name|| component name|
-|rxport||rx ip port|
-|txport||tx ip port|
-|address||ip destination address|
-|mask|||
-|mode|||
-|filter|x:1.1.1.1|excluded messages from this addresses|
-|enable|true/false|enable or disable the component|
-|value|||
-|destination||destination components name|
+| parameter name | parameter type |parameter value|component| note |
+|---------|--------|--------|-----|--------|
+|protocol|enum|udp/file/console||component type|
+|name|string||all| component name|
+|rxport|number||udp|rx ip port|
+|txport|number||udp|tx ip port|
+|address|ipaddress||udp|ip destination address|
+|mask|ipaddress||||
+|mode|enum|copy-raw|all|copy the messages to destination with no modifications|
+|rules|string|x:1.1.1.1 i:1.1.1.1 x:all i:none|udp|excluded messages from this addresses|
+|enable|boolean|true/false|all|enable or disable the component|
+|value|string||file|various uses, for file the file name|
+|destination|string||udp|messages destination components name|
+|yarplogger|boolean|true/false|console|activate in consol component forward to yarplogger|
 
+## 1.6. Use with YarpLogger
+DiagnosticDaemon can forward data to YarpLogger.
+To eneble this feature use the parameter yarplogger in a protocol="consol"
+component.
 
-## 1.6. Application structure
+```xml
+enableyarplogger="true"
+```
+
+Also before execute DiagnosticDaemon use in the same shell:
+
+```bash
+export YARP_FORWARD_LOG_ENABLE=1
+```
+
+## 1.7. Application structure
 
 In figure the application class diagram.
 

@@ -1,91 +1,14 @@
 <rop>
-
-    <param conditionname="none" name="code" size="16" value="" longdescription="" show="false"/>
-
-    <msg name="empty">    
-        <param conditionname="code" conditionvalue="0" name="msgtype" size="0" value="empty" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="0" name="severity" size="16" value="" longdescription="" show="false"/> 
-            <xi:include href="msgdepot/severity.xml" parse="xml" xpointer="title"/>
-        <param conditionname="code" conditionvalue="0" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="0" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="0" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="0" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="0" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="0" name="time" size="64" value="" encoding="bigendian" longdescription="board life time in microseconds" show="true"/>
-    </msg>
-    
-    <msg name="startlog">       
-        <param conditionname="code" conditionvalue="1" name="msgtype" size="0" value="startlog" longdescription="" show="true"/>   
-        <param conditionname="code" conditionvalue="1" name="severity" size="16" value="" longdescription="" show="false"/> 
-            <xi:include href="msgdepot/severity.xml" parse="xml" xpointer="title"/>
-        <param conditionname="code" conditionvalue="1" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="1" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="1" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="1" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="1" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="1" name="time" size="64" value="" encoding="bigendian" longdescription="board life time in microseconds" show="true"/>
-   </msg>        
-
-    <msg name="stoplog">    
-        <param conditionname="code" conditionvalue="2" name="msgtype" size="0" value="stoplog" longdescription="" show="true"/>
-        <param conditionname="code" conditionvalue="2" name="severity" size="16" value="" longdescription="" show="false"/> 
-            <xi:include href="msgdepot/severity.xml" parse="xml" xpointer="title"/>
-        <param conditionname="code" conditionvalue="2" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="2" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="2" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="2" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="2" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="2" name="time" size="64" value="" encoding="bigendian" longdescription="board life time in microseconds" show="true"/>
-      </msg>        
-
-    <msg name="ethlog">    
-        <param conditionname="code" conditionvalue="3" name="msgtype" size="0" value="ethlog" longdescription="" show="true"/>
-        <param conditionname="code" conditionvalue="3" name="severity" size="16" value="" longdescription="" show="false"/> 
-            <xi:include href="msgdepot/severity.xml" parse="xml" xpointer="title"/>
-        <param conditionname="code" conditionvalue="3" name="errorstring" size="16" value="" longdescription="" show="false"/> 
-            <xi:include href="msgdepot/errorstring.xml" parse="xml" xpointer="title"/>
-        <param conditionname="code" conditionvalue="3" name="board" size="16" value="" longdescription="" show="false"/> 
-            <xi:include href="msgdepot/board.xml" parse="xml" xpointer="title"/>
-        <param conditionname="code" conditionvalue="3" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="3" name="ethernet" size="16" value="" longdescription="" show="false"/> 
-            <xi:include href="msgdepot/ethernet.xml" parse="xml" xpointer="title"/>
-        <param conditionname="code" conditionvalue="3" name="unused" size="16" value="" longdescription="" show="true"/>         
-        <param conditionname="code" conditionvalue="3" name="time" size="64" value="" encoding="bigendian" longdescription="board life time in microseconds" show="true"/>
-       </msg>        
-
-    <msg name="command">    
-        <param conditionname="code" conditionvalue="4" name="msgtype" size="0" value="command" longdescription="" show="true"/>
-        <param conditionname="code" conditionvalue="4" name="severity" size="16" value="" longdescription="" show="false"/> 
-            <xi:include href="msgdepot/severity.xml" parse="xml" xpointer="title"/>
-        <param conditionname="code" conditionvalue="4" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="4" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="4" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="4" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="4" name="unused" size="16" value="" longdescription="" show="true"/>
-        <param conditionname="code" conditionvalue="4" name="time" size="64" value="" encoding="bigendian" longdescription="board life time in microseconds" show="true"/>
-    </msg>        
-
-    <msg name="forceflush">    
-        <param conditionname="code" conditionvalue="5" name="msgtype" size="0" value="forceflush" longdescription="" show="true"/>
-        <param conditionname="code" conditionvalue="5" name="severity" size="16" value="" longdescription="" show="false"/> 
-            <xi:include href="msgdepot/severity.xml" parse="xml" xpointer="title"/>
-        <param conditionname="code" conditionvalue="5" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="5" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="5" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="5" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="5" name="unused" size="16" value="" longdescription="" show="true"/>   
-        <param conditionname="code" conditionvalue="5" name="time" size="64" value="" encoding="bigendian" longdescription="board life time in microseconds" show="true"/>      
-    </msg>        
-
-    <msg name="unforceflush">    
-        <param conditionname="code" conditionvalue="6" name="msgtype" size="0" value="unforceflush" longdescription="" show="true"/>
-        <param conditionname="code" conditionvalue="6" name="severity" size="16" value="" longdescription="" show="false"/> 
-            <xi:include href="msgdepot/severity.xml" parse="xml" xpointer="title"/>
-        <param conditionname="code" conditionvalue="6" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="6" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="6" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="6" name="unused" size="16" value="" longdescription="" show="true"/> 
-        <param conditionname="code" conditionvalue="6" name="unused" size="16" value="" longdescription="" show="true"/>   
-        <param conditionname="code" conditionvalue="6" name="time" size="64" value="" encoding="bigendian" longdescription="board life time in microseconds" show="true"/>      
-    </msg>        
+    <param name="ctrl-ver" size="2" value="" longdescription="ctrl-ver" show="true"/>
+    <param name="ctrl-rqstconf" size="1" value="" longdescription="ctrl-rqstconf" show="true"/>
+    <param name="ctrl-rqsttime" size="1" value="" longdescription="ctrl-rqsttime" show="true"/>
+    <param name="ctrl-plussign" size="1" value="" longdescription="ctrl-plussign" show="true"/>
+    <param name="ctrl-plustime" size="1" value="" longdescription="ctrl-plustime" show="true"/>
+    <param name="ctrl-confinfo" size="2" value="" longdescription="ctrl-confinfo" show="true"/>
+    <param name="ropc" size="8" value="" longdescription="ropc" show="true"/>
+    <param name="datasize" size="16" value="" encoding="littleendian" longdescription="datasize" show="true"/>
+    <param name="id" size="32" value="" longdescription="id" show="true"/>
+    <param name="data" conditionorvalue="2 3 4 5" conditionname="ropc" conditionallevelup="0" conditionallength="datasize" size="" value="" longdescription="id" show="true"/>
+    <param name="signature" conditionorvalue="1" conditionname="ctrl-plussign" conditionallevelup="0" size="8" value="" longdescription="signature" show="true"/>
+    <param name="time" conditionorvalue="1" conditionname="ctrl-plustime" conditionallevelup="0" size="8" value="" longdescription="time" show="true"/>
 </rop>
