@@ -9,9 +9,7 @@
 //
 
 
-// - include guard ----------------------------------------------------------------------------------------------------
-#ifndef _DECODER_H_
-#define _DECODER_H_
+#pragma once
 
 #include "embot_prot_eth_diagnostic_Host.h"
 #include "embot_prot_eth_diagnostic.h"
@@ -45,9 +43,3 @@ private:
     inline static bool enableYarpLogger_{false};
     static void forewardtoYarpLogger(const std::string& data,embot::prot::eth::diagnostic::TYP severity); 
 };
-
-
-#endif  // include-guard
-
-
-// - end-of-file (leave a blank line after)----------------------------------------------------------------------------

@@ -44,7 +44,7 @@ if (COMPILE_WITHYARP_DEF)
   target_compile_definitions(diagnosticdaemon PRIVATE -DCOMPILE_WITHYARP_DEF)
   set(YARP_MINIMUM_REQUIRED_VERSION 3.0.102)
   find_package(YARP REQUIRED COMPONENTS os conf)
-  target_link_libraries(diagnosticdaemon YARP::YARP_os)
+  target_link_libraries(diagnosticdaemon YARP::YARP_os YARP::YARP_conf YARP::YARP_init)
 endif()
 
 file(COPY ${CMAKE_CURRENT_LIST_DIR}/config.xml DESTINATION ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})

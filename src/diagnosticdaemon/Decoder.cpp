@@ -10,6 +10,7 @@
 #ifdef COMPILE_WITHYARP_DEF 
 #include <yarp/os/api.h>
 #include <yarp/os/Log.h>
+#include <yarp/os/Network.h>
 #endif
 #include <iosfwd>
 #include <iostream>
@@ -29,13 +30,16 @@ double feat_yarp_time_now(void) { return 0; }
 // later on we shall use a std::string and surely a different text
 static const char * geterrormessage(const uint32_t code)
 {
+#ifdef COMPILE_WITHYARP_DEF     
     return eoerror_code2string(code);
+#endif    
 }
 
 
 Decoder::Decoder()
 : _host(new embot::prot::eth::diagnostic::Host)
 {
+    yarp::os::Network::init();
 }
 
 Decoder::~Decoder()
@@ -62,6 +66,8 @@ bool Decoder::init(const Config &config)
 
     _initted = true;
 
+    static yarp::os::Network network;
+
     return true; 
 }
 
@@ -72,9 +78,8 @@ bool Decoder::initted() const
 
 bool Decoder::decode(uint8_t *ropframe, uint16_t sizeofropframe, const embot::prot::eth::IPv4 &ipv4,bool enableYarpLogger)
 {
-    Log(Severity::error)<<"forward to Yarp"<<std::endl;
-    forewardtoYarpLogger("Pippo",embot::prot::eth::diagnostic::TYP::error);
     enableYarpLogger_=enableYarpLogger;
+
     if(!initted())
     {
         Log(Severity::error)<<"Decoder::decode"<<std::endl;
@@ -88,7 +93,8 @@ bool Decoder::decode(uint8_t *ropframe, uint16_t sizeofropframe, const embot::pr
 static void s_eoprot_print_mninfo_status(const embot::prot::eth::IPv4 &ipv4, embot::prot::eth::diagnostic::InfoBasic * infobasic, uint8_t * extra);
 
 bool Decoder::ropdecode(const embot::prot::eth::IPv4 &ipv4, const embot::prot::eth::rop::Descriptor &rop)
-{      
+{
+    Log(Severity::debug)<<"msg Arrived from rop"<<std::endl;      
     // in here we just print out, hence we use a string // or a std::string
     char textout[128] = {0};
     
@@ -209,10 +215,7 @@ bool Decoder::ropdecode(const embot::prot::eth::IPv4 &ipv4, const embot::prot::e
             if(rop.hassignature() || rop.hastime())
             {
                 snprintf(textout, sizeof(textout), "from %s [sig = 0x%x, tim = %ld] -> @ %s -> %s -- %s", ipv4.tostring(buf, sizeof(buf)), rop.signature, rop.time, tf.to_string().c_str(), text, info->extra);
-            }
-            else
-            {
-                snprintf(textout, sizeof(textout), "from %s [no sig, no tim] -> @ %s: %s -- %s", ipv4.tostring(buf, sizeof(buf)), tf.to_string().c_str(), text, info->extra);
+            }Log(Severity::error)<<"forward to Yarp003"<<std::endl;im] -> @ %s: %s -- %s", ipv4.tostring(buf, sizeof(buf)), tf.to_string().c_str(), text, info->extra);
             }
             
 #warning TODO-acemor: it is missing the management of flags, par16 and par64.
@@ -240,7 +243,6 @@ void Decoder::forewardtoYarpLogger(const std::string& data,embot::prot::eth::dia
 
     severity=severity;
 #ifdef COMPILE_WITHYARP_DEF
-    Log(Severity::error)<<"forward to Yarp"<<std::endl;
     switch (severity)
     {
         case embot::prot::eth::diagnostic::TYP::info:
@@ -292,7 +294,9 @@ static void s_eoprot_print_mninfo_status(const embot::prot::eth::IPv4 &ipv4, emb
 #define CAN_PRINT_FULL_PARSING
 
     static const eOerror_code_t codecanprint = EOERRORCODE(eoerror_category_System, eoerror_value_SYS_canservices_canprint);
-    eOerror_category_t category = eoerror_code2category(infobasic->code);
+    eOerror_category_t category;
+    if(infobasic)
+        category = eoerror_code2category(infobasic->code);
 
 #if defined(DROPCODES_FROM_LIST)
     static const eOerror_code_t codes2drop_value[] =
