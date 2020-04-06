@@ -7,6 +7,11 @@
 #include "Decoder.h"
 #include "Log.h"
 
+#ifdef COMPILE_WITHYARP_DEF 
+#include <yarp/os/api.h>
+#include <yarp/os/Log.h>
+#endif
+#include <iosfwd>
 #include <iostream>
 #include "embot_prot_eth_diagnostic.h"
 
@@ -15,9 +20,9 @@
 extern "C" {
 // i give dummy implementation
 void* ace_mutex_new(void) { return nullptr; }
-int8_t ace_mutex_take(void* m, uint32_t tout_usec) { return 0; }
-int8_t ace_mutex_release(void* m) { return 0; }
-void ace_mutex_delete(void* m) {}
+int8_t ace_mutex_take(void* , uint32_t ) { return 0; }
+int8_t ace_mutex_release(void* ) { return 0; }
+void ace_mutex_delete(void* ) {}
 double feat_yarp_time_now(void) { return 0; }
 }
 #warning TODO-acemor: do a function which transform code to string
@@ -65,8 +70,9 @@ bool Decoder::initted() const
     return _initted;
 }
 
-bool Decoder::decode(uint8_t *ropframe, uint16_t sizeofropframe, const embot::prot::eth::IPv4 &ipv4)
+bool Decoder::decode(uint8_t *ropframe, uint16_t sizeofropframe, const embot::prot::eth::IPv4 &ipv4,bool enableYarpLogger)
 {
+    enableYarpLogger_=enableYarpLogger;
     if(!initted())
     {
         Log(Severity::error)<<"Decoder::decode"<<std::endl;
@@ -91,22 +97,21 @@ bool Decoder::ropdecode(const embot::prot::eth::IPv4 &ipv4, const embot::prot::e
         return false;
     }
 
+    embot::prot::eth::diagnostic::TYP severity;
 #if 1
-
-
 
     switch(rop.id32)
     {
         case embot::prot::eth::diagnostic::InfoBasic::id32:
         {
             embot::prot::eth::diagnostic::InfoBasic *ib = reinterpret_cast<embot::prot::eth::diagnostic::InfoBasic*>(rop.value.getU08ptr());
-
+            severity=ib->flags.getTYP();
             s_eoprot_print_mninfo_status(ipv4, ib, nullptr);
         } break;
         case embot::prot::eth::diagnostic::Info::id32:
         {
             embot::prot::eth::diagnostic::Info *info = reinterpret_cast<embot::prot::eth::diagnostic::Info*>(rop.value.getU08ptr());
-
+            severity=info->basic.flags.getTYP();
             s_eoprot_print_mninfo_status(ipv4, &info->basic, info->extra);
 
         } break;
@@ -125,7 +130,7 @@ bool Decoder::ropdecode(const embot::prot::eth::IPv4 &ipv4, const embot::prot::e
         case embot::prot::eth::diagnostic::InfoBasic::id32:
         {
             embot::prot::eth::diagnostic::InfoBasic *ib = reinterpret_cast<embot::prot::eth::diagnostic::InfoBasic*>(rop.value.getU08ptr());
-
+            severity=ib->flags.getTYP();
             embot::core::TimeFormatter tf(ib->timestamp);
             const char *text = geterrormessage(ib->code);
             char buf[16] = {0};
@@ -139,7 +144,7 @@ bool Decoder::ropdecode(const embot::prot::eth::IPv4 &ipv4, const embot::prot::e
                     case embot::prot::eth::diagnostic::InfoBasic::id32:
                     {
                         embot::prot::eth::diagnostic::InfoBasic *ib = reinterpret_cast<embot::prot::eth::diagnostic::InfoBasic*>(rop.value.getU08ptr());
-
+                        severity=ib->basic.flags.getTYP();
                         embot::core::TimeFormatter tf(ib->timestamp);
                         const char *text = geterrormessage(ib->code);
                         char buf[16] = {0};
@@ -160,7 +165,7 @@ bool Decoder::ropdecode(const embot::prot::eth::IPv4 &ipv4, const embot::prot::e
                     case embot::prot::eth::diagnostic::Info::id32:
                     {
                         embot::prot::eth::diagnostic::Info *info = reinterpret_cast<embot::prot::eth::diagnostic::Info*>(rop.value.getU08ptr());
-
+                        severity=info->basic.flags.getTYP();
                         embot::core::TimeFormatter tf(info->basic.timestamp);
                         const char *text = geterrormessage(info->basic.code);
                         char buf[16] = {0};
@@ -195,7 +200,7 @@ bool Decoder::ropdecode(const embot::prot::eth::IPv4 &ipv4, const embot::prot::e
         case embot::prot::eth::diagnostic::Info::id32:
         {
             embot::prot::eth::diagnostic::Info *info = reinterpret_cast<embot::prot::eth::diagnostic::Info*>(rop.value.getU08ptr());
-
+            severity=info->basic.flags.getTYP();
             embot::core::TimeFormatter tf(info->basic.timestamp);
             const char *text = geterrormessage(info->basic.code);
             char buf[16] = {0};
@@ -221,9 +226,40 @@ bool Decoder::ropdecode(const embot::prot::eth::IPv4 &ipv4, const embot::prot::e
     }
 #endif
 
+    forewardtoYarpLogger(textout,severity);
+        
     return true;
 }
 
+void Decoder::forewardtoYarpLogger(const std::string& data,embot::prot::eth::diagnostic::TYP severity)
+{
+    if(!enableYarpLogger_)
+        return;
+
+    severity=severity;
+
+#ifdef COMPILE_WITHYARP_DEF 
+    switch (severity)
+    {
+        case embot::prot::eth::diagnostic::TYP::info:
+            yInfo(data.c_str());
+            break;
+        case embot::prot::eth::diagnostic::TYP::debug:
+            yDebug(data.c_str());
+            break;
+        case embot::prot::eth::diagnostic::TYP::warning:
+            yWarning(data.c_str());
+            break;
+        case embot::prot::eth::diagnostic::TYP::error:
+            yError(data.c_str());
+            break;
+        case embot::prot::eth::diagnostic::TYP::fatal:
+        case embot::prot::eth::diagnostic::TYP::max:
+            yFatal(data.c_str());
+            break;
+    }
+#endif    
+}
 // section which prints as yarprobot interface does. just cut'n'paste and make it run
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -389,7 +425,7 @@ static void s_process_category_Default(const embot::prot::eth::IPv4 &ipv4, embot
 
 
 
-static void s_process_CANPRINT(const embot::prot::eth::IPv4 &ipv4, embot::prot::eth::diagnostic::InfoBasic* infobasic)
+static void s_process_CANPRINT(const embot::prot::eth::IPv4 &, embot::prot::eth::diagnostic::InfoBasic* )
 {
     s_print_string(std::string("received a CAN PRINT but the handler is not implemented yet"), embot::prot::eth::diagnostic::TYP::debug);
 //    feat_CANprint(ipv4, infobasic);
@@ -484,8 +520,8 @@ static void s_process_category_Config(const embot::prot::eth::IPv4 &ipv4, embot:
             uint64_t brdnum =     (infobasic->par64 & 0x0000ff0000000000) >> 40;
             const char *canboardname = eoboards_type2string(static_cast<eObrd_type_t>(brdnum));
             uint64_t searchtime = (infobasic->par64 & 0xffff000000000000) >> 48;
-            eObrd_protocolversion_t prot = {0};
-            eObrd_firmwareversion_t appl = {0};
+            eObrd_protocolversion_t prot{0};
+            eObrd_firmwareversion_t appl{0};
             uint64_t reqpr =      (infobasic->par64 & 0x000000ffff000000) >> 24;
             uint64_t reqfw =      (infobasic->par64 & 0x0000000000ffffff);
             uint8_t address;

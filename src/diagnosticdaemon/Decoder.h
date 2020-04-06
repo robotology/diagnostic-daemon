@@ -14,6 +14,7 @@
 #define _DECODER_H_
 
 #include "embot_prot_eth_diagnostic_Host.h"
+#include "embot_prot_eth_diagnostic.h"
 
 class Decoder
 {
@@ -32,7 +33,7 @@ public:
 
     bool init(const Config &config);
     bool initted() const;        
-    bool decode(uint8_t *ropframe, uint16_t sizeofropframe, const embot::prot::eth::IPv4 &ipv4 = {"10.0.1.98"});
+    bool decode(uint8_t *ropframe, uint16_t sizeofropframe, const embot::prot::eth::IPv4 &ipv4 = {"10.0.1.98"},bool enableYarpLogger=false);
     
 private:    
     bool _initted {false};
@@ -40,6 +41,9 @@ private:
     embot::prot::eth::diagnostic::Host *_host {nullptr};
     embot::prot::eth::diagnostic::Host::Config _configdiaghost { false, 513, ropdecode};
     static bool ropdecode(const embot::prot::eth::IPv4 &ipv4, const embot::prot::eth::rop::Descriptor &rop);
+    
+    inline static bool enableYarpLogger_{false};
+    static void forewardtoYarpLogger(const std::string& data,embot::prot::eth::diagnostic::TYP severity); 
 };
 
 

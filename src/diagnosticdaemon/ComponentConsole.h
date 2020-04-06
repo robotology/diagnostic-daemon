@@ -29,6 +29,7 @@ class ComponentConsole: public Component
         std::unique_ptr<std::thread> thread_;
         void inputLoop();
         bool active_{true};
+        bool enableYarpLogger_{false};
 
         Decoder decoder_;
 };
