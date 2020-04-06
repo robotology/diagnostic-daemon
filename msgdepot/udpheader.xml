@@ -1,0 +1,10 @@
+<udpheader name="udpheader">
+    <param name="startcode" size="32" value="" longdescription="start code" show="true"/> 
+    <param name="sizeofbody" size="16" value="" longdescription="size of body" show="true"/> 
+    <param name="numberofrops" size="16" value="" longdescription="number of rops" show="true"/> 
+    <param name="sequencenum" size="64" value="" longdescription="sequence number" show="true"/> 
+    <param name="ageofframe" size="64" value="" longdescription="age of frame" show="true"/>
+    <param name="roplist" repetitionname="numberofrops" size="0" value="" longdescription="rop list" show="true">
+        <xi:include href="msgdepot/rop.xml" parse="xml" xpointer="title"/>
+    </param>
+</udpheader>
