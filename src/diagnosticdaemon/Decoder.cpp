@@ -37,7 +37,9 @@ static const char * geterrormessage(const uint32_t code)
 Decoder::Decoder()
 : _host(new embot::prot::eth::diagnostic::Host)
 {
+#ifdef COMPILE_WITHYARP_DEF
     yarp::os::Network::init();
+#endif    
 }
 
 Decoder::~Decoder()
@@ -63,8 +65,6 @@ bool Decoder::init(const Config &config)
     _host->init(_configdiaghost);    
 
     _initted = true;
-
-    static yarp::os::Network network;
 
     return true; 
 }
