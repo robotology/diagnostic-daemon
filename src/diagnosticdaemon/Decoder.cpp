@@ -11,6 +11,7 @@
 #include <yarp/os/api.h>
 #include <yarp/os/Log.h>
 #include <yarp/os/Network.h>
+#include <yarp/os/LogStream.h>
 #endif
 #include <iosfwd>
 #include <iostream>
@@ -137,21 +138,21 @@ void Decoder::forewardtoYarpLogger(const std::string& data,embot::prot::eth::dia
     switch (severity)
     {
         case embot::prot::eth::diagnostic::TYP::info:
-            yInfo(data.c_str());
+            yInfo()<<data;
             break;
         case embot::prot::eth::diagnostic::TYP::debug:
-            yDebug(data.c_str());
+            yDebug()<<data;;
             break;
         case embot::prot::eth::diagnostic::TYP::warning:
-            yWarning(data.c_str());
+            yWarning()<<data;;
             break;
         case embot::prot::eth::diagnostic::TYP::error:
-            yError(data.c_str());
+            yError()<<data;;
             break;
         default:
         case embot::prot::eth::diagnostic::TYP::fatal:
         case embot::prot::eth::diagnostic::TYP::max:
-            yFatal(data.c_str());
+            yFatal()<<data;;
             break;
     }
 #endif    
