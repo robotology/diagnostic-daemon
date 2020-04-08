@@ -150,10 +150,11 @@ component.
 enableyarplogger="true"
 ```
 
-Also before execute DiagnosticDaemon use in the same shell:
+Also before execute DiagnosticDaemon use in the same shell or in your .bashrc:
 
 ```bash
 export YARP_FORWARD_LOG_ENABLE=1
+export YARP_DEBUG_ENABLE=1
 ```
 
 ## 1.7. Application structure

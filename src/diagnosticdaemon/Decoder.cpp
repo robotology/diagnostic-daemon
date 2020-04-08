@@ -11,6 +11,7 @@
 #include <yarp/os/api.h>
 #include <yarp/os/Log.h>
 #include <yarp/os/Network.h>
+#include <yarp/os/LogStream.h>
 #endif
 #include <iosfwd>
 #include <iostream>
@@ -26,20 +27,20 @@ int8_t ace_mutex_release(void* ) { return 0; }
 void ace_mutex_delete(void* ) {}
 double feat_yarp_time_now(void) { return 0; }
 }
-#warning TODO-acemor: do a function which transform code to string
+//#warning TODO-acemor: do a function which transform code to string
 // later on we shall use a std::string and surely a different text
 static const char * geterrormessage(const uint32_t code)
 {
-#ifdef COMPILE_WITHYARP_DEF     
     return eoerror_code2string(code);
-#endif    
 }
 
 
 Decoder::Decoder()
 : _host(new embot::prot::eth::diagnostic::Host)
 {
+#ifdef COMPILE_WITHYARP_DEF
     yarp::os::Network::init();
+#endif    
 }
 
 Decoder::~Decoder()
@@ -65,8 +66,6 @@ bool Decoder::init(const Config &config)
     _host->init(_configdiaghost);    
 
     _initted = true;
-
-    static yarp::os::Network network;
 
     return true; 
 }
@@ -95,8 +94,6 @@ static void s_eoprot_print_mninfo_status(const embot::prot::eth::IPv4 &ipv4, emb
 bool Decoder::ropdecode(const embot::prot::eth::IPv4 &ipv4, const embot::prot::eth::rop::Descriptor &rop)
 {
     Log(Severity::debug)<<"msg Arrived from rop"<<std::endl;      
-    // in here we just print out, hence we use a string // or a std::string
-    char textout[128] = {0};
     
     // i accept only sig<>
     if(embot::prot::eth::rop::OPC::sig != rop.opcode)
@@ -105,21 +102,18 @@ bool Decoder::ropdecode(const embot::prot::eth::IPv4 &ipv4, const embot::prot::e
         return false;
     }
 
-    embot::prot::eth::diagnostic::TYP severity;
-#if 1
 
     switch(rop.id32)
     {
         case embot::prot::eth::diagnostic::InfoBasic::id32:
         {
             embot::prot::eth::diagnostic::InfoBasic *ib = reinterpret_cast<embot::prot::eth::diagnostic::InfoBasic*>(rop.value.getU08ptr());
-            severity=ib->flags.getTYP();
             s_eoprot_print_mninfo_status(ipv4, ib, nullptr);
         } break;
+
         case embot::prot::eth::diagnostic::Info::id32:
         {
             embot::prot::eth::diagnostic::Info *info = reinterpret_cast<embot::prot::eth::diagnostic::Info*>(rop.value.getU08ptr());
-            severity=info->basic.flags.getTYP();
             s_eoprot_print_mninfo_status(ipv4, &info->basic, info->extra);
 
         } break;
@@ -132,107 +126,6 @@ bool Decoder::ropdecode(const embot::prot::eth::IPv4 &ipv4, const embot::prot::e
         break;
     }
 
-#else
-    switch(rop.id32)
-    {        
-        case embot::prot::eth::diagnostic::InfoBasic::id32:
-        {
-            embot::prot::eth::diagnostic::InfoBasic *ib = reinterpret_cast<embot::prot::eth::diagnostic::InfoBasic*>(rop.value.getU08ptr());
-            severity=ib->flags.getTYP();
-            embot::core::TimeFormatter tf(ib->timestamp);
-            const char *text = geterrormessage(ib->code);
-            char buf[16] = {0};
-            if(rop.hassignature() || rop.hastime())
-            {
-                snprintf(textout, sizeof(textout), "from %s [sig = 0x%x, tim = %ld] -> @ %s -> %s", ipv4.tostring(buf, sizeof(buf)), rop.signature, rop.time, tf.to_string().c_str(), text);
-            }
-            else
-            {    switch(rop.id32)
-                {
-                    case embot::prot::eth::diagnostic::InfoBasic::id32:
-                    {
-                        embot::prot::eth::diagnostic::InfoBasic *ib = reinterpret_cast<embot::prot::eth::diagnostic::InfoBasic*>(rop.value.getU08ptr());
-                        severity=ib->basic.flags.getTYP();
-                        embot::core::TimeFormatter tf(ib->timestamp);
-                        const char *text = geterrormessage(ib->code);
-                        char buf[16] = {0};
-                        if(rop.hassignature() || rop.hastime())
-                        {
-                            snprintf(textout, sizeof(textout), "from %s [sig = 0x%x, tim = %ld] -> @ %s -> %s", ipv4.tostring(buf, sizeof(buf)), rop.signature, rop.time, tf.to_string().c_str(), text);
-                        }
-                        else
-                        {
-                            snprintf(textout, sizeof(textout), "from %s [no sig, no tim] -> @ %s: %s", ipv4.tostring(buf, sizeof(buf)), tf.to_string().c_str(), text);
-                        }
-
-            #warning TODO-acemor: it is missing the management of flags, par16 and par64.
-
-                        std::cout<<textout<<std::endl;
-                    }
-                    break;
-                    case embot::prot::eth::diagnostic::Info::id32:
-                    {
-                        embot::prot::eth::diagnostic::Info *info = reinterpret_cast<embot::prot::eth::diagnostic::Info*>(rop.value.getU08ptr());
-                        severity=info->basic.flags.getTYP();
-                        embot::core::TimeFormatter tf(info->basic.timestamp);
-                        const char *text = geterrormessage(info->basic.code);
-                        char buf[16] = {0};
-                        if(rop.hassignature() || rop.hastime())
-                        {
-                            snprintf(textout, sizeof(textout), "from %s [sig = 0x%x, tim = %ld] -> @ %s -> %s -- %s", ipv4.tostring(buf, sizeof(buf)), rop.signature, rop.time, tf.to_string().c_str(), text, info->extra);
-                        }
-                        else
-                        {
-                            snprintf(textout, sizeof(textout), "from %s [no sig, no tim] -> @ %s: %s -- %s", ipv4.tostring(buf, sizeof(buf)), tf.to_string().c_str(), text, info->extra);
-                        }
-
-            #warning TODO-acemor: it is missing the management of flags, par16 and par64.
-
-                        Log(Severity::none)<<textout<<std::endl;
-                        break;
-                    }
-                    default:
-                    {
-                        Log(Severity::none)<<"unknown"<<std::endl;
-                    }
-                    break;
-                }
-                snprintf(textout, sizeof(textout), "from %s [no sig, no tim] -> @ %s: %s", ipv4.tostring(buf, sizeof(buf)), tf.to_string().c_str(), text);
-            }
-            
-#warning TODO-acemor: it is missing the management of flags, par16 and par64.
-            
-            std::cout<<textout<<std::endl;
-        } 
-        break;
-        case embot::prot::eth::diagnostic::Info::id32:
-        {
-            embot::prot::eth::diagnostic::Info *info = reinterpret_cast<embot::prot::eth::diagnostic::Info*>(rop.value.getU08ptr());
-            severity=info->basic.flags.getTYP();
-            embot::core::TimeFormatter tf(info->basic.timestamp);
-            const char *text = geterrormessage(info->basic.code);
-            char buf[16] = {0};
-            if(rop.hassignature() || rop.hastime())
-            {
-                snprintf(textout, sizeof(textout), "from %s [sig = 0x%x, tim = %ld] -> @ %s -> %s -- %s", ipv4.tostring(buf, sizeof(buf)), rop.signature, rop.time, tf.to_string().c_str(), text, info->extra);
-            }Log(Severity::error)<<"forward to Yarp003"<<std::endl;im] -> @ %s: %s -- %s", ipv4.tostring(buf, sizeof(buf)), tf.to_string().c_str(), text, info->extra);
-            }
-            
-#warning TODO-acemor: it is missing the management of flags, par16 and par64.
-            
-            Log(Severity::none)<<textout<<std::endl;
-            break;
-        }
-        default:
-        {
-            Log(Severity::none)<<"unknown"<<std::endl;
-        } 
-        break;
-    }
-#endif
-
-    forewardtoYarpLogger(textout,severity);
-        
     return true;
 }
 
@@ -241,25 +134,25 @@ void Decoder::forewardtoYarpLogger(const std::string& data,embot::prot::eth::dia
     if(!enableYarpLogger_)
         return;
 
-    severity=severity;
 #ifdef COMPILE_WITHYARP_DEF
     switch (severity)
     {
         case embot::prot::eth::diagnostic::TYP::info:
-            yInfo(data.c_str());
+            yInfo()<<data;
             break;
         case embot::prot::eth::diagnostic::TYP::debug:
-            yDebug(data.c_str());
+            yDebug()<<data;;
             break;
         case embot::prot::eth::diagnostic::TYP::warning:
-            yWarning(data.c_str());
+            yWarning()<<data;;
             break;
         case embot::prot::eth::diagnostic::TYP::error:
-            yError(data.c_str());
+            yError()<<data;;
             break;
+        default:
         case embot::prot::eth::diagnostic::TYP::fatal:
         case embot::prot::eth::diagnostic::TYP::max:
-            yFatal(data.c_str());
+            yFatal()<<data;;
             break;
     }
 #endif    
@@ -377,6 +270,8 @@ static void s_print_string(const std::string &str, embot::prot::eth::diagnostic:
         } break;
     }
 
+
+    Decoder::forewardtoYarpLogger(str, errortype);
 }
 
 

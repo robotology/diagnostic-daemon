@@ -13,7 +13,6 @@ project(DiagnosticDaemon
         LANGUAGES C CXX
         VERSION 1.0.0)
 
-set(CMAKE_AUTOMOC ON)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 include(GNUInstallDirs)

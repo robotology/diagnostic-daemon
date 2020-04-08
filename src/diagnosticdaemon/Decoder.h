@@ -41,5 +41,6 @@ private:
     static bool ropdecode(const embot::prot::eth::IPv4 &ipv4, const embot::prot::eth::rop::Descriptor &rop);
     
     inline static bool enableYarpLogger_{false};
+public:
     static void forewardtoYarpLogger(const std::string& data,embot::prot::eth::diagnostic::TYP severity); 
 };
