@@ -23,6 +23,7 @@ class ComponentFile: public Component
         virtual ~ComponentFile(){};
 
         void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint) override;
+        void acceptMsg(std::string& msg,unsigned int size,udp::endpoint senderEndPoint) override;
 
     private:        
         std::ofstream fstream_;

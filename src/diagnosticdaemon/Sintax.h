@@ -26,7 +26,6 @@ namespace confsintax
     static constexpr char enable[]{"enable"};
     static constexpr char destination[]{"destination"};
     static constexpr char addressfilter[]{"addressfilter"};
-    static constexpr char enableyarplogger[]{"enableyarplogger"};
 
     static constexpr char udpbroadcast[]{"udp-broadcast"};
     static constexpr char udp[]{"udp"};
@@ -34,6 +33,8 @@ namespace confsintax
     static constexpr char console[]{"console"};
     static constexpr char disabled[]{"disabled"};
     static constexpr char configurator[]{"configurator"};
+    static constexpr char decoder[]{"decoder"};
+    static constexpr char yarplogger[]{"yarplogger"};
 };
 
 

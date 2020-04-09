@@ -12,7 +12,7 @@
 #include <vector>
 #include <algorithm>
 
-enum class Severity {debug,error,trace,none};
+enum class Severity {debug,trace,info,warning,error,max,fatal,none};
 
 class Log
 {

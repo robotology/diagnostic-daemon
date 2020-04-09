@@ -16,6 +16,8 @@ set(DiagnosticDaemonSrc     main.cpp
                             ComponentDisabled.cpp
                             ConfigurationDepot.cpp
                             Decoder.cpp
+                            ComponentDecoder.cpp
+                            ComponentYarpLogger.cpp
                         )
 
 set(DiagnosticDaemonHdr     ComponentUdp.h
@@ -29,6 +31,8 @@ set(DiagnosticDaemonHdr     ComponentUdp.h
                             pugixml.hpp
                             pugiconfig.hpp
                             Decoder.h
+                            ComponentDecoder.h
+                            ComponentYarpLogger.h
                             Log.h
                        )
 
@@ -46,6 +50,7 @@ if (COMPILE_WITHYARP_DEF)
   find_package(YARP REQUIRED COMPONENTS os conf)
   target_link_libraries(diagnosticdaemon YARP::YARP_os YARP::YARP_conf YARP::YARP_init)
 endif()
+
 
 file(COPY ${CMAKE_CURRENT_LIST_DIR}/config.xml DESTINATION ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 

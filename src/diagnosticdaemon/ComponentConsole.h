@@ -15,7 +15,6 @@
 #include <thread>
 
 #include "Component.h"
-#include "Decoder.h"
 
 class ComponentConsole: public Component
 {
@@ -24,14 +23,12 @@ class ComponentConsole: public Component
         virtual ~ComponentConsole() {}
 
         void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint) override;
+        void acceptMsg(std::string& msg,unsigned int size,udp::endpoint senderEndPoint) override;
 
     private:
         std::unique_ptr<std::thread> thread_;
         void inputLoop();
         bool active_{true};
-        bool enableYarpLogger_{false};
-
-        Decoder decoder_;
 };
 
 using ComponentConsole_sptr=std::shared_ptr<ComponentConsole>;

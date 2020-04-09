@@ -9,6 +9,8 @@
 #include "ComponentFile.h"
 #include "ComponentConsole.h"
 #include "ComponentDisabled.h"
+#include "ComponentDecoder.h"
+#include "ComponentYarpLogger.h"
 #include "Log.h"
 
 ConfigurationDepot::ConfigurationDepot(boost::asio::io_service &io_service): ios_(io_service)
@@ -79,7 +81,17 @@ Component_sptr ConfigurationDepot::createComponent(const std::map<std::string,st
         {
             components=std::make_shared<ComponentDisabled>(attributes,*this);
             return components;
-        }                  
+        } 
+        case (uint8_t)ComponentType::decoder:                
+        {
+            components=std::make_shared<ComponentDecoder>(attributes,*this);
+            return components;
+        }         
+        case (uint8_t)ComponentType::yarplogger:                
+        {
+            components=std::make_shared<ComponentYarpLogger>(attributes,*this);
+            return components;
+        }                            
         default:
         {
             //TODO error

@@ -15,6 +15,11 @@ ComponentFile::ComponentFile(const std::map<std::string,std::string>& attributes
     fstream_.open(filename_);
 }
 
+void ComponentFile::acceptMsg(std::string& msg,unsigned int,udp::endpoint senderEndPoint)
+{
+    fstream_<< msg<<std::endl;    
+}
+
 void ComponentFile::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint)
 {
     for(size_t index=0;index<size;++index)

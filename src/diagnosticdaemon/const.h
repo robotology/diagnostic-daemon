@@ -13,7 +13,9 @@ enum class ComponentType: uint8_t
     udp,
     file,
     console,
-    disabled
+    disabled,
+    decoder,
+    yarplogger
 };
 
 inline std::map<std::string,uint8_t> componentTypeLookup{
@@ -21,7 +23,9 @@ inline std::map<std::string,uint8_t> componentTypeLookup{
                                                         {confsintax::udp,(uint8_t)ComponentType::udp},
                                                         {confsintax::file,(uint8_t)ComponentType::file},
                                                         {confsintax::console,(uint8_t)ComponentType::console},
-                                                        {confsintax::disabled,(uint8_t)ComponentType::disabled}
+                                                        {confsintax::disabled,(uint8_t)ComponentType::disabled},
+                                                        {confsintax::decoder,(uint8_t)ComponentType::decoder},
+                                                        {confsintax::yarplogger,(uint8_t)ComponentType::yarplogger}
                                                         };
 
 template <typename T> std::vector<T> tokenize(const std::string& value)
