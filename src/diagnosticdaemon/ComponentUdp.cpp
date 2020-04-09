@@ -50,7 +50,7 @@ void ComponentUdp::handleReceiveFrom(const boost::system::error_code &error, siz
     }
     else
     {
-      depot_.route(rxData_,size,destination_,senderEndpoint_);
+      depot_.route(rxData_,size,destination_,senderEndpoint_,Severity::none);
     }
     
   }
@@ -80,7 +80,7 @@ void ComponentUdp::send(const std::array<uint8_t,maxMsgLenght_>& message,unsigne
       boost::asio::placeholders::bytes_transferred));
 }
 
-void ComponentUdp::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint )
+void ComponentUdp::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint,Severity severity)
 {
     send(msg,size);
 }

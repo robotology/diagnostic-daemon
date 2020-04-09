@@ -18,15 +18,15 @@ ComponentYarpLogger::ComponentYarpLogger(const std::map<std::string,std::string>
 #endif       
 }
 
-void ComponentYarpLogger::acceptMsg(std::string& msg,unsigned int ,udp::endpoint senderEndPoint)
+void ComponentYarpLogger::acceptMsg(std::string& msg,unsigned int ,udp::endpoint senderEndPoint,Severity severity)
 {
     Log(Severity::debug)<<"ComponentYarpLogger"<<std::endl;
     std::stringstream ss;
     ss<<senderEndPoint;
-    forewardtoYarpLogger(msg,Severity::error);    
+    forewardtoYarpLogger(msg,severity);    
 }
 
-void ComponentYarpLogger::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint)
+void ComponentYarpLogger::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint,Severity severity)
 {
     Log(Severity::debug)<<"ComponentYarpLogger"<<std::endl;
     Log(Severity::error)<<"Todo"<<std::endl;

@@ -22,8 +22,8 @@ class ComponentConsole: public Component
         ComponentConsole(const std::map<std::string,std::string>& attributes,ConfigurationDepot& depot);
         virtual ~ComponentConsole() {}
 
-        void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint) override;
-        void acceptMsg(std::string& msg,unsigned int size,udp::endpoint senderEndPoint) override;
+        void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint,Severity severity) override;
+        void acceptMsg(std::string& msg,unsigned int size,udp::endpoint senderEndPoint,Severity severity) override;
 
     private:
         std::unique_ptr<std::thread> thread_;

@@ -18,6 +18,8 @@
 #include <condition_variable>
 #include <thread>
 
+#include "Log.h"
+
 class Decoder
 {
 public:
@@ -35,8 +37,8 @@ public:
 
     bool init(const Config &config);
     bool initted() const;        
-    std::list<std::string> decode(uint8_t *ropframe, uint16_t sizeofropframe, const embot::prot::eth::IPv4 &ipv4 = {"10.0.1.98"});
-
+    std::list<std::pair<std::string,Severity>> decode(uint8_t *ropframe, uint16_t sizeofropframe, const embot::prot::eth::IPv4 &ipv4 = {"10.0.1.98"});
+    void clear();
     
 private:    
     bool _initted {false};
@@ -47,7 +49,7 @@ private:
     embot::prot::eth::diagnostic::Host::Config _configdiaghost;// { false, 513, ropdecode};
 
     std::mutex lockDecodedMsg_;
-    std::list<std::string> decodedMsg_;
+    std::list<std::pair<std::string,Severity>> decodedMsg_;
 
     std::mutex mutexcv_;
     std::condition_variable condVar_; 
@@ -60,5 +62,7 @@ private:
     void s_process_category_Default(const embot::prot::eth::IPv4 &ipv4, embot::prot::eth::diagnostic::InfoBasic* infobasic, uint8_t * extra);
     void s_process_category_Config(const embot::prot::eth::IPv4 &ipv4, embot::prot::eth::diagnostic::InfoBasic* infobasic, uint8_t * extra);
     const char * s_get_sourceofmessage(embot::prot::eth::diagnostic::InfoBasic* infobasic, uint8_t *address);
+
+    Severity severitytranslate(embot::prot::eth::diagnostic::TYP severity);
 
 };

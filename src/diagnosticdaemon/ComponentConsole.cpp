@@ -16,7 +16,7 @@ ComponentConsole::ComponentConsole(const std::map<std::string,std::string>& attr
     thread_=std::make_unique<std::thread>(&ComponentConsole::inputLoop,this);
 }
 
-void ComponentConsole::acceptMsg(std::string& msg,unsigned int ,udp::endpoint senderEndPoint)
+void ComponentConsole::acceptMsg(std::string& msg,unsigned int ,udp::endpoint senderEndPoint,Severity severity)
 {
     Log(Severity::debug)<<"ComponentConsole"<<std::endl;
     std::stringstream ss;
@@ -26,7 +26,7 @@ void ComponentConsole::acceptMsg(std::string& msg,unsigned int ,udp::endpoint se
     Log(Severity::none)<<"******END RAW-MSG******"<<std::endl;    
 }
 
-void ComponentConsole::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint)
+void ComponentConsole::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint,Severity severity)
 {
     Log(Severity::debug)<<"ComponentConsole"<<std::endl;
     std::stringstream ss;

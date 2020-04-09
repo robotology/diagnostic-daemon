@@ -22,7 +22,7 @@ class ComponentDisabled: public Component
         ComponentDisabled(const std::map<std::string,std::string>& attributes,ConfigurationDepot& depot);        
         virtual ~ComponentDisabled(){};
 
-        void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint) override;
+        void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint,Severity severity) override;
 };
 
 using ComponentDisabled_sptr=std::shared_ptr<ComponentDisabled>;

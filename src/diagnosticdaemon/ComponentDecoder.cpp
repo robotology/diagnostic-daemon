@@ -19,7 +19,7 @@ ComponentDecoder::ComponentDecoder(const std::map<std::string,std::string>& attr
     decoder_.init({});
 }
 
-void ComponentDecoder::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint)
+void ComponentDecoder::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint,Severity severity)
 {
     Log(Severity::debug)<<"ComponentDecoder"<<std::endl;
 
@@ -35,8 +35,9 @@ void ComponentDecoder::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned
     ss<<senderEndPoint;
     auto msgs=decoder_.decode(msg.data(), static_cast<uint16_t>(size), embot::prot::eth::IPv4(ss.str().c_str()));
     
-    for(std::string& currentMsg:msgs)
+    for(auto& currentMsg:msgs)
     {
-        depot_.route(currentMsg,currentMsg.size(),destination_,senderEndPoint);
+        depot_.route(currentMsg.first,currentMsg.first.size(),destination_,senderEndPoint,currentMsg.second);
     }
+    decoder_.clear();
 }

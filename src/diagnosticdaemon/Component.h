@@ -11,6 +11,7 @@
 #pragma once
 
 #include "Sintax.h"
+#include "Log.h"
 
 #include "pugixml.hpp"
 
@@ -31,8 +32,8 @@ class Component
         Component(const std::map<std::string,std::string>& attributes,ConfigurationDepot&);
         virtual ~Component(){}
 
-        virtual void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint)=0;
-        virtual void acceptMsg(std::string&,unsigned int ,udp::endpoint){};
+        virtual void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint,Severity severity)=0;
+        virtual void acceptMsg(std::string&,unsigned int ,udp::endpoint,Severity severity){};
         std::string getName() const {return name_;}
         const std::map<std::string,std::string> getParameterMap() const;
 

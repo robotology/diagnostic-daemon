@@ -65,12 +65,18 @@ bool Decoder::initted() const
     return _initted;
 }
 
-std::list<std::string> Decoder::decode(uint8_t *ropframe, uint16_t sizeofropframe, const embot::prot::eth::IPv4 &ipv4)
+void Decoder::clear()
+{
+    std::lock_guard<std::mutex> lock(lockDecodedMsg_);
+    decodedMsg_.clear();
+}
+
+std::list<std::pair<std::string,Severity>> Decoder::decode(uint8_t *ropframe, uint16_t sizeofropframe, const embot::prot::eth::IPv4 &ipv4)
 {
     if(!initted())
     {
         Log(Severity::error)<<"Decoder::decode"<<std::endl;
-        return std::list<std::string>();
+        return std::list<std::pair<std::string,Severity>>();
     }
 
     embot::core::Data data(ropframe, sizeofropframe);
@@ -126,34 +132,33 @@ bool Decoder::ropdecode(const embot::prot::eth::IPv4 &ipv4, const embot::prot::e
     condVar_.notify_one();    
     return true;
 }
-/*
-void Decoder::forewardtoYarpLogger(const std::string& data,embot::prot::eth::diagnostic::TYP severity)
+
+Severity Decoder::severitytranslate(embot::prot::eth::diagnostic::TYP severity)
 {
-#ifdef COMPILE_WITHYARP_DEF
+    Severity myseverity;
     switch (severity)
     {
         case embot::prot::eth::diagnostic::TYP::info:
-            yInfo()<<data;
+            myseverity=Severity::info;
             break;
         case embot::prot::eth::diagnostic::TYP::debug:
-            yDebug()<<data;;
+            myseverity=Severity::debug;
             break;
         case embot::prot::eth::diagnostic::TYP::warning:
-            yWarning()<<data;;
+            myseverity=Severity::warning;
             break;
         case embot::prot::eth::diagnostic::TYP::error:
-            yError()<<data;;
+            myseverity=Severity::error;
             break;
         default:
         case embot::prot::eth::diagnostic::TYP::fatal:
         case embot::prot::eth::diagnostic::TYP::max:
-            yFatal()<<data;;
+            myseverity=Severity::fatal;
             break;
     }
-#endif    
+    return myseverity;
 }
-// section which prints as yarprobot interface does. just cut'n'paste and make it run
-*/
+
 // --------------------------------------------------------------------------------------------------------------------
 // - definition of static functions
 // --------------------------------------------------------------------------------------------------------------------
@@ -251,8 +256,9 @@ void Decoder::s_print_string(const std::string &str, embot::prot::eth::diagnosti
     }
 
     {
+        Severity severity=severitytranslate(errortype);
         std::lock_guard<std::mutex> lock(lockDecodedMsg_);
-        decodedMsg_.push_back(ss.str());
+        decodedMsg_.push_back(std::pair<std::string,Severity>{ss.str(),severity});
     }
 
     //Decoder::forewardtoYarpLogger(ss.str(), errortype);
