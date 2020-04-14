@@ -10,6 +10,7 @@
 #include "ComponentConsole.h"
 #include "ComponentDisabled.h"
 #include "ComponentDecoder.h"
+#include "ComponentConfig.h"
 #include "ComponentYarpLogger.h"
 #include "Log.h"
 
@@ -90,6 +91,11 @@ Component_sptr ConfigurationDepot::createComponent(const std::map<std::string,st
         case (uint8_t)ComponentType::yarplogger:                
         {
             components=std::make_shared<ComponentYarpLogger>(attributes,*this);
+            return components;
+        }    
+        case (uint8_t)ComponentType::config:                
+        {
+            components=std::make_shared<ComponentConfig>(attributes,*this);
             return components;
         }                            
         default:

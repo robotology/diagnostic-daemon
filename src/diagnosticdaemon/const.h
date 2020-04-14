@@ -15,7 +15,8 @@ enum class ComponentType: uint8_t
     console,
     disabled,
     decoder,
-    yarplogger
+    yarplogger,
+    config
 };
 
 inline std::map<std::string,uint8_t> componentTypeLookup{
@@ -25,7 +26,8 @@ inline std::map<std::string,uint8_t> componentTypeLookup{
                                                         {confsintax::console,(uint8_t)ComponentType::console},
                                                         {confsintax::disabled,(uint8_t)ComponentType::disabled},
                                                         {confsintax::decoder,(uint8_t)ComponentType::decoder},
-                                                        {confsintax::yarplogger,(uint8_t)ComponentType::yarplogger}
+                                                        {confsintax::yarplogger,(uint8_t)ComponentType::yarplogger},
+                                                        {confsintax::config,(uint8_t)ComponentType::config}
                                                         };
 
 template <typename T> std::vector<T> tokenize(const std::string& value)

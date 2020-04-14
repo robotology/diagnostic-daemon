@@ -13,8 +13,6 @@
 #include "Sintax.h"
 #include "Log.h"
 
-#include "pugixml.hpp"
-
 #include <boost/asio.hpp>
 #include <memory>
 #include <set>

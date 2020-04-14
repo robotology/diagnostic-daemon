@@ -35,6 +35,7 @@ namespace confsintax
     static constexpr char configurator[]{"configurator"};
     static constexpr char decoder[]{"decoder"};
     static constexpr char yarplogger[]{"yarplogger"};
+    static constexpr char config[]{"config"};
 };
 
 

@@ -17,6 +17,7 @@ set(DiagnosticDaemonSrc     main.cpp
                             ConfigurationDepot.cpp
                             Decoder.cpp
                             ComponentDecoder.cpp
+                            ComponentConfig.cpp
                             ComponentYarpLogger.cpp
                         )
 
@@ -33,6 +34,7 @@ set(DiagnosticDaemonHdr     ComponentUdp.h
                             Decoder.h
                             ComponentDecoder.h
                             ComponentYarpLogger.h
+                            ComponentConfig.h
                             Log.h
                        )
 
