@@ -20,7 +20,7 @@ namespace confsintax
     static constexpr char mode[]{"mode"};
     static constexpr char name[]{"name"};
     static constexpr char address[]{"address"};
-    static constexpr char protocol[]{"protocol"};
+    static constexpr char type[]{"type"};
     static constexpr char value[]{"value"};
     static constexpr char mask[]{"mask"};
     static constexpr char enable[]{"enable"};

@@ -13,6 +13,6 @@ ComponentDisabled::ComponentDisabled(const std::map<std::string,std::string>& at
 {
 }
 
-void ComponentDisabled::acceptMsg(std::array<uint8_t,maxMsgLenght_>& ,unsigned int ,udp::endpoint,Severity severity )
+void ComponentDisabled::acceptMsg(std::array<uint8_t,maxMsgLenght_>& ,unsigned int ,udp::endpoint,Severity )
 {  
 }

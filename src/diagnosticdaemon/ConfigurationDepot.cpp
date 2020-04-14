@@ -53,13 +53,13 @@ bool ConfigurationDepot::createConfiguration()
 Component_sptr ConfigurationDepot::createComponent(const std::map<std::string,std::string>& attributes)
 {
     Component_sptr components;
-    std::string protocol=attributes.at(confsintax::protocol);
+    std::string type=attributes.at(confsintax::type);
     bool enable =asBool(confsintax::enable,attributes);
     
     if(!enable)
-        protocol=confsintax::disabled;
+        type=confsintax::disabled;
 
-    switch(componentTypeLookup[protocol])
+    switch(componentTypeLookup[type])
     {
         case (uint8_t)ComponentType::udpbroadcast:
         case (uint8_t)ComponentType::udp:

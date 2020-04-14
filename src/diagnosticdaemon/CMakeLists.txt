@@ -51,8 +51,6 @@ if (COMPILE_WITHYARP_DEF)
   target_link_libraries(diagnosticdaemon YARP::YARP_os YARP::YARP_conf YARP::YARP_init)
 endif()
 
-
-file(COPY ${CMAKE_CURRENT_LIST_DIR}/config.xml DESTINATION ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
-
 # install
 install(TARGETS diagnosticdaemon RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(FILES ${CMAKE_CURRENT_LIST_DIR}/config.xml DESTINATION ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})

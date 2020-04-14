@@ -26,7 +26,7 @@ void ComponentConsole::acceptMsg(std::string& msg,unsigned int ,udp::endpoint se
     Log(Severity::none)<<"******END RAW-MSG******"<<std::endl;    
 }
 
-void ComponentConsole::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint,Severity severity)
+void ComponentConsole::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint,Severity)
 {
     Log(Severity::debug)<<"ComponentConsole"<<std::endl;
     std::stringstream ss;

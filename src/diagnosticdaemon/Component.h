@@ -33,7 +33,7 @@ class Component
         virtual ~Component(){}
 
         virtual void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint,Severity severity)=0;
-        virtual void acceptMsg(std::string&,unsigned int ,udp::endpoint,Severity severity){};
+        virtual void acceptMsg(std::string&,unsigned int ,udp::endpoint,Severity){};
         std::string getName() const {return name_;}
         const std::map<std::string,std::string> getParameterMap() const;
 
@@ -43,7 +43,7 @@ class Component
         const std::map<std::string,std::string> parametersMap_;
 
         std::string name_;
-        std::string protocol_;
+        std::string type_;
         bool enable_;
         std::string mode_;
         std::string destination_;

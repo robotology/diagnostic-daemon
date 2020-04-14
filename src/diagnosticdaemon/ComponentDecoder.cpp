@@ -19,7 +19,7 @@ ComponentDecoder::ComponentDecoder(const std::map<std::string,std::string>& attr
     decoder_.init({});
 }
 
-void ComponentDecoder::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint,Severity severity)
+void ComponentDecoder::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint,Severity)
 {
     Log(Severity::debug)<<"ComponentDecoder"<<std::endl;
 

@@ -26,7 +26,7 @@ void ComponentYarpLogger::acceptMsg(std::string& msg,unsigned int ,udp::endpoint
     forewardtoYarpLogger(msg,severity);    
 }
 
-void ComponentYarpLogger::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint,Severity severity)
+void ComponentYarpLogger::acceptMsg(std::array<uint8_t,maxMsgLenght_>&,unsigned int,udp::endpoint,Severity)
 {
     Log(Severity::debug)<<"ComponentYarpLogger"<<std::endl;
     Log(Severity::error)<<"Todo"<<std::endl;
@@ -34,7 +34,7 @@ void ComponentYarpLogger::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsig
 
 void ComponentYarpLogger::forewardtoYarpLogger(const std::string& data,Severity severity)
 {
-
+    severity=severity;
 #ifdef COMPILE_WITHYARP_DEF
     switch (severity)
     {
