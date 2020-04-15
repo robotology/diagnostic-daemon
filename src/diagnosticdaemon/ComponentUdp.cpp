@@ -26,8 +26,8 @@ ComponentUdp::ComponentUdp(boost::asio::io_service &ios,const std::map<std::stri
       ios_(ios)
 {
   emsAddress_=asString(confsintax::address,attributes);
-  std::string addressfilter=asString(confsintax::addressfilter,attributes);
-  analyzeAddress(addressfilter);
+  std::string rules=asString(confsintax::rules,attributes);
+  analyzeAddress(rules);
 
   txSocket_.open(boost::asio::ip::udp::v4());
 

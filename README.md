@@ -11,6 +11,7 @@
   - [1.5. Tags meaning](#15-tags-meaning)
   - [1.6. Use with YarpLogger](#16-use-with-yarplogger)
   - [1.7. Application structure](#17-application-structure)
+  - [1.8. Remote diagnosticdaemon configuration](#18-remote-diagnosticdaemon-configuration)
 
 <!-- /TOC -->
 
@@ -186,3 +187,11 @@ In figure the application class diagram.
     <img src="img/diagnosticdaemonclass.png" >
     <figcaption><i>UML class diagram</i></figcaption>
 </figure>
+
+## 1.8. Remote diagnosticdaemon configuration
+
+```xml
+<message name="filtermessageset" type="address" destinationaddress="10.0.1.1 9000" rules="x:10.0.1.4 x:10.0.1.5 i:10.0.1.6" propagatetoboard="false" persistence="false"/>
+```
+
+
