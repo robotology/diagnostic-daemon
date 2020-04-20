@@ -115,11 +115,13 @@ In this case the following UML diagram describe the created objects:
 <figure style="display:block;margin-left:auto;margin-right:auto;width:80%;border:solid 1px">
     <img src="img/diagnosticdaemonobj.png" >
     <figcaption><i>UML Object diagram</i></figcaption>
-</figure>
+</figure>  
+  
+<br/><br/>
 
 The message flow through the instantiated components  (follow step0...3):
 
-<figure style="display:block;margin-left:auto;margin-right:auto;width:80%;border:solid 1px">
+<figure style="display:block;margin-left:auto;margin-right:auto;margin_top:20px;width:80%;border:solid 1px">
     <img src="img/diagnosticdaemonmsgz.png" >
     <figcaption><i>UML msg diagram</i></figcaption>
 </figure>
@@ -138,11 +140,13 @@ DD follows various flows.
 - Component #2 write message to file
 
 ### 1.4.2. Available components
+The following components are available.  
+  
 **upd or udp-broadcast**: send and receive data on udp connection.  
 **console**: write data on console and accept keyboard input.  
 **file**: write data on file.  
 **decoder**: decode message from byte format to string.  
-**yarplogger**: send received message to yarplogger.
+**yarplogger**: send received message to yarplogger.  
 **config**: change configuration as it receives a configuration message.
 
 ## 1.5. Tags meaning
