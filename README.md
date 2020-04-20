@@ -172,7 +172,6 @@ The component tag has the following attributes:
 |enable|boolean|true/false|all|enable or disable the component|
 |value|string||file|various uses, for file the file name|
 |destination|string||udp|messages destination, here the receiver component name|
-|yarplogger|boolean|true/false|console|forward to yarplogger|
 
 ## 1.6. Use with YarpLogger
 DiagnosticDaemon can forward data to YarpLogger.
