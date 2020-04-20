@@ -14,21 +14,28 @@
 #include <memory>
 #include <thread>
 
-#include "Component.h"
+#ifdef COMPILE_WITHYARP_DEF 
+#include <yarp/os/api.h>
+#include <yarp/os/Log.h>
+#include <yarp/os/Network.h>
+#include <yarp/os/LogStream.h>
+#endif
 
-class ComponentConsole: public Component
+#include "Component.h"
+#include "Log.h"
+
+class ComponentYarpLogger: public Component
 {
     public:
-        ComponentConsole(const std::map<std::string,std::string>& attributes,ConfigurationDepot& depot);
-        virtual ~ComponentConsole() {}
+        ComponentYarpLogger(const std::map<std::string,std::string>& attributes,ConfigurationDepot& depot);
+        virtual ~ComponentYarpLogger() {}
 
         void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint,Severity severity) override;
         void acceptMsg(std::string& msg,unsigned int size,udp::endpoint senderEndPoint,Severity severity) override;
 
     private:
-        std::unique_ptr<std::thread> thread_;
-        void inputLoop();
         bool active_{true};
+        void forewardtoYarpLogger(const std::string& data,Severity severity/*,embot::prot::eth::diagnostic::TYP severity*/); 
 };
 
-using ComponentConsole_sptr=std::shared_ptr<ComponentConsole>;
+using ComponentYarpLogger_sptr=std::shared_ptr<ComponentYarpLogger>;

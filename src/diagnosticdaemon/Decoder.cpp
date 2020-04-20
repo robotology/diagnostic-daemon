@@ -7,17 +7,12 @@
 #include "Decoder.h"
 #include "Log.h"
 
-#ifdef COMPILE_WITHYARP_DEF 
-#include <yarp/os/api.h>
-#include <yarp/os/Log.h>
-#include <yarp/os/Network.h>
-#include <yarp/os/LogStream.h>
-#endif
 #include <iosfwd>
 #include <iostream>
 #include "embot_prot_eth_diagnostic.h"
 
 #include "EoError.h"
+#include "EoBoards.h"
 
 extern "C" {
 // i give dummy implementation
@@ -36,16 +31,11 @@ static const char * geterrormessage(const uint32_t code)
 
 
 Decoder::Decoder()
-: _host(new embot::prot::eth::diagnostic::Host)
-{
-#ifdef COMPILE_WITHYARP_DEF
-    yarp::os::Network::init();
-#endif    
+{ 
 }
 
 Decoder::~Decoder()
 {  
-    delete _host; 
 }
 
 bool Decoder::init(const Config &config)
@@ -63,7 +53,7 @@ bool Decoder::init(const Config &config)
     _config = config;
 
     _configdiaghost.ropcapacity = _config.ropcapacity;
-    _host->init(_configdiaghost);    
+    _host.init(_configdiaghost);    
 
     _initted = true;
 
@@ -75,22 +65,32 @@ bool Decoder::initted() const
     return _initted;
 }
 
-bool Decoder::decode(uint8_t *ropframe, uint16_t sizeofropframe, const embot::prot::eth::IPv4 &ipv4,bool enableYarpLogger)
+void Decoder::clear()
 {
-    enableYarpLogger_=enableYarpLogger;
+    std::lock_guard<std::mutex> lock(lockDecodedMsg_);
+    decodedMsg_.clear();
+}
 
+std::list<std::pair<std::string,Severity>> Decoder::decode(uint8_t *ropframe, uint16_t sizeofropframe, const embot::prot::eth::IPv4 &ipv4)
+{
     if(!initted())
     {
         Log(Severity::error)<<"Decoder::decode"<<std::endl;
-        return false;
+        return std::list<std::pair<std::string,Severity>>();
     }
 
     embot::core::Data data(ropframe, sizeofropframe);
-    return _host->accept(ipv4, data);        
+    _host.accept(ipv4, data,ropdecode,this);
+    std::unique_lock<std::mutex> lck(mutexcv_);
+    condVar_.wait(lck, [&]{ return msgReady_; });
+    return decodedMsg_;      
 }
 
-static void s_eoprot_print_mninfo_status(const embot::prot::eth::IPv4 &ipv4, embot::prot::eth::diagnostic::InfoBasic * infobasic, uint8_t * extra);
-
+bool Decoder::ropdecode(const embot::prot::eth::IPv4 &ipv4, const embot::prot::eth::rop::Descriptor &rop,void*orig)
+{
+    Decoder* myDecoder=(Decoder*)orig;
+    return myDecoder->ropdecode(ipv4,rop);
+}
 bool Decoder::ropdecode(const embot::prot::eth::IPv4 &ipv4, const embot::prot::eth::rop::Descriptor &rop)
 {
     Log(Severity::debug)<<"msg Arrived from rop"<<std::endl;      
@@ -98,10 +98,9 @@ bool Decoder::ropdecode(const embot::prot::eth::IPv4 &ipv4, const embot::prot::e
     // i accept only sig<>
     if(embot::prot::eth::rop::OPC::sig != rop.opcode)
     {
-        Log(Severity::error)<<"Decoder::Impl"<<std::endl;
+        Log(Severity::debug)<<"Decoder::Impl"<<std::endl;
         return false;
     }
-
 
     switch(rop.id32)
     {
@@ -126,62 +125,47 @@ bool Decoder::ropdecode(const embot::prot::eth::IPv4 &ipv4, const embot::prot::e
         break;
     }
 
+    {
+        std::lock_guard<std::mutex> lck(mutexcv_);
+        msgReady_ = true;
+    }
+    condVar_.notify_one();    
     return true;
 }
 
-void Decoder::forewardtoYarpLogger(const std::string& data,embot::prot::eth::diagnostic::TYP severity)
+Severity Decoder::severitytranslate(embot::prot::eth::diagnostic::TYP severity)
 {
-    if(!enableYarpLogger_)
-        return;
-
-#ifdef COMPILE_WITHYARP_DEF
+    Severity myseverity;
     switch (severity)
     {
         case embot::prot::eth::diagnostic::TYP::info:
-            yInfo()<<data;
+            myseverity=Severity::info;
             break;
         case embot::prot::eth::diagnostic::TYP::debug:
-            yDebug()<<data;;
+            myseverity=Severity::debug;
             break;
         case embot::prot::eth::diagnostic::TYP::warning:
-            yWarning()<<data;;
+            myseverity=Severity::warning;
             break;
         case embot::prot::eth::diagnostic::TYP::error:
-            yError()<<data;;
+            myseverity=Severity::error;
             break;
         default:
         case embot::prot::eth::diagnostic::TYP::fatal:
         case embot::prot::eth::diagnostic::TYP::max:
-            yFatal()<<data;;
+            myseverity=Severity::fatal;
             break;
     }
-#endif    
+    return myseverity;
 }
-// section which prints as yarprobot interface does. just cut'n'paste and make it run
 
 // --------------------------------------------------------------------------------------------------------------------
 // - definition of static functions
 // --------------------------------------------------------------------------------------------------------------------
 
 
-#include "EoBoards.h"
 
-static void s_print_string(const std::string &str, embot::prot::eth::diagnostic::TYP errortype);
-
-static void s_eoprot_print_mninfo_status(const embot::prot::eth::IPv4 &ipv4, embot::prot::eth::diagnostic::InfoBasic* infobasic, uint8_t * extra);
-
-static void s_process_CANPRINT(const embot::prot::eth::IPv4 &ipv4, embot::prot::eth::diagnostic::InfoBasic* infobasic);
-
-static void s_process_category_Default(const embot::prot::eth::IPv4 &ipv4, embot::prot::eth::diagnostic::InfoBasic* infobasic, uint8_t * extra);
-
-static void s_process_category_Config(const embot::prot::eth::IPv4 &ipv4, embot::prot::eth::diagnostic::InfoBasic* infobasic, uint8_t * extra);
-
-
-static const char * s_get_sourceofmessage(embot::prot::eth::diagnostic::InfoBasic* infobasic, uint8_t *address);
-
-
-
-static void s_eoprot_print_mninfo_status(const embot::prot::eth::IPv4 &ipv4, embot::prot::eth::diagnostic::InfoBasic * infobasic, uint8_t * extra)
+void Decoder::s_eoprot_print_mninfo_status(const embot::prot::eth::IPv4 &ipv4, embot::prot::eth::diagnostic::InfoBasic * infobasic, uint8_t * extra)
 {
 #undef DROPCODES_FROM_LIST
 #define CAN_PRINT_FULL_PARSING
@@ -235,47 +219,53 @@ static void s_eoprot_print_mninfo_status(const embot::prot::eth::IPv4 &ipv4, emb
 }
 
 
-static void s_print_string(const std::string &str, embot::prot::eth::diagnostic::TYP errortype)
+void Decoder::s_print_string(const std::string &str, embot::prot::eth::diagnostic::TYP errortype)
 {
+    std::stringstream ss;
     switch(errortype)
     {
         case embot::prot::eth::diagnostic::TYP::info:
         {
-            std::cout << "[INFO] " << str << std::endl;
+            ss << "[INFO] " << str << std::endl;
         } break;
 
         case embot::prot::eth::diagnostic::TYP::debug:
         {
-            std::cout << "[DEBUG] " << str << std::endl;
+            ss << "[DEBUG] " << str << std::endl;
         } break;
 
         case embot::prot::eth::diagnostic::TYP::warning:
         {
-            std::cout << "[WARNING] " << str << std::endl;
+            ss << "[WARNING] " << str << std::endl;
         } break;
 
         case embot::prot::eth::diagnostic::TYP::error:
         {
-            std::cout << "[ERROR] " << str << std::endl;
+            ss << "[ERROR] " << str << std::endl;
         } break;
 
         case embot::prot::eth::diagnostic::TYP::fatal:
         {
-            std::cout << "[FATAL] " << str << std::endl;
+            ss << "[FATAL] " << str << std::endl;
         } break;
 
         default:
         {
-            std::cout << "[ERROR] " << str << std::endl;
+            ss << "[ERROR] " << str << std::endl;
         } break;
     }
 
+    {
+        Severity severity=severitytranslate(errortype);
+        std::lock_guard<std::mutex> lock(lockDecodedMsg_);
+        decodedMsg_.push_back(std::pair<std::string,Severity>{ss.str(),severity});
+    }
 
-    Decoder::forewardtoYarpLogger(str, errortype);
+    //Decoder::forewardtoYarpLogger(ss.str(), errortype);
 }
 
 
-static void s_process_category_Default(const embot::prot::eth::IPv4 &ipv4, embot::prot::eth::diagnostic::InfoBasic* infobasic, uint8_t * extra)
+void Decoder::s_process_category_Default(const embot::prot::eth::IPv4 &ipv4, embot::prot::eth::diagnostic::InfoBasic* infobasic, uint8_t * extra)
 {
     char str[512] = {0};
     embot::prot::eth::diagnostic::TYP type {embot::prot::eth::diagnostic::TYP::info};
@@ -326,14 +316,14 @@ static void s_process_category_Default(const embot::prot::eth::IPv4 &ipv4, embot
 
 
 
-static void s_process_CANPRINT(const embot::prot::eth::IPv4 &, embot::prot::eth::diagnostic::InfoBasic* )
+void Decoder::s_process_CANPRINT(const embot::prot::eth::IPv4 &, embot::prot::eth::diagnostic::InfoBasic* )
 {
     s_print_string(std::string("received a CAN PRINT but the handler is not implemented yet"), embot::prot::eth::diagnostic::TYP::debug);
 //    feat_CANprint(ipv4, infobasic);
 }
 
 
-static void s_process_category_Config(const embot::prot::eth::IPv4 &ipv4, embot::prot::eth::diagnostic::InfoBasic* infobasic, uint8_t * extra)
+void Decoder::s_process_category_Config(const embot::prot::eth::IPv4 &ipv4, embot::prot::eth::diagnostic::InfoBasic* infobasic, uint8_t * extra)
 {
     char str[512] = {0};
     embot::prot::eth::diagnostic::TYP type {embot::prot::eth::diagnostic::TYP::info};
@@ -555,10 +545,7 @@ static void s_process_category_Config(const embot::prot::eth::IPv4 &ipv4, embot:
 
 }
 
-
-
-
-static const char * s_get_sourceofmessage(embot::prot::eth::diagnostic::InfoBasic* infobasic, uint8_t *address)
+const char * Decoder::s_get_sourceofmessage(embot::prot::eth::diagnostic::InfoBasic* infobasic, uint8_t *address)
 {
     static const char * const sourcenames[] =
     {
@@ -578,6 +565,4 @@ static const char * s_get_sourceofmessage(embot::prot::eth::diagnostic::InfoBasi
 
     return((source > embot::core::tointegral(embot::prot::eth::diagnostic::SRC::can2)) ? (sourcenames[3]) : (sourcenames[source]));
 }
-
-// end of file
 

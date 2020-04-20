@@ -1,8 +1,11 @@
 <configuration>
-    <component protocol="udp-broadcast"  name="boards"     rxport="11000" txport="11000" address="10.0.1.1"   mask="255.255.255.0" mode="copy-raw"    addressfilter="x:10.0.1.4 i:10.0.1.1" enable="true"  value="" destination="file file2 console gui gui2"/>  
-    <component protocol="udp"            name="gui"        rxport="8000"  txport="9000"  address="127.0.0.1"  mask=""              mode="copy-raw"    addressfilter="" enable="false"  value="" destination="boards"/>
-    <component protocol="udp"            name="gui2"       rxport="8001"  txport="9001"  address="127.0.0.1"  mask=""              mode="copy-raw"    addressfilter="" enable="false"  value="" destination="boards"/>
-    <component protocol="file"           name="file"       rxport=""      txport=""      address=""           mask=""              mode="copy-parser" addressfilter="" enable="true"  value="logger.log" destination=""/>
-    <component protocol="file"           name="file2"      rxport=""      txport=""      address=""           mask=""              mode="copy-parser" addressfilter="" enable="true"  value="logger2.log" destination=""/>
-    <component protocol="console"        name="console"    rxport=""      txport=""      address=""           mask=""              mode="copy-parser" addressfilter="" enable="true"  value="" destination="boards" enableyarplogger="false"/>
+    <component type="udp"            name="boards"     rxport="11000" txport="11000" address="10.0.1.1"   mask="255.255.255.0" mode="copy-raw"    rules="x:10.0.1.4 i:10.0.1.1" enable="true"  value="" destination="dec gui1 file1"/>  
+    <component type="udp"            name="configrx"   rxport="11001" txport="11001" address="127.0.0.1"  mask=""              mode="copy-raw"    rules="" enable="true"  value="" destination="config"/>  
+    <component type="udp"            name="gui1"       rxport="8000"  txport="9000"  address="127.0.0.1"  mask=""              mode="copy-raw"    rules="" enable="true"  value="" destination="boards"/>
+    <component type="file"           name="file1"      rxport=""      txport=""      address=""           mask=""              mode="copy-parser" rules="" enable="true"  value="logger1.log" destination=""/>
+    <component type="file"           name="file2"      rxport=""      txport=""      address=""           mask=""              mode="copy-parser" rules="" enable="true"  value="logger2.log" destination=""/>
+    <component type="console"        name="console"    rxport=""      txport=""      address=""           mask=""              mode="copy-parser" rules="" enable="true"  value="" destination=""/>
+    <component type="decoder"        name="dec"        rxport=""      txport=""      address=""           mask=""              mode="copy-parser" rules="" enable="true"  value="" destination="file2 console yarp"/>
+    <component type="yarplogger"     name="yarp"       rxport=""      txport=""      address=""           mask=""              mode="copy-parser" rules="" enable="true"  value="" destination=""/>
+    <component type="config"         name="config"     rxport=""      txport=""      address=""           mask=""              mode="copy-parser" rules="" enable="true"  value="" destination=""/>
 </configuration>

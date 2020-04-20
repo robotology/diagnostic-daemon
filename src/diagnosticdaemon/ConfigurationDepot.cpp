@@ -9,6 +9,9 @@
 #include "ComponentFile.h"
 #include "ComponentConsole.h"
 #include "ComponentDisabled.h"
+#include "ComponentDecoder.h"
+#include "ComponentConfig.h"
+#include "ComponentYarpLogger.h"
 #include "Log.h"
 
 ConfigurationDepot::ConfigurationDepot(boost::asio::io_service &io_service): ios_(io_service)
@@ -51,13 +54,13 @@ bool ConfigurationDepot::createConfiguration()
 Component_sptr ConfigurationDepot::createComponent(const std::map<std::string,std::string>& attributes)
 {
     Component_sptr components;
-    std::string protocol=attributes.at(confsintax::protocol);
+    std::string type=attributes.at(confsintax::type);
     bool enable =asBool(confsintax::enable,attributes);
     
     if(!enable)
-        protocol=confsintax::disabled;
+        type=confsintax::disabled;
 
-    switch(componentTypeLookup[protocol])
+    switch(componentTypeLookup[type])
     {
         case (uint8_t)ComponentType::udpbroadcast:
         case (uint8_t)ComponentType::udp:
@@ -79,7 +82,22 @@ Component_sptr ConfigurationDepot::createComponent(const std::map<std::string,st
         {
             components=std::make_shared<ComponentDisabled>(attributes,*this);
             return components;
-        }                  
+        } 
+        case (uint8_t)ComponentType::decoder:                
+        {
+            components=std::make_shared<ComponentDecoder>(attributes,*this);
+            return components;
+        }         
+        case (uint8_t)ComponentType::yarplogger:                
+        {
+            components=std::make_shared<ComponentYarpLogger>(attributes,*this);
+            return components;
+        }    
+        case (uint8_t)ComponentType::config:                
+        {
+            components=std::make_shared<ComponentConfig>(attributes,*this);
+            return components;
+        }                            
         default:
         {
             //TODO error

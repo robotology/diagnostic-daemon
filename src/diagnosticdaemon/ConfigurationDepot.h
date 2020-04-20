@@ -29,7 +29,7 @@ class ConfigurationDepot
         ConfigurationDepot(boost::asio::io_service &io_service);
         bool createConfiguration();
 
-        template <typename T> bool route(T&,unsigned int size,const std::string& destination,udp::endpoint senderEndPoint);
+        template <typename T> bool route(T&,unsigned int size,const std::string& destination,udp::endpoint senderEndPoint,Severity severity);
 
         bool save();
 
@@ -42,7 +42,7 @@ class ConfigurationDepot
         void mapAttributeToXml(pugi::xml_node& node,const std::map<std::string,std::string>& in) const;
 };
 
-template <typename T> bool ConfigurationDepot::route(T& msg,unsigned int size,const std::string& destinations,udp::endpoint senderEndPoint)
+template <typename T> bool ConfigurationDepot::route(T& msg,unsigned int size,const std::string& destinations,udp::endpoint senderEndPoint,Severity severity)
 {
     const auto tokenizedDestination=tokenize<std::string>(destinations);
 
@@ -51,7 +51,7 @@ template <typename T> bool ConfigurationDepot::route(T& msg,unsigned int size,co
         for(const std::string& currentDestination:tokenizedDestination)
         {
             if(current->getName()==currentDestination)
-                current->acceptMsg(msg,size,senderEndPoint);
+                current->acceptMsg(msg,size,senderEndPoint,severity);
         }  
     }
     

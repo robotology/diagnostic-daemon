@@ -26,8 +26,8 @@ ComponentUdp::ComponentUdp(boost::asio::io_service &ios,const std::map<std::stri
       ios_(ios)
 {
   emsAddress_=asString(confsintax::address,attributes);
-  std::string addressfilter=asString(confsintax::addressfilter,attributes);
-  analyzeAddress(addressfilter);
+  std::string rules=asString(confsintax::rules,attributes);
+  analyzeAddress(rules);
 
   txSocket_.open(boost::asio::ip::udp::v4());
 
@@ -50,7 +50,7 @@ void ComponentUdp::handleReceiveFrom(const boost::system::error_code &error, siz
     }
     else
     {
-      depot_.route(rxData_,size,destination_,senderEndpoint_);
+      depot_.route(rxData_,size,destination_,senderEndpoint_,Severity::none);
     }
     
   }
@@ -80,7 +80,7 @@ void ComponentUdp::send(const std::array<uint8_t,maxMsgLenght_>& message,unsigne
       boost::asio::placeholders::bytes_transferred));
 }
 
-void ComponentUdp::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint )
+void ComponentUdp::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint,Severity)
 {
     send(msg,size);
 }

@@ -20,13 +20,12 @@ namespace confsintax
     static constexpr char mode[]{"mode"};
     static constexpr char name[]{"name"};
     static constexpr char address[]{"address"};
-    static constexpr char protocol[]{"protocol"};
+    static constexpr char type[]{"type"};
     static constexpr char value[]{"value"};
     static constexpr char mask[]{"mask"};
     static constexpr char enable[]{"enable"};
     static constexpr char destination[]{"destination"};
-    static constexpr char addressfilter[]{"addressfilter"};
-    static constexpr char enableyarplogger[]{"enableyarplogger"};
+    static constexpr char rules[]{"rules"};
 
     static constexpr char udpbroadcast[]{"udp-broadcast"};
     static constexpr char udp[]{"udp"};
@@ -34,7 +33,20 @@ namespace confsintax
     static constexpr char console[]{"console"};
     static constexpr char disabled[]{"disabled"};
     static constexpr char configurator[]{"configurator"};
+    static constexpr char decoder[]{"decoder"};
+    static constexpr char yarplogger[]{"yarplogger"};
+    static constexpr char config[]{"config"};
 };
+
+namespace confmessage
+{
+    static constexpr char message[]{"message"}; 
+    static constexpr char name[]{"name"};
+    static constexpr char filtermessageset[]{"filtermessageset"}; 
+    static constexpr char destinationaddress[]{"destinationaddress"}; 
+    static constexpr char rules[]{"rules"}; 
+    
+}
 
 
 inline bool asBool(const std::string& name,const std::map<std::string,std::string>& attributes)
