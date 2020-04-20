@@ -175,12 +175,17 @@ The component tag has the following attributes:
 
 ## 1.6. Use with YarpLogger
 DiagnosticDaemon can forward data to YarpLogger.
-To eneble this feature use the parameter **enableyarplogger** in a protocol="consol"
-component.
+To enable this feature use the component **yarplogger**.
+Example:
 
 ```xml
-enableyarplogger="true"
+<configuration>
+    <component type="udp"            name="boards"     rxport="11000" txport="11000" address="10.0.1.1"   mask="255.255.255.0" mode="copy-raw"    rules="x:10.0.1.4 i:10.0.1.1" enable="true"  value="" destination="dec"/>  
+    <component type="decoder"        name="dec"        rxport=""      txport=""      address=""           mask=""              mode="copy-parser" rules="" enable="true"  value="" destination="yarp"/>
+    <component type="yarplogger"     name="yarp"       rxport=""      txport=""      address=""           mask=""              mode="copy-parser" rules="" enable="true"  value="" destination=""/>
 ```
+In this example three components are working:
+The component with name 'boards' receive messages from udp, then it sends the messages to the component 'dec' and at the end the component 'dec' send the messages to the component 'yarp'. The component 'yarp' send the messages to the yarplogger.  
 
 Also before execute DiagnosticDaemon use in the same shell or in your .bashrc:
 
