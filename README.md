@@ -175,7 +175,7 @@ The component tag has the following attributes:
 
 ## 1.6. Use with YarpLogger
 DiagnosticDaemon can forward data to YarpLogger.
-To enable this feature use the component **yarplogger**.
+To enable this feature use the component **yarplogger**.  
 Example:
 
 ```xml
@@ -186,6 +186,7 @@ Example:
 ```
 In this example three components are working:
 The component with name 'boards' receive messages from udp, then it sends the messages to the component 'dec' and at the end the component 'dec' send the messages to the component 'yarp'. The component 'yarp' send the messages to the yarplogger.  
+Note that the component named 'dec' decode the bytes messages to string format messages.
 
 Also before execute DiagnosticDaemon use in the same shell or in your .bashrc:
 
