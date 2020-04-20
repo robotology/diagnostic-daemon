@@ -11,7 +11,10 @@
   - [1.5. Tags meaning](#15-tags-meaning)
   - [1.6. Use with YarpLogger](#16-use-with-yarplogger)
   - [1.7. Application structure](#17-application-structure)
-  - [1.8. Remote diagnosticdaemon configuration](#18-remote-diagnosticdaemon-configuration)
+  - [1.8. Configuration messages](#18-configuration-messages)
+  - [1.9. Use](#19-use)
+  - [1.10. Message list](#110-message-list)
+    - [1.10.1. filtermessageset](#1101-filtermessageset)
 
 <!-- /TOC -->
 
@@ -93,12 +96,15 @@ Here is the default file:
 
 ```xml
 <configuration>
-    <component protocol="udp-broadcast"  name="boards"     rxport="11000" txport="11000" address="10.0.1.1"   mask="255.255.255.0" mode="copy-raw"    addressfilter="x:10.0.1.4 i:10.0.1.1" enable="true"  value="" destination="file file2 console gui gui2"/>  
-    <component protocol="udp"            name="gui"        rxport="8000"  txport="9000"  address="127.0.0.1"  mask=""              mode="copy-raw"    addressfilter="" enable="false"  value="" destination="boards"/>
-    <component protocol="udp"            name="gui2"       rxport="8001"  txport="9001"  address="127.0.0.1"  mask=""              mode="copy-raw"    addressfilter="" enable="false"  value="" destination="boards"/>
-    <component protocol="file"           name="file"       rxport=""      txport=""      address=""           mask=""              mode="copy-parser" addressfilter="" enable="true"  value="logger.log" destination=""/>
-    <component protocol="file"           name="file2"      rxport=""      txport=""      address=""           mask=""              mode="copy-parser" addressfilter="" enable="true"  value="logger2.log" destination=""/>
-    <component protocol="console"        name="console"    rxport=""      txport=""      address=""           mask=""              mode="copy-parser" addressfilter="" enable="true"  value="" destination="boards" enableyarplogger="false"/>
+    <component type="udp"            name="boards"     rxport="11000" txport="11000" address="10.0.1.1"   mask="255.255.255.0" mode="copy-raw"    rules="x:10.0.1.4 i:10.0.1.1" enable="true"  value="" destination="dec gui1 file1"/>  
+    <component type="udp"            name="configrx"   rxport="11001" txport="11001" address="127.0.0.1"  mask=""              mode="copy-raw"    rules="" enable="true"  value="" destination="config"/>  
+    <component type="udp"            name="gui1"       rxport="8000"  txport="9000"  address="127.0.0.1"  mask=""              mode="copy-raw"    rules="" enable="true"  value="" destination="boards"/>
+    <component type="file"           name="file1"      rxport=""      txport=""      address=""           mask=""              mode="copy-parser" rules="" enable="true"  value="logger1.log" destination=""/>
+    <component type="file"           name="file2"      rxport=""      txport=""      address=""           mask=""              mode="copy-parser" rules="" enable="true"  value="logger2.log" destination=""/>
+    <component type="console"        name="console"    rxport=""      txport=""      address=""           mask=""              mode="copy-parser" rules="" enable="true"  value="" destination=""/>
+    <component type="decoder"        name="dec"        rxport=""      txport=""      address=""           mask=""              mode="copy-parser" rules="" enable="true"  value="" destination="file2 console yarp"/>
+    <component type="yarplogger"     name="yarp"       rxport=""      txport=""      address=""           mask=""              mode="copy-parser" rules="" enable="true"  value="" destination=""/>
+    <component type="config"         name="config"     rxport=""      txport=""      address=""           mask=""              mode="copy-parser" rules="" enable="true"  value="" destination=""/>
 </configuration>
 
 ```
@@ -135,20 +141,23 @@ DD follows various flows.
 **upd or udp-broadcast**: send and receive data on udp connection.  
 **console**: write data on console and accept keyboard input.  
 **file**: write data on file.  
+**decoder**: decode message from byte format to string.  
+**yarplogger**: send received message to yarplogger.
+**config**: change configuration as it receives a configuration message.
 
 ## 1.5. Tags meaning
 
 An example component in the config.xml:
 
 ```xml
-<component protocol="udp-broadcast"  name="boards"     rxport="11000" txport="11000" address="10.0.1.1"   mask="255.255.255.0" mode="copy-raw"    filter="all" enable="true"  value="" destination="file file2 console gui gui2"/>
+    <component type="udp"            name="boards"     rxport="11000" txport="11000" address="10.0.1.1"   mask="255.255.255.0" mode="copy-raw"    rules="x:10.0.1.4 i:10.0.1.1" enable="true"  value="" destination="dec gui1 file1"/>  
 ```
 
 The component tag has the following attributes:
 
 | parameter name | parameter type |parameter value|component| note |
 |---------|--------|--------|-----|--------|
-|protocol|enum|udp/file/console||component type|
+|protocol|enum|udp/file/console/yarplogger/config/decoder||component type|
 |name|string||all| component name|
 |rxport|number||udp|rx ip port|
 |txport|number||udp|tx ip port|
@@ -188,10 +197,33 @@ In figure the application class diagram.
     <figcaption><i>UML class diagram</i></figcaption>
 </figure>
 
-## 1.8. Remote diagnosticdaemon configuration
+## 1.8. Configuration messages
+
+## 1.9. Use
+All the configuration messages should be send to port udp component connected to a config component.  
+In default config.xml the port for configuration is 11001.
+
+## 1.10. Message list
+
+| message name | use | note |
+|---------|--------|--------|
+|filtermanageset|It can be used for filters setting|none|
+
+### 1.10.1. filtermessageset
+This message is used for set the filters in DiagnosticDaemon.
+
+| parameter name | description |values | default |
+|---------|--------|--------|--------|
+|name|message name|string with message name|empty|
+|destinationaddress|Destination address to which the filter is anctivated|dotted string:port|empty|
+|type|Type of filter|address|address|
+|rules|Rules of exclusion (x:address) and inclusion (i:address)|Special addresses are none and all|x:none i:all|
+|propagatetoboard|The rules can be propagated to the boards|ture or false|false|
+|persistence|The rules will be saved in the DiagnosticDaemon configuration file|true or false|false|
+
+Example:
 
 ```xml
 <message name="filtermessageset" type="address" destinationaddress="10.0.1.1 9000" rules="x:10.0.1.4 x:10.0.1.5 i:10.0.1.6" propagatetoboard="false" persistence="false"/>
 ```
-
 
