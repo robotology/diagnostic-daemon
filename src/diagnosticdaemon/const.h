@@ -16,6 +16,7 @@ enum class ComponentType: uint8_t
     disabled,
     decoder,
     yarplogger,
+    synch,
     config
 };
 
@@ -27,6 +28,7 @@ inline std::map<std::string,uint8_t> componentTypeLookup{
                                                         {confsintax::disabled,(uint8_t)ComponentType::disabled},
                                                         {confsintax::decoder,(uint8_t)ComponentType::decoder},
                                                         {confsintax::yarplogger,(uint8_t)ComponentType::yarplogger},
+                                                        {confsintax::synch,(uint8_t)ComponentType::synch},
                                                         {confsintax::config,(uint8_t)ComponentType::config}
                                                         };
 

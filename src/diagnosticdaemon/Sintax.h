@@ -26,6 +26,8 @@ namespace confsintax
     static constexpr char enable[]{"enable"};
     static constexpr char destination[]{"destination"};
     static constexpr char rules[]{"rules"};
+    static constexpr char synchtime[]{"synchtime"};
+    
 
     static constexpr char udpbroadcast[]{"udp-broadcast"};
     static constexpr char udp[]{"udp"};
@@ -36,6 +38,7 @@ namespace confsintax
     static constexpr char decoder[]{"decoder"};
     static constexpr char yarplogger[]{"yarplogger"};
     static constexpr char config[]{"config"};
+    static constexpr char synch[]{"synch"};
 };
 
 namespace confmessage

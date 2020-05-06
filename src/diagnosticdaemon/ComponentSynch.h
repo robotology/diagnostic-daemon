@@ -5,30 +5,30 @@
 */
 
 // - brief
-//   Console component class
+//   File component class
 //
 
 #pragma once
 
-#include <iostream>
-#include <memory>
 #include <thread>
+#include <memory>
 
 #include "Component.h"
 
-class ComponentConsole: public Component
+class ComponentSynch: public Component
 {
     public:
-        ComponentConsole(const std::map<std::string,std::string>& attributes,ConfigurationDepot& depot);
-        virtual ~ComponentConsole();
+        ComponentSynch(const std::map<std::string,std::string>& attributes,ConfigurationDepot& depot);        
+        virtual ~ComponentSynch();
 
         void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint,Severity severity) override;
         void acceptMsg(std::string& msg,unsigned int size,udp::endpoint senderEndPoint,Severity severity) override;
 
-    private:
+    private:      
         std::unique_ptr<std::thread> thread_;
-        void inputLoop();
-        bool active_{true};
+        void work();
+        bool active_{true};  
+        unsigned int synchtime_{10000};
 };
 
-using ComponentConsole_sptr=std::shared_ptr<ComponentConsole>;
+using ComponentSynch_sptr=std::shared_ptr<ComponentSynch>;

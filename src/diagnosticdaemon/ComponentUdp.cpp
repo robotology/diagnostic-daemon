@@ -80,8 +80,17 @@ void ComponentUdp::send(const std::array<uint8_t,maxMsgLenght_>& message,unsigne
       boost::asio::placeholders::bytes_transferred));
 }
 
+void ComponentUdp::acceptMsg(std::string& msg,unsigned int size,udp::endpoint,Severity)
+{
+    Log(Severity::debug)<<getName()<<" Accept message"<<std::endl;
+    std::array<uint8_t,maxMsgLenght_> tosend;
+    std::copy(msg.begin(),msg.end(),tosend.data());
+    send(tosend,size);
+}
+
 void ComponentUdp::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint,Severity)
 {
+    Log(Severity::debug)<<getName()<<" Accept message"<<std::endl;
     send(msg,size);
 }
 

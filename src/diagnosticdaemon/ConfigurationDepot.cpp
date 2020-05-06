@@ -12,6 +12,7 @@
 #include "ComponentDecoder.h"
 #include "ComponentConfig.h"
 #include "ComponentYarpLogger.h"
+#include "ComponentSynch.h"
 #include "Log.h"
 
 ConfigurationDepot::ConfigurationDepot(boost::asio::io_service &io_service): ios_(io_service)
@@ -97,7 +98,12 @@ Component_sptr ConfigurationDepot::createComponent(const std::map<std::string,st
         {
             components=std::make_shared<ComponentConfig>(attributes,*this);
             return components;
-        }                            
+        }  
+        case (uint8_t)ComponentType::synch:                
+        {
+            components=std::make_shared<ComponentSynch>(attributes,*this);
+            return components;
+        }                                    
         default:
         {
             //TODO error

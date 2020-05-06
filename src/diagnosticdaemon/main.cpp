@@ -19,6 +19,7 @@ int main()
 {
   try
   {
+    std::cout << "Start" << std::endl;
     boost::asio::io_service ios;
 
     ConfigurationDepot depot(ios);
@@ -30,6 +31,6 @@ int main()
   {
     std::cerr << "Exception: " << e.what() << "\n";
   }
-
+  std::cout << "Stop" << std::endl;
   return 0;
 }

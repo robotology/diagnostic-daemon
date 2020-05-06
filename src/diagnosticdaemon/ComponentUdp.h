@@ -22,6 +22,7 @@ public:
     virtual ~ComponentUdp(){};
 
     void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint,Severity severity) override;
+    void acceptMsg(std::string&,unsigned int ,udp::endpoint,Severity) override ;
 
 private:
 

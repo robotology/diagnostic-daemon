@@ -148,6 +148,7 @@ The following components are available.
 **decoder**: decode message from byte format to string.  
 **yarplogger**: send received message to yarplogger.  
 **config**: change configuration as it receives a configuration message.
+**synch**: create a synch time message to be sent to boards.
 
 ## 1.5. Tags meaning
 
@@ -172,6 +173,7 @@ The component tag has the following attributes:
 |enable|boolean|true/false|all|enable or disable the component|
 |value|string||file|various uses, for file the file name|
 |destination|string||udp|messages destination, here the receiver component name|
+|synchtime|integer||synch|timeout for sending synch message in msec|
 
 ## 1.6. Use with YarpLogger
 DiagnosticDaemon can forward data to YarpLogger.
