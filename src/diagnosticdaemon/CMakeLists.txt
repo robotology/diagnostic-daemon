@@ -7,11 +7,12 @@
 
 # @author Luca Tricerri <luca.tricerri@iit.it>
 
+project(diagnosticdaemon)
+
 set(DiagnosticDaemonSrc     main.cpp
                             ComponentUdp.cpp
                             ComponentFile.cpp
                             ComponentConsole.cpp
-                            pugixml.cpp
                             Component.cpp
                             ComponentDisabled.cpp
                             ConfigurationDepot.cpp
@@ -30,8 +31,6 @@ set(DiagnosticDaemonHdr     ComponentUdp.h
                             ConfigurationDepot.h
                             ElapsedTime.h
                             Sintax.h
-                            pugixml.hpp
-                            pugiconfig.hpp
                             Decoder.h
                             ComponentDecoder.h
                             ComponentYarpLogger.h
@@ -40,21 +39,22 @@ set(DiagnosticDaemonHdr     ComponentUdp.h
                             Log.h
                        )
 
-add_executable(diagnosticdaemon ${DiagnosticDaemonSrc} ${DiagnosticDaemonHdr} )
+add_executable(${PROJECT_NAME} ${DiagnosticDaemonSrc} ${DiagnosticDaemonHdr} )
 
-target_link_libraries(diagnosticdaemon pthread
+target_link_libraries(${PROJECT_NAME} pthread
                                        Boost::system
+                                       pugixml
                                        icub_firmware_shared::embot
                                        icub_firmware_shared::embobj
                                        )
 
 if (COMPILE_WITHYARP_DEF)
-  target_compile_definitions(diagnosticdaemon PRIVATE -DCOMPILE_WITHYARP_DEF)
+  target_compile_definitions(${PROJECT_NAME} PRIVATE -DCOMPILE_WITHYARP_DEF)
   set(YARP_MINIMUM_REQUIRED_VERSION 3.0.102)
   find_package(YARP REQUIRED COMPONENTS os conf)
-  target_link_libraries(diagnosticdaemon YARP::YARP_os YARP::YARP_conf YARP::YARP_init)
+  target_link_libraries(${PROJECT_NAME} YARP::YARP_os YARP::YARP_conf YARP::YARP_init)
 endif()
 
 # install
-install(TARGETS diagnosticdaemon RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(FILES ${CMAKE_CURRENT_LIST_DIR}/config.xml DESTINATION ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})

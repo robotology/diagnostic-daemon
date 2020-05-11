@@ -1,4 +1,5 @@
 #include "Parser.h"
+#include "BitStream.h"
 
 #include <iostream>
 #include <iomanip>
@@ -131,18 +132,12 @@ void Parser::fillNodeWithValue(std::list<std::tuple<std::string,std::string,std:
 {
     uint16_t size=node.attribute(sizekey_).as_int();
     std::string encoding=node.attribute(encoding_).value();
+    std::string uom=node.attribute(uomkey_).value();
     std::stringstream ss;
-    switch(size)
-        {
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-            {
-                uint8_t tmp=rop[byteindex];
+
+    if(uom==bitkey_)
+    {
+           uint8_t tmp=rop[byteindex];
                 tmp=(tmp>>(8-bitindex-size));
                 uint8_t mask=make_mask<uint8_t>(size);
                 tmp=tmp&mask;
@@ -155,8 +150,12 @@ void Parser::fillNodeWithValue(std::list<std::tuple<std::string,std::string,std:
                     byteindex++;
                 }
                 ss<<std::to_string(tmp);
-                break;
-            }
+    }
+    else
+    {
+        //TODO da cambiare
+        switch(size)
+        {
             case 8:
             {
                 node.attribute(valuekey_)=rop[byteindex];
@@ -210,13 +209,14 @@ void Parser::fillNodeWithValue(std::list<std::tuple<std::string,std::string,std:
                 break;
             }
         }
+    }
 
-        std::string name=node.attribute(namekey_).value();
-        std::string value=ss.str();
-        std::string longdescription=node.attribute(longdescription_).value();
-        bool show=node.attribute(showkey_).as_bool();
-            if(show)
-                msg.push_back({name,value,longdescription});
+    std::string name=node.attribute(namekey_).value();
+    std::string value=ss.str();
+    std::string longdescription=node.attribute(longdescription_).value();
+    bool show=node.attribute(showkey_).as_bool();
+        if(show)
+            msg.push_back({name,value,longdescription});
 }
 
 void Parser::includePreparser()
@@ -299,12 +299,40 @@ std::list<std::tuple<std::string,std::string,std::string>> Parser::parse(const s
     uint8_t indexbit{0};
     pugi::xml_document currentDoc_;
     currentDoc_.reset(doc_);
-    pugi::xpath_node_set params = currentDoc_.select_nodes(paramkey_); 
+    std::string nodeName{"//"};
+    nodeName+=param_;
+    pugi::xpath_node_set params = currentDoc_.select_nodes(nodeName.c_str()); 
 
     visit(currentDoc_.document_element(), msg,rop,byteindex,indexbit);
 
     return msg;
     //currentDoc_.save(std::cout);
+}
+
+
+bool Parser::parse(const std::string& msg,std::vector<uint8_t>& data)
+{
+    BitStream out(50);
+
+    pugi::xml_document doc;
+    doc.load_string(msg.c_str());
+    pugi::xml_node params = doc.child(udpheader_);
+    
+    bool ret{true};
+    for (auto currentNode:params)
+    {
+        uint8_t size=currentNode.attribute(sizekey_).as_int();
+        uint8_t value=currentNode.attribute(valuekey_).as_int();
+        std::string uom=currentNode.attribute(uomkey_).value();
+        if(uom==bitkey_)
+            ret=ret && out.addBits(value,size);
+        else
+            ret=ret && out.addBytes(value,size);
+    }
+
+    out.dump(); 
+    data=out.data_;
+    return ret;
 }
 
 

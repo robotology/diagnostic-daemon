@@ -17,6 +17,7 @@ class Parser
     public:
         Parser();
         std::list<std::tuple<std::string,std::string,std::string>> parse(const std::array<uint8_t,maxMsgLenght_>&);
+        bool parse(const std::string& msg,std::vector<uint8_t>&);
         static void dump(const std::list<std::tuple<std::string,std::string,std::string>>& msg);
 
     private:
@@ -42,12 +43,14 @@ class Parser
         template <class T>
         constexpr T make_mask(std::size_t len)
         {
-        return ((static_cast<T>(1) << len)-1);
+            return ((static_cast<T>(1) << len)-1);
         }
 
+        //node and attribute name
+        static constexpr char param_[]{"param"}; 
+        static constexpr char udpheader_[]{"udpheader"}; 
+        
         //sintax key
-        static constexpr char paramkey_[]{"//param"}; 
-
         static constexpr char namekey_[]{"name"}; 
         static constexpr char valuekey_[]{"value"};
         static constexpr char sizekey_[]{"size"};
@@ -62,5 +65,8 @@ class Parser
         static constexpr char littleendian_[]{"littleendian"};
         static constexpr char longdescription_[]{"longdescription"};
         static constexpr char conditionallengthkey_[]{"conditionallength"};
+        static constexpr char uomkey_[]{"uom"};
+        static constexpr char bitkey_[]{"bit"};
+        static constexpr char bytekey_[]{"byte"};
         
 };
