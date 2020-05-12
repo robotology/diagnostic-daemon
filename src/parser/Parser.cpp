@@ -9,7 +9,17 @@
 Parser::Parser()
 {
     pugi::xml_parse_result result = doc_.load_file("msgdepot/udpheader.xml");
-    result=result;
+    if(result.status == pugi::status_file_not_found)
+    {
+        std::cout<<"config.xml not found"<<std::endl;
+        return ;
+    }
+    if(result.status != pugi::status_ok)
+    {
+        std::cout<<"config.xml reading"<<std::endl;
+        return ;
+    }
+
     includePreparser();
 }
 
@@ -74,7 +84,7 @@ bool Parser::checkIfParamIsToBeDeleted(const pugi::xml_node& node)
 
 unsigned int Parser::checkRepetitionNumber(const pugi::xml_node& node)
 {
-    //std::string debug=node.attribute(namekey_).value();
+    std::string debug=node.attribute(namekey_).value();
     pugi::xml_attribute attr;
     std::string repetitionname;
     std::string repetitionnamenode;
@@ -102,11 +112,12 @@ void Parser::updateVariabileLength(pugi::xml_node& node)
 {
     std::string debug=node.attribute(namekey_).value();
     pugi::xml_attribute attr;
+    pugi::xml_attribute conditionalLenght=node.attribute(conditionallengthkey_);
     std::string variabilelengthname;
     std::string variabilelengthvalue;
-    if ((attr = node.attribute(conditionallengthkey_)))
+    if (!conditionalLenght.empty())
     {
-        variabilelengthname=attr.value();
+        variabilelengthname=conditionalLenght.value();
         if(variabilelengthname==std::string(nonekey_))
             return ;
 
@@ -118,7 +129,7 @@ void Parser::updateVariabileLength(pugi::xml_node& node)
         }
         attr = conditionalLengthNode.attribute(valuekey_);
         std::string length=attr.value();
-        int lenValue=std::atoi(length.c_str())*8;
+        int lenValue=std::atoi(length.c_str());
         node.attribute(sizekey_)=lenValue;
         std::string debug=node.attribute(namekey_).value();
         //int debug1=node.attribute(sizekey_).as_int();
@@ -156,14 +167,14 @@ void Parser::fillNodeWithValue(std::list<std::tuple<std::string,std::string,std:
         //TODO da cambiare
         switch(size)
         {
-            case 8:
+            case 1:
             {
                 node.attribute(valuekey_)=rop[byteindex];
                 ss<<(std::to_string)(rop[byteindex]);
                 ++byteindex;
                 break;
             }
-            case 16:
+            case 2:
             {
                 uint16_t tmp=*(uint16_t*)&rop[byteindex];
                 /*if(encoding==littleendian_)
@@ -176,7 +187,7 @@ void Parser::fillNodeWithValue(std::list<std::tuple<std::string,std::string,std:
                 byteindex+=2;
                 break;
             }
-            case 32:
+            case 4:
             {
                 uint32_t tmp=*(uint32_t*)&rop[byteindex];
                 byteindex+=4;
@@ -184,7 +195,7 @@ void Parser::fillNodeWithValue(std::list<std::tuple<std::string,std::string,std:
                 ss<<tmp;
                 break;
             }
-            case 64:
+            case 8:
             {
                 uint64_t tmp=*(uint64_t*)&rop[byteindex];
                 /*if(encoding==littleendian_)
@@ -199,6 +210,8 @@ void Parser::fillNodeWithValue(std::list<std::tuple<std::string,std::string,std:
             case 0:
             break;
             default:
+            std::cout<<"Error in byte assign:"<<size<<std::endl;
+            /*
             {
                 node.attribute(valuekey_)="..";
                 for(int t=0;t<size/8;++t)
@@ -207,7 +220,7 @@ void Parser::fillNodeWithValue(std::list<std::tuple<std::string,std::string,std:
                     byteindex++;
                 }
                 break;
-            }
+            }*/
         }
     }
 
@@ -283,9 +296,6 @@ void Parser::visit(pugi::xml_node node,std::list<std::tuple<std::string,std::str
             
             fillNodeWithValue(msg,rop,current,byteindex,bitindex);
             
-            
-
-
             visit(current,msg,rop,byteindex,bitindex);
        }
 
@@ -312,7 +322,7 @@ std::list<std::tuple<std::string,std::string,std::string>> Parser::parse(const s
 
 bool Parser::parse(const std::string& msg,std::vector<uint8_t>& data)
 {
-    BitStream out(50);
+    BitStream out(maxMsgLen_);
 
     pugi::xml_document doc;
     doc.load_string(msg.c_str());

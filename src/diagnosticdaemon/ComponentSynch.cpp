@@ -6,6 +6,7 @@
 
 #include "ComponentSynch.h"
 #include "ConfigurationDepot.h"
+#include "MsgPrepare.h"
 #include <iomanip>
 #include <boost/asio.hpp>
 
@@ -32,6 +33,8 @@ void ComponentSynch::work()
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(synchtime_));
         Log(Severity::debug)<<getName()<<" Send time"<<std::endl;
+        MsgPrepare msgprepare;
+        msgprepare.prepareFromName("roptime");
         std::string testmsg{"test"};
         udp::endpoint senderEndpoint{};//boost::asio::ip::address::from_string("127.0.0.1"),123};
         depot_.route(testmsg,testmsg.size(),destination_,senderEndpoint,Severity::none);

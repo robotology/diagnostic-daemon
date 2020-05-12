@@ -21,6 +21,7 @@ set(DiagnosticDaemonSrc     main.cpp
                             ComponentConfig.cpp
                             ComponentYarpLogger.cpp
                             ComponentSynch.cpp
+                            MsgPrepare.cpp
                         )
 
 set(DiagnosticDaemonHdr     ComponentUdp.h
@@ -37,6 +38,7 @@ set(DiagnosticDaemonHdr     ComponentUdp.h
                             ComponentConfig.h
                             ComponentSynch.h
                             Log.h
+                            MsgPrepare.h
                        )
 
 add_executable(${PROJECT_NAME} ${DiagnosticDaemonSrc} ${DiagnosticDaemonHdr} )
@@ -44,6 +46,7 @@ add_executable(${PROJECT_NAME} ${DiagnosticDaemonSrc} ${DiagnosticDaemonHdr} )
 target_link_libraries(${PROJECT_NAME} pthread
                                        Boost::system
                                        pugixml
+                                       parser
                                        icub_firmware_shared::embot
                                        icub_firmware_shared::embobj
                                        )
@@ -58,3 +61,4 @@ endif()
 # install
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(FILES ${CMAKE_CURRENT_LIST_DIR}/config.xml DESTINATION ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
+install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/msgready DESTINATION ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})

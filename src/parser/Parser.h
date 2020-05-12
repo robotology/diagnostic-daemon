@@ -12,15 +12,16 @@ class EOMDiagnosticRopMsg;
 
 class Parser
 {
-    private:
-        static constexpr unsigned int maxMsgLenght_{1500};
     public:
         Parser();
+        static constexpr unsigned int maxMsgLenght_{1500};
         std::list<std::tuple<std::string,std::string,std::string>> parse(const std::array<uint8_t,maxMsgLenght_>&);
         bool parse(const std::string& msg,std::vector<uint8_t>&);
         static void dump(const std::list<std::tuple<std::string,std::string,std::string>>& msg);
+        
 
     private:
+        static constexpr unsigned int maxMsgLen_{50};
         pugi::xml_document doc_;
 
         void visit(pugi::xml_node node,std::list<std::tuple<std::string,std::string,std::string>>& msg,const std::array<uint8_t,maxMsgLenght_>& rop,uint16_t &byteindex,uint8_t &bitindex);
