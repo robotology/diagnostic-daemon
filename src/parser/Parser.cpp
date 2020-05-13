@@ -1,5 +1,6 @@
 #include "Parser.h"
 #include "BitStream.h"
+#include "syntax.h"
 
 #include <iostream>
 #include <iomanip>
@@ -142,7 +143,7 @@ void Parser::updateVariabileLength(pugi::xml_node& node)
 void Parser::fillNodeWithValue(std::list<std::tuple<std::string,std::string,std::string>>& msg,const std::array<uint8_t,maxMsgLenght_>& rop,pugi::xml_node& node,uint16_t &byteindex,uint8_t& bitindex)
 {
     uint16_t size=node.attribute(sizekey_).as_int();
-    std::string encoding=node.attribute(encoding_).value();
+    std::string encoding=node.attribute(encodingkey_).value();
     std::string uom=node.attribute(uomkey_).value();
     std::stringstream ss;
 
@@ -320,24 +321,33 @@ std::list<std::tuple<std::string,std::string,std::string>> Parser::parse(const s
 }
 
 
-bool Parser::parse(const std::string& msg,std::vector<uint8_t>& data)
+bool Parser::parse(const std::string& xml,std::vector<uint8_t>& data)
+{
+    pugi::xml_document doc;
+    doc.load_string(xml.c_str());
+    return parse(doc,data);
+}
+
+
+bool Parser::parse(pugi::xml_document& doc,std::vector<uint8_t>& data)
 {
     BitStream out(maxMsgLen_);
 
-    pugi::xml_document doc;
-    doc.load_string(msg.c_str());
     pugi::xml_node params = doc.child(udpheader_);
     
     bool ret{true};
     for (auto currentNode:params)
     {
+        std::string debug=currentNode.attribute(namekey_).value();
         uint8_t size=currentNode.attribute(sizekey_).as_int();
-        uint8_t value=currentNode.attribute(valuekey_).as_int();
+        std::string test=currentNode.attribute(valuekey_).value();
+        unsigned long value=currentNode.attribute(valuekey_).as_ullong();
         std::string uom=currentNode.attribute(uomkey_).value();
+        std::string encoding=currentNode.attribute(encodingkey_).value();
         if(uom==bitkey_)
             ret=ret && out.addBits(value,size);
         else
-            ret=ret && out.addBytes(value,size);
+            ret=ret && out.addBytes(value,size,encoding);
     }
 
     out.dump(); 

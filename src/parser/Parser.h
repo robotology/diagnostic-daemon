@@ -16,9 +16,11 @@ class Parser
         Parser();
         static constexpr unsigned int maxMsgLenght_{1500};
         std::list<std::tuple<std::string,std::string,std::string>> parse(const std::array<uint8_t,maxMsgLenght_>&);
-        bool parse(const std::string& msg,std::vector<uint8_t>&);
-        static void dump(const std::list<std::tuple<std::string,std::string,std::string>>& msg);
         
+        bool parse(pugi::xml_document& doc,std::vector<uint8_t>&);
+        bool parse(const std::string& doc,std::vector<uint8_t>& data);
+        
+        static void dump(const std::list<std::tuple<std::string,std::string,std::string>>& msg);
 
     private:
         static constexpr unsigned int maxMsgLen_{50};
@@ -45,29 +47,5 @@ class Parser
         constexpr T make_mask(std::size_t len)
         {
             return ((static_cast<T>(1) << len)-1);
-        }
-
-        //node and attribute name
-        static constexpr char param_[]{"param"}; 
-        static constexpr char udpheader_[]{"udpheader"}; 
-        
-        //sintax key
-        static constexpr char namekey_[]{"name"}; 
-        static constexpr char valuekey_[]{"value"};
-        static constexpr char sizekey_[]{"size"};
-        static constexpr char showkey_[]{"show"};
-        static constexpr char conditionalkey_[]{"conditional"};
-        static constexpr char conditionnamekey_[]{"conditionname"};
-        static constexpr char conditionorvaluekey_[]{"conditionorvalue"};
-        static constexpr char conditionolevelup_[]{"conditionallevelup"};
-        static constexpr char repetitionnamekey_[]{"repetitionname"};
-        static constexpr char nonekey_[]{"none"};
-        static constexpr char encoding_[]{"encoding"};
-        static constexpr char littleendian_[]{"littleendian"};
-        static constexpr char longdescription_[]{"longdescription"};
-        static constexpr char conditionallengthkey_[]{"conditionallength"};
-        static constexpr char uomkey_[]{"uom"};
-        static constexpr char bitkey_[]{"bit"};
-        static constexpr char bytekey_[]{"byte"};
-        
+        }       
 };

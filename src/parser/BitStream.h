@@ -7,7 +7,7 @@ class BitStream
     public:
         BitStream(unsigned int size);
         bool addBits(unsigned int toadd,uint8_t bitnumber);
-        bool addBytes(unsigned int toadd,uint8_t bytenumber);
+        bool addBytes(unsigned long toadd,uint8_t bytenumber,const std::string& encoding);
         void dump();
         std::vector<uint8_t> data_;
 

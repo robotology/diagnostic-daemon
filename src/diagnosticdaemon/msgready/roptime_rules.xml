@@ -1,0 +1,3 @@
+<rules >
+    <rule name="1" update="data" with="time"/>
+</rules >
