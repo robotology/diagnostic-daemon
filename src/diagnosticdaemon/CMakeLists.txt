@@ -45,7 +45,7 @@ add_executable(${PROJECT_NAME} ${DiagnosticDaemonSrc} ${DiagnosticDaemonHdr} )
 
 target_link_libraries(${PROJECT_NAME} pthread
                                        Boost::system
-                                       pugixml
+                                       pugixml::pugixml
                                        parser
                                        icub_firmware_shared::embot
                                        icub_firmware_shared::embobj
