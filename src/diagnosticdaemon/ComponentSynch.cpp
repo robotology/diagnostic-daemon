@@ -34,10 +34,13 @@ void ComponentSynch::work()
         std::this_thread::sleep_for(std::chrono::milliseconds(synchtime_));
         Log(Severity::debug)<<getName()<<" Send time"<<std::endl;
         MsgPrepare msgprepare;
-        msgprepare.prepareFromName("roptime");
+        std::vector<uint8_t> tosendVector=msgprepare.prepareFromName("roptime");
+        std::array<uint8_t,maxMsgLenght_> toSend;
+        std::copy(tosendVector.begin(), tosendVector.begin() + 48, toSend.begin());
+
         std::string testmsg{"test"};
         udp::endpoint senderEndpoint{};//boost::asio::ip::address::from_string("127.0.0.1"),123};
-        depot_.route(testmsg,testmsg.size(),destination_,senderEndpoint,Severity::none);
+        depot_.route(toSend,48,destination_,senderEndpoint,Severity::none);
     }
 }      
 
