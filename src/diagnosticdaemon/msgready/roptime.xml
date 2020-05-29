@@ -18,8 +18,8 @@
         <param name='id' size='4' value='65541' uom='byte' encoding='littleendian' longdescription='id' show='true'/>
         <param name='data' conditionorvalue='2 3 4 5' conditionname='ropc' conditionallevelup='0' conditionallength='datasize' size='8' value='123' encoding='littleendian' longdescription='id' show='true'/>
         
-        <param name='stopcode' size='1' uom='byte' value='18' longdescription='stop code byte1' show='true'/> 
-        <param name='stopcode' size='1' uom='byte' value='52' longdescription='stop code byte2' show='true'/>
-        <param name='stopcode' size='1' uom='byte' value='86' longdescription='stop code byte3' show='true'/> 
-        <param name='stopcode' size='1' uom='byte' value='120' longdescription='stop code byte4' show='true'/> 
+        <param name='stopcode' size='1' uom='byte' value='33' longdescription='stop code byte1' show='true'/> 
+        <param name='stopcode' size='1' uom='byte' value='67' longdescription='stop code byte2' show='true'/>
+        <param name='stopcode' size='1' uom='byte' value='101' longdescription='stop code byte3' show='true'/> 
+        <param name='stopcode' size='1' uom='byte' value='135' longdescription='stop code byte4' show='true'/> 
     </udpheader>
