@@ -9,6 +9,6 @@
     <component type="yarplogger"     name="yarp"       rxport=""      txport=""      address=""           mask=""              mode="copy-parser" rules="" enable="true"  value="" destination=""/>
     <component type="config"         name="config"     rxport=""      txport=""      address=""           mask=""              mode="copy-parser" rules="" enable="true"  value="" destination=""/>
      
-    <component type="udp"            name="synchboard" rxport="11002" txport="11003" address="127.0.0.1"  mask="255.255.255.0" mode="copy-raw"    rules="" enable="true"  value="" destination=""/>  
+    <component type="udp"            name="synchboard" rxport="11002" txport="11000" address="10.0.1.1"  mask="255.255.255.0" mode="copy-raw"    rules="" enable="true"  value="" destination=""/>  
     <component type="synch"          name="synchtime"  rxport=""      txport=""      address=""           mask=""              mode="copy-parser" rules="" enable="true"  value="" destination="synchboard" synchtime="2000"/> 
 </configuration>
