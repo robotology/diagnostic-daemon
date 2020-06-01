@@ -18,18 +18,30 @@ using namespace boost::asio;
 
 ComponentUdp::ComponentUdp(boost::asio::io_service &ios,const std::map<std::string,std::string>&attributes,ConfigurationDepot&depot)
     : Component(attributes,depot),
-      port_(asInt(confsintax::rxport,attributes)),
-      txport_(asInt(confsintax::txport,attributes)),
+      port_(asInt(confsyntax::rxport,attributes)),
+      txport_(asInt(confsyntax::txport,attributes)),
+      broadcast_(asBool(confsyntax::broadcast,attributes)),
       rxSocket_(ios, udp::endpoint(udp::v4(), port_)),
       txSocket_(ios),
-      receiverEndpoint_(udp::endpoint(ip::address::from_string(asString(confsintax::address,attributes)), txport_)),
       ios_(ios)
-{
-  emsAddress_=asString(confsintax::address,attributes);
-  std::string rules=asString(confsintax::rules,attributes);
-  analyzeAddress(rules);
-
+{ 
   txSocket_.open(boost::asio::ip::udp::v4());
+  if(broadcast_)
+  {
+    boost::asio::socket_base::broadcast option(true);
+    txSocket_.set_option(option);
+    //txSocket_.set_option(boost::asio::ip::udp::socket::reuse_address(true));
+    //txSocket_.set_option(boost::asio::socket_base::broadcast(true));
+    //receiverEndpoint_={boost::asio::ip::address_v4::broadcast(), txport_};            
+  }
+  //else
+  {
+    receiverEndpoint_=udp::endpoint(ip::address::from_string(asString(confsyntax::address,attributes)), txport_);
+  }
+  
+  emsAddress_=asString(confsyntax::address,attributes);
+  std::string rules=asString(confsyntax::rules,attributes);
+  analyzeAddress(rules);
 
   rxSocket_.async_receive_from(
       boost::asio::buffer(rxData_, maxMsgLenght_), senderEndpoint_,
@@ -42,21 +54,20 @@ void ComponentUdp::handleReceiveFrom(const boost::system::error_code &error, siz
 {
   if (!error && size > 0)
   {
-    std::cout << "Rx from:"<<senderEndpoint_.address()  << " received bytes:"<<std::hex<<size<<" Max byte:"<<(int)maxMsgLenght_<< std::endl; //test
+    Log(Severity::debug) <<getName() << " Rx from:"<<senderEndpoint_.address()  << " received bytes:"<<std::hex<<size<<" Max byte:"<<(int)maxMsgLenght_<< std::endl; //test
 
     if(discardMsgByFilter(senderEndpoint_.address()))
     {
-      std::cout << "Discard msg for filter"<<std::endl;
+      Log(Severity::debug)<<getName() << " Discard msg for filter"<<std::endl;
     }
     else
     {
       depot_.route(rxData_,size,destination_,senderEndpoint_,Severity::none);
-    }
-    
+    } 
   }
   else
   {
-    std::cout << "Error rx:"<<error<< std::endl;
+    Log(Severity::debug) <<getName() << " Error rx:"<<error.value()<< std::endl;
   }
 
   rxSocket_.async_receive_from(
@@ -68,7 +79,7 @@ void ComponentUdp::handleReceiveFrom(const boost::system::error_code &error, siz
 
 void ComponentUdp::handleSendTo(const boost::system::error_code &err, size_t size)
 {
-  std::cout << "Sent size:"<<size<<" error:"<<err<< std::endl; //test
+  Log(Severity::debug) <<getName() << " Sent msg, size:"<<size<<" error:"<<err.value()<< " endpoint:"<<senderEndpoint_<<std::endl; //test
 }
 
 void ComponentUdp::send(const std::array<uint8_t,maxMsgLenght_>& message,unsigned int size)
@@ -82,7 +93,7 @@ void ComponentUdp::send(const std::array<uint8_t,maxMsgLenght_>& message,unsigne
 
 void ComponentUdp::acceptMsg(std::string& msg,unsigned int size,udp::endpoint,Severity)
 {
-    Log(Severity::debug)<<getName()<<" Accept message"<<std::endl;
+    Log(Severity::debug)<<getName()<<" Accept message1"<<std::endl;
     std::array<uint8_t,maxMsgLenght_> tosend;
     std::copy(msg.begin(),msg.end(),tosend.data());
     send(tosend,size);
@@ -90,7 +101,7 @@ void ComponentUdp::acceptMsg(std::string& msg,unsigned int size,udp::endpoint,Se
 
 void ComponentUdp::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint,Severity)
 {
-    Log(Severity::debug)<<getName()<<" Accept message"<<std::endl;
+    Log(Severity::debug)<<getName()<<" Accept message2"<<std::endl;
     send(msg,size);
 }
 
@@ -107,7 +118,7 @@ void ComponentUdp::analyzeAddress(const std::string& addresses)
             includededAddresses_.insert(boost::asio::ip::address::from_string(current.substr(2,current.size()-2)));
         else
         {
-            Log(Severity::error)<<"filter not well configured"<<std::endl;
+            Log(Severity::error)<<getName() <<" filter not well configured"<<std::endl;
         }
     }
 }

@@ -12,12 +12,12 @@ Parser::Parser()
     pugi::xml_parse_result result = doc_.load_file("msgdepot/udpheader.xml");
     if(result.status == pugi::status_file_not_found)
     {
-        std::cout<<"config.xml not found"<<std::endl;
+        std::cout<<"Parser config.xml not found"<<std::endl;
         return ;
     }
     if(result.status != pugi::status_ok)
     {
-        std::cout<<"config.xml reading"<<std::endl;
+        std::cout<<"Parser config.xml reading"<<std::endl;
         return ;
     }
 
@@ -254,7 +254,7 @@ void Parser::dump(const std::list<std::tuple<std::string,std::string,std::string
 {
     for(auto current:msg)
     {
-        std::cout<<std::setiosflags(std::ios::left)<<std::setfill('-')<<std::setw(20)<<std::get<0>(current)<<std::setfill('-')<<std::setw(20)<<std::get<1>(current)<<std::setfill('-')<<std::setw(20)<<std::get<2>(current)<<std::endl;
+        std::cout<<"Parser:"<<std::setiosflags(std::ios::left)<<std::setfill('-')<<std::setw(20)<<std::get<0>(current)<<std::setfill('-')<<std::setw(20)<<std::get<1>(current)<<std::setfill('-')<<std::setw(20)<<std::get<2>(current)<<std::endl;
     }
 }
 
@@ -350,7 +350,7 @@ bool Parser::parse(pugi::xml_document& doc,std::vector<uint8_t>& data)
             ret=ret && out.addBytes(value,size,encoding);
     }
 
-    out.dump(); 
+    //out.dump(); 
     data=out.data_;
     return ret;
 }

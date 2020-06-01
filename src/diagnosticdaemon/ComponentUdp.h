@@ -28,7 +28,8 @@ private:
 
     std::string emsAddress_="10.0.1.1";
     unsigned int port_{11000}; 
-    unsigned int txport_{11000}; 
+    unsigned int txport_{11000};
+    bool broadcast_{false}; 
 
     udp::socket rxSocket_;
     udp::socket txSocket_;

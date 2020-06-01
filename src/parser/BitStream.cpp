@@ -26,7 +26,6 @@ bool BitStream::addBits(unsigned int toadd,uint8_t bitnumber)
     {
         unsigned int mask=pow(2,pos);
         unsigned int tmp=toadd & mask;
-        std::cout<<" ";
         tmp=(tmp>>pos);
 
 
@@ -122,9 +121,10 @@ bool BitStream::addBytes(unsigned long toadd,uint8_t bytenumber,const std::strin
 
 void BitStream::dump()
 {
+    std::cout<<"BitStream::dump"<<std::endl;
     for(uint8_t current:data_)
     {
         std::cout<<(int)current<<" ";
     }
-
+    std::cout<<std::endl;
 }

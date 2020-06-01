@@ -31,7 +31,7 @@ set(DiagnosticDaemonHdr     ComponentUdp.h
                             ComponentDisabled.h
                             ConfigurationDepot.h
                             ElapsedTime.h
-                            Sintax.h
+                            Syntax.h
                             Decoder.h
                             ComponentDecoder.h
                             ComponentYarpLogger.h

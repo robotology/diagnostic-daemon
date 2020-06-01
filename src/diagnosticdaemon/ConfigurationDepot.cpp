@@ -21,7 +21,7 @@ ConfigurationDepot::ConfigurationDepot(boost::asio::io_service &io_service): ios
 bool ConfigurationDepot::createConfiguration()
 {
     pugi::xml_document doc;
-    pugi::xml_parse_result result = doc.load_file(confsintax::configurationfile);
+    pugi::xml_parse_result result = doc.load_file(confsyntax::configurationfile);
     if(result.status == pugi::status_file_not_found)
     {
         Log(Severity::error)<<"config.xml not found"<<std::endl;
@@ -34,7 +34,7 @@ bool ConfigurationDepot::createConfiguration()
     }
 
     std::string tmp{"//"};
-    tmp+=confsintax::component;
+    tmp+=confsyntax::component;
     pugi::xpath_node_set components = doc.select_nodes(tmp.c_str());   
     for(auto currentComponent:components)
     {
@@ -55,11 +55,11 @@ bool ConfigurationDepot::createConfiguration()
 Component_sptr ConfigurationDepot::createComponent(const std::map<std::string,std::string>& attributes)
 {
     Component_sptr components;
-    std::string type=attributes.at(confsintax::type);
-    bool enable =asBool(confsintax::enable,attributes);
+    std::string type=attributes.at(confsyntax::type);
+    bool enable =asBool(confsyntax::enable,attributes);
     
     if(!enable)
-        type=confsintax::disabled;
+        type=confsyntax::disabled;
 
     switch(componentTypeLookup[type])
     {
@@ -115,13 +115,13 @@ Component_sptr ConfigurationDepot::createComponent(const std::map<std::string,st
 bool ConfigurationDepot::save()
 {
     pugi::xml_document doc;
-    pugi::xml_node node = doc.append_child(confsintax::configuration);
+    pugi::xml_node node = doc.append_child(confsyntax::configuration);
     for(auto current:depot_)
     {
         auto myparameters=current->getParameterMap();
         mapAttributeToXml(node,myparameters);
     }
-    doc.save_file("test.xml");
+    doc.save_file("newconfig.xml");
     return true;
 }
 
@@ -137,7 +137,7 @@ std::map<std::string,std::string> ConfigurationDepot::xmlAttributeToMap(const pu
 
 void ConfigurationDepot::mapAttributeToXml(pugi::xml_node& node,const std::map<std::string,std::string>& in) const
 {
-    pugi::xml_node mynode=node.append_child(confsintax::component);
+    pugi::xml_node mynode=node.append_child(confsyntax::component);
 
     for(auto current:in)
     {

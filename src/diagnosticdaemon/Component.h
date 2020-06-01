@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "Sintax.h"
+#include "Syntax.h"
 #include "Log.h"
 
 #include <boost/asio.hpp>

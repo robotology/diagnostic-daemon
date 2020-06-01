@@ -18,7 +18,7 @@
 #include <map>
 
 #include "Component.h"
-#include "Sintax.h"
+#include "Syntax.h"
 #include "const.h"
 
 using boost::asio::ip::udp;

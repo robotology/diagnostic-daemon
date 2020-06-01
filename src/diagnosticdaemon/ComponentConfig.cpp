@@ -21,7 +21,7 @@ void ComponentConfig::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned 
 
     //*Config file
     pugi::xml_document configurationDoc;
-    pugi::xml_parse_result result = configurationDoc.load_file(confsintax::configurationfile);
+    pugi::xml_parse_result result = configurationDoc.load_file(confsyntax::configurationfile);
     if(result.status == pugi::status_file_not_found)
     {
         Log(Severity::error)<<"config.xml not found"<<std::endl;
@@ -67,16 +67,16 @@ void ComponentConfig::manageFilterSet(pugi::xml_document& configurationDoc,const
     std::string rulesvalue=messagenode.attribute(confmessage::rules).value();
 
     tmp={"//"};
-    tmp+=confsintax::component; 
+    tmp+=confsyntax::component; 
     auto nodes=configurationDoc.select_nodes(tmp.c_str());
     bool found{false};
     for(const pugi::xpath_node& xnode:nodes)
     {   
         pugi::xml_node node=xnode.node();
-        if(node.attribute(confsintax::address).value()==destinationaddress[0])
+        if(node.attribute(confsyntax::address).value()==destinationaddress[0])
         {
             found=true;
-            node.attribute(confsintax::rules).set_value(rulesvalue.c_str());
+            node.attribute(confsyntax::rules).set_value(rulesvalue.c_str());
         }
     }
     if(!found)

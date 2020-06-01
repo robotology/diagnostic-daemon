@@ -10,7 +10,6 @@ RopParser::RopParser()
     pugi::xml_parse_result result = doc_.load_file("msgdepot/rop.xml");
     result=result;
     includePreparser();
-    //doc_.save(std::cout);    
 }
 
 std::list<std::tuple<std::string,std::string,std::string>> RopParser::parse(const EOMDiagnosticRopMsg& rop)
@@ -137,7 +136,7 @@ void RopParser::dump(const std::list<std::tuple<std::string,std::string,std::str
 {
     for(auto current:msg)
     {
-        Log(Severity::none)<<std::setfill('-')<<std::setw(20)<<std::get<0>(current)<<std::get<1>(current)<<std::endl;
+        Log(Severity::none)<<"RopParser"<<std::setfill('-')<<std::setw(20)<<std::get<0>(current)<<std::get<1>(current)<<std::endl;
     }
 }
 

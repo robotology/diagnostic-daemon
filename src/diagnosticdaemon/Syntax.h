@@ -9,9 +9,11 @@
 #include <map>
 #include <sstream>
 
-namespace confsintax
+namespace confsyntax
 {
     static constexpr char configurationfile[]{"./config.xml"}; 
+    static constexpr char msgready[]{"msgready/"}; 
+    
     static constexpr char in[]{"in"};       
     static constexpr char configuration[]{"configuration"}; 
     static constexpr char component[]{"component"}; 
@@ -39,6 +41,7 @@ namespace confsintax
     static constexpr char yarplogger[]{"yarplogger"};
     static constexpr char config[]{"config"};
     static constexpr char synch[]{"synch"};
+    static constexpr char broadcast[]{"broadcast"};
 };
 
 namespace confmessage

@@ -11,7 +11,7 @@
 
 ComponentFile::ComponentFile(const std::map<std::string,std::string>& attributes,ConfigurationDepot& depot):Component(attributes,depot)
 {
-    filename_=asString(confsintax::value,attributes);
+    filename_=asString(confsyntax::value,attributes);
     fstream_.open(filename_);
 }
 
