@@ -99,6 +99,11 @@ bool Decoder::ropdecode(const embot::prot::eth::IPv4 &ipv4, const embot::prot::e
     if(embot::prot::eth::rop::OPC::sig != rop.opcode)
     {
         Log(Severity::debug)<<"Decoder::Impl"<<std::endl;
+        {
+            std::lock_guard<std::mutex> lck(mutexcv_);
+            msgReady_ = true;
+        }
+        condVar_.notify_one(); 
         return false;
     }
 

@@ -18,14 +18,12 @@ using namespace boost::asio;
 
 ComponentUdp::ComponentUdp(boost::asio::io_service &ios,const std::map<std::string,std::string>&attributes,ConfigurationDepot&depot)
     : Component(attributes,depot),
-      port_(asInt(confsyntax::rxport,attributes)),
+      rxport_(asInt(confsyntax::rxport,attributes)),
       txport_(asInt(confsyntax::txport,attributes)),
       broadcast_(asBool(confsyntax::broadcast,attributes)),
-      rxSocket_(ios, udp::endpoint(udp::v4(), port_)),
-      txSocket_(ios),
-      ios_(ios)
+      rxSocket_(ios, udp::endpoint(udp::v4(), rxport_)),
+      txSocket_(ios,boost::asio::ip::udp::v4())
 { 
-  txSocket_.open(boost::asio::ip::udp::v4());
   if(broadcast_)
   {
     boost::asio::socket_base::broadcast option(true);
@@ -35,11 +33,9 @@ ComponentUdp::ComponentUdp(boost::asio::io_service &ios,const std::map<std::stri
     //receiverEndpoint_={boost::asio::ip::address_v4::broadcast(), txport_};            
   }
   //else
-  {
-    receiverEndpoint_=udp::endpoint(ip::address::from_string(asString(confsyntax::address,attributes)), txport_);
-  }
   
-  emsAddress_=asString(confsyntax::address,attributes);
+  receiverEndpoint_=udp::endpoint(ip::address::from_string(asString(confsyntax::address,attributes)), txport_);
+  
   std::string rules=asString(confsyntax::rules,attributes);
   analyzeAddress(rules);
 
@@ -54,7 +50,7 @@ void ComponentUdp::handleReceiveFrom(const boost::system::error_code &error, siz
 {
   if (!error && size > 0)
   {
-    Log(Severity::debug) <<getName() << " Rx from:"<<senderEndpoint_.address()  << " received bytes:"<<std::hex<<size<<" Max byte:"<<(int)maxMsgLenght_<< std::endl; //test
+    Log(Severity::debug) <<getName() << " Rx from:"<<senderEndpoint_  << " received bytes:"<<std::hex<<size<<" Max byte:"<<(int)maxMsgLenght_<< std::endl; //test
 
     if(discardMsgByFilter(senderEndpoint_.address()))
     {
@@ -77,10 +73,6 @@ void ComponentUdp::handleReceiveFrom(const boost::system::error_code &error, siz
       boost::asio::placeholders::bytes_transferred));
 }
 
-void ComponentUdp::handleSendTo(const boost::system::error_code &err, size_t size)
-{
-  Log(Severity::debug) <<getName() << " Sent msg, size:"<<size<<" error:"<<err.value()<< " endpoint:"<<senderEndpoint_<<std::endl; //test
-}
 
 void ComponentUdp::send(const std::array<uint8_t,maxMsgLenght_>& message,unsigned int size)
 {
@@ -90,6 +82,12 @@ void ComponentUdp::send(const std::array<uint8_t,maxMsgLenght_>& message,unsigne
       boost::asio::placeholders::error,
       boost::asio::placeholders::bytes_transferred));
 }
+
+void ComponentUdp::handleSendTo(const boost::system::error_code &err, size_t size)
+{
+  Log(Severity::debug) <<getName() << " Sent msg, size:"<<size<<" error:"<<err.value()<< " endpoint:"<<senderEndpoint_<<std::endl; //test
+}
+
 
 void ComponentUdp::acceptMsg(std::string& msg,unsigned int size,udp::endpoint,Severity)
 {

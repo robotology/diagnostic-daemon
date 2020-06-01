@@ -26,8 +26,7 @@ public:
 
 private:
 
-    std::string emsAddress_="10.0.1.1";
-    unsigned int port_{11000}; 
+    unsigned int rxport_{11000}; 
     unsigned int txport_{11000};
     bool broadcast_{false}; 
 
@@ -47,8 +46,6 @@ private:
     std::set<boost::asio::ip::address> excludedAddresses_;
     std::set<boost::asio::ip::address> includededAddresses_;
     bool discardMsgByFilter(const boost::asio::ip::address& address);
-
-    boost::asio::io_service &ios_;
 };
 
 using ComponentUdp_sptr=std::shared_ptr<ComponentUdp>;
