@@ -147,7 +147,7 @@ The following components are available.
 **file**: write data on file.  
 **decoder**: decode message from byte format to string.  
 **yarplogger**: send received message to yarplogger.  
-**config**: change configuration as it receives a configuration message.
+**config**: change configuration as it receives a configuration message.  
 **synch**: create a synch time message to be sent to boards.
 
 ## 1.5. Tags meaning
