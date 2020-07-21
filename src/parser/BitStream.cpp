@@ -2,6 +2,7 @@
 #include <string.h>
 #include <math.h>
 #include <vector>
+#include <memory>
 #include <algorithm>
 
 #include "BitStream.h"
@@ -59,9 +60,9 @@ bool BitStream::addBytes(unsigned long toadd,uint8_t bytenumber,const std::strin
     if(currentBit_!=0)
         return false;
 
-    uint8_t bytes[bytenumber];
-    memset(bytes,0,bytenumber);
-    std::copy(static_cast<const char*>(static_cast<const void*>(&toadd)), static_cast<const char*>(static_cast<const void*>(&toadd)) + sizeof(unsigned long), bytes);
+    auto bytes = std::make_unique<uint8_t[]>(bytenumber);
+    memset(bytes.get(),0,bytenumber);
+    std::copy(static_cast<const char*>(static_cast<const void*>(&toadd)), static_cast<const char*>(static_cast<const void*>(&toadd)) + sizeof(unsigned long), bytes.get());
 
     std::vector<uint8_t> bytesVect;
     bytesVect.assign(&bytes[0],&bytes[bytenumber]);
@@ -112,9 +113,6 @@ bool BitStream::addBytes(unsigned long toadd,uint8_t bytenumber,const std::strin
         data_[currentByte_]=bytesVect[t];
         currentByte_++;
     }
-
-
-
 
     return true;
 }

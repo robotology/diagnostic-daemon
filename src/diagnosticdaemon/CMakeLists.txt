@@ -43,7 +43,7 @@ set(DiagnosticDaemonHdr     ComponentUdp.h
 
 add_executable(${PROJECT_NAME} ${DiagnosticDaemonSrc} ${DiagnosticDaemonHdr} )
 
-target_link_libraries(${PROJECT_NAME} pthread
+target_link_libraries(${PROJECT_NAME}  ${Common_LIBRARIES}
                                        Boost::system
                                        pugixml::pugixml
                                        parser
