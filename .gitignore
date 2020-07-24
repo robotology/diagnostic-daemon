@@ -1,32 +1,26 @@
-# Prerequisites
-*.d
-
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
+*~
+/build*/
+/bindings/build*/
+/bindings/check*/
+/bindings/java/
+/bindings/lua/
+/bindings/python/
+/bindings/ruby/
+/doc/
+*kdev*
+*.orig
+/package-tmp/
+*.swp
+*~
+licenses-all.txt
+licenses-authors-compact.txt
+licenses-authors.txt
+licenses-bad.txt
+licenses-copyright-compact.txt
+licenses-good.txt
+.DS_Store
+.Spotlight-V100
+.Trashes
+.vs/
+CMakeSettings.json
+*.txt.user
