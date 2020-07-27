@@ -35,7 +35,7 @@ endif()
 
 # Control where libraries and executables are placed during the build.
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_LIBRARY_DIR}")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
 
 # Encourage user to specify a build type (e.g. Release, Debug, etc.), otherwise set it to Debug.
@@ -73,7 +73,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 else ()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
   set(CMAKE_EXE_LINKER_FLAGS  "-rdynamic")
-  set(Common_LIBRARIES dl pthread)
+  set(Common_LIBRARIES dl pthread stdc++fs)
 endif ()
 
 

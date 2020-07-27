@@ -16,7 +16,9 @@ set(LogHdr  Log.h
                        )
 add_library(${PROJECT_NAME} ${LogSrc} ${LogHdr} )
 
-target_link_libraries(${PROJECT_NAME}  ${Common_LIBRARIES} stdc++fs)
+# We are using <experimental/filesystem> because <filesystem> is available since gcc 8.0.
+add_compile_definitions(${PROJECT_NAME} _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING)
+target_link_libraries(${PROJECT_NAME}  ${Common_LIBRARIES})
 target_include_directories(${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
                                                   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
