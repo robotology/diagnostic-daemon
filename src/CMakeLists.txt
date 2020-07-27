@@ -14,11 +14,18 @@ FetchContent_Declare(
 	GIT_REPOSITORY https://github.com/zeux/pugixml.git
 	GIT_TAG        origin/master
 )
-FetchContent_GetProperties(pugixml)
-if(NOT pugixml)
-	FetchContent_Populate(pugixml)
-	add_subdirectory(${pugixml_SOURCE_DIR} ${pugixml_BINARY_DIR})
+
+if(DIAGNOSTICDAEMON_USE_EXTERNAL_PUGIXML)
+  find_package(pugixml REQUIRED)
+else()
+  FetchContent_GetProperties(pugixml)
+  if(NOT pugixml)
+	  FetchContent_Populate(pugixml)
+	  add_subdirectory(${pugixml_SOURCE_DIR} ${pugixml_BINARY_DIR})
+  endif()
 endif()
+
+
 
 option(COMPILE_WITHUNITTEST "Compile also unittest" OFF)
 if(COMPILE_WITHUNITTEST)

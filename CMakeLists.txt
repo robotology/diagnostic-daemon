@@ -18,6 +18,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 include(GNUInstallDirs)
 
 option(COMPILE_WITHYARP_DEF "Compile diagnosticdaemon for YARP connection" OFF)
+option(DIAGNOSTICDAEMON_USE_EXTERNAL_PUGIXML "Set to on if you want to use an external pugixml" OFF)
 
 find_package(icub_firmware_shared REQUIRED)
 if(icub_firmware_shared_FOUND)
