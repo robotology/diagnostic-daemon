@@ -5,23 +5,19 @@
 #                                                                              #
 ################################################################################
 
-# @author Luca Tricerri <luca.tricerri@iit.it> 
+# @author Luca Tricerri <luca.tricerri@iit.it>
 
-include(FetchContent)
+project(log)
 
-FetchContent_Declare(
-	pugixml
-	GIT_REPOSITORY https://github.com/zeux/pugixml.git
-	GIT_TAG        origin/master
-)
-FetchContent_GetProperties(pugixml)
-if(NOT pugixml)
-	FetchContent_Populate(pugixml)
-	add_subdirectory(${pugixml_SOURCE_DIR} ${pugixml_BINARY_DIR})
-endif()
+set(LogSrc  Log.cpp
+                        )
 
-add_subdirectory(log)
-add_subdirectory(parser)
-add_subdirectory(diagnosticdaemon)
-#add_subdirectory(diagnosticdaemonui)
+set(LogHdr  Log.h
+                       )
+add_library(${PROJECT_NAME} ${LogSrc} ${LogHdr} )
 
+target_link_libraries(${PROJECT_NAME}  ${Common_LIBRARIES})
+target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>")
+
+# install
+install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
