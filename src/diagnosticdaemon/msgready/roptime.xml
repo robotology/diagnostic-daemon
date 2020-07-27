@@ -16,7 +16,7 @@
         <param name='ropc' size='1' value='3' uom='byte' longdescription='ropc' show='true'/>
         <param name='datasize' size='2' uom='byte' value='8' encoding='littleendian' longdescription='datasize' show='true'/>
         <param name='id' size='4' value='65541' uom='byte' encoding='littleendian' longdescription='id' show='true'/>
-        <param name='data' conditionorvalue='2 3 4 5' conditionname='ropc' conditionallevelup='0' conditionallength='datasize' size='8' value='123' encoding='littleendian' longdescription='id' show='true'/>
+        <param name='data' conditionorvalue='2 3 4 5' conditionname='ropc' conditionallevelup='0' conditionallength='datasize' size='8' uom='byte' value='123' encoding='littleendian' longdescription='id' show='true'/>
         
         <param name='stopcode' size='1' uom='byte' value='33' longdescription='stop code byte1' show='true'/> 
         <param name='stopcode' size='1' uom='byte' value='67' longdescription='stop code byte2' show='true'/>

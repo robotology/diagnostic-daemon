@@ -34,6 +34,11 @@ std::vector<uint8_t> MsgPrepare::prepareFromName(const std::string& name)
     Parser parser;
     std::vector<uint8_t> out;
     bool check=parser.parse(doc,out);
+    if(!check)
+    {
+        Log(Severity::error)<<"parsing error"<<std::endl;
+        return std::vector<uint8_t>();        
+    }
 
     return out;
 }

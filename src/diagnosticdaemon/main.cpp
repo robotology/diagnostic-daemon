@@ -19,7 +19,7 @@ int main()
 {
   try
   {
-    std::cout << "Start" << std::endl;
+    Log(Severity::info) << "Start" << std::endl;
     boost::asio::io_service ios;
 
     ConfigurationDepot depot(ios);
@@ -29,8 +29,8 @@ int main()
   }
   catch (std::exception& e)
   {
-    std::cerr << "Exception: " << e.what() << "\n";
+    Log(Severity::error) << "Exception: " << e.what() << "\n";
   }
-  std::cout << "Stop" << std::endl;
+  Log(Severity::info) << "Stop" << std::endl;
   return 0;
 }

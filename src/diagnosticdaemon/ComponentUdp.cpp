@@ -4,7 +4,7 @@
  * email:   luca.tricerri@iit.it
 */
 
-#include <boost/array.hpp>
+#include <array>
 #include <boost/bind.hpp>
 
 #include <iostream>
@@ -27,12 +27,8 @@ ComponentUdp::ComponentUdp(boost::asio::io_service &ios,const std::map<std::stri
   if(broadcast_)
   {
     boost::asio::socket_base::broadcast option(true);
-    txSocket_.set_option(option);
-    //txSocket_.set_option(boost::asio::ip::udp::socket::reuse_address(true));
-    //txSocket_.set_option(boost::asio::socket_base::broadcast(true));
-    //receiverEndpoint_={boost::asio::ip::address_v4::broadcast(), txport_};            
+    txSocket_.set_option(option);     
   }
-  //else
   
   receiverEndpoint_=udp::endpoint(ip::address::from_string(asString(confsyntax::address,attributes)), txport_);
   
@@ -73,7 +69,6 @@ void ComponentUdp::handleReceiveFrom(const boost::system::error_code &error, siz
       boost::asio::placeholders::bytes_transferred));
 }
 
-
 void ComponentUdp::send(const std::array<uint8_t,maxMsgLenght_>& message,unsigned int size)
 {
     txSocket_.async_send_to(
@@ -87,7 +82,6 @@ void ComponentUdp::handleSendTo(const boost::system::error_code &err, size_t siz
 {
   Log(Severity::debug) <<getName() << " Sent msg, size:"<<size<<" error:"<<err.value()<< " endpoint:"<<senderEndpoint_<<std::endl; //test
 }
-
 
 void ComponentUdp::acceptMsg(std::string& msg,unsigned int size,udp::endpoint,Severity)
 {

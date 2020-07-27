@@ -37,14 +37,13 @@ set(DiagnosticDaemonHdr     ComponentUdp.h
                             ComponentYarpLogger.h
                             ComponentConfig.h
                             ComponentSynch.h
-                            Log.h
                             MsgPrepare.h
                        )
 
 add_executable(${PROJECT_NAME} ${DiagnosticDaemonSrc} ${DiagnosticDaemonHdr} )
 
 target_link_libraries(${PROJECT_NAME}  ${Common_LIBRARIES}
-                                       Boost::system
+                                       log
                                        pugixml::pugixml
                                        parser
                                        icub_firmware_shared::embot
