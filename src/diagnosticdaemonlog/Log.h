@@ -36,7 +36,7 @@ public:
     };
 
 private:
-    static constexpr char logfilekey_[]{"pleaselogtofile"};
+    static constexpr char logfilekey_[] = "pleaselogtofile";
     std::stringstream ss_;
 	std::string severityStr_;
     Severity severity_;

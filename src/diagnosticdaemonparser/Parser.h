@@ -31,7 +31,7 @@ class Parser
 
     private:
         static constexpr unsigned int maxMsgLen_{50};
-        static constexpr char msgroot_[]{"msgdepot/udpheader.xml"};
+        static constexpr char msgroot_[] = "msgdepot/udpheader.xml";
         pugi::xml_document doc_;
         bool started_{false};
 
