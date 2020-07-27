@@ -3,8 +3,6 @@
 
 #include <QStandardItemModel>
 
-#include "EOMDiagnosticUdpMsg.h"
-
 class MsgListTableModel : public QStandardItemModel
 {
 public:

@@ -1,6 +1,4 @@
 #include "paramtablemodel.h"
-#include "EOMDiagnosticRopMsg.h"
-#include "MsgDescriptionExt.h"
 
 ParamTableModel::ParamTableModel()
 {
@@ -17,6 +15,8 @@ void ParamTableModel::ShowRop(const QModelIndex &index)
     item.setData(QColor(Qt::green), Qt::BackgroundRole);
     item.setData(QColor(Qt::red), Qt::FontRole);
     */
+
+   /*
     QStandardItem *root = invisibleRootItem();
 
     QByteArray param=index.sibling(index.row(),0).data(Qt::UserRole).toByteArray();
@@ -55,5 +55,5 @@ void ParamTableModel::ShowRop(const QModelIndex &index)
         //name->setIcon(QIcon(":/icons/info.png"));
 
         root->appendRow(toInsert);
-    }
+    }*/
 }

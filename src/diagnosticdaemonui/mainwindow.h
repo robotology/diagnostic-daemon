@@ -6,6 +6,7 @@
 #include "msglisttablemodel.h"
 #include "paramtablemodel.h"
 #include "longdescriptionmodel.h"
+#include "Log.h"
 
 class SettingsTableModel;
 

@@ -32,12 +32,8 @@ add_executable(diagnosticdaemonui
   paramtablemodel.h
   longdescriptionmodel.cpp
   longdescriptionmodel.h
-  ../parser/RopParser.cpp
-  ../parser/RopParser.h
-  ../diagnosticdaemon/pugixml.cpp
   ${qrc_moc}
-  app.rc
 )
 file(COPY ${CMAKE_CURRENT_LIST_DIR}/uiconfig.xml DESTINATION ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 
-target_link_libraries(diagnosticdaemonui PRIVATE Qt5::Widgets Qt5::Network)
+target_link_libraries(diagnosticdaemonui PRIVATE Qt5::Widgets Qt5::Network pugixml::pugixml)

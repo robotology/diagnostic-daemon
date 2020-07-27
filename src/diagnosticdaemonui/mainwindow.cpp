@@ -99,7 +99,7 @@ void MainWindow::on_msglist_clicked(const QModelIndex &index)
 
 void MainWindow::on_stoptrace_clicked()
 {
-    std::array<uint8_t, EOMDiagnosticUdpMsg::getSize()> udpMsg;
+    /*std::array<uint8_t, EOMDiagnosticUdpMsg::getSize()> udpMsg;
     EOMDiagnosticUdpMsg msg;
     EOMDiagnosticRopMsg::Info rop;
     rop=EOMDiagnosticRopMsg::Info{(uint16_t)DiagnosticRopCode::stoplog,(uint16_t)DiagnosticRopSeverity::trace,1,1,14,15,16,17,18};
@@ -110,10 +110,12 @@ void MainWindow::on_stoptrace_clicked()
     // Build a packet to send
     QByteArray buffer((char*)udpMsg.data(),EOMDiagnosticUdpMsg::getSize());
     txudpSocket_->writeDatagram(buffer.data(), EOMDiagnosticUdpMsg::getSize(),QHostAddress::LocalHost, txport_);
+    */
 }
 
 void MainWindow::on_starttrace_clicked()
 {
+    /*
     std::array<uint8_t, EOMDiagnosticUdpMsg::getSize()> udpMsg;
     EOMDiagnosticUdpMsg msg;
     EOMDiagnosticRopMsg::Info rop;
@@ -125,12 +127,13 @@ void MainWindow::on_starttrace_clicked()
     // Build a packet to send
     QByteArray buffer((char*)udpMsg.data(),EOMDiagnosticUdpMsg::getSize());
     txudpSocket_->writeDatagram(buffer.data(), EOMDiagnosticUdpMsg::getSize(),QHostAddress::LocalHost, txport_);
-
+*/
     //tableListViewModel_->InserRops(buffer);
 }
 
 void MainWindow::on_alwaysflush_clicked()
 {
+    /*
     std::array<uint8_t, EOMDiagnosticUdpMsg::getSize()> udpMsg;
     EOMDiagnosticUdpMsg msg;
     EOMDiagnosticRopMsg::Info rop;
@@ -142,12 +145,13 @@ void MainWindow::on_alwaysflush_clicked()
     // Build a packet to send
     QByteArray buffer((char*)udpMsg.data(),EOMDiagnosticUdpMsg::getSize());
     txudpSocket_->writeDatagram(buffer.data(), EOMDiagnosticUdpMsg::getSize(),QHostAddress::LocalHost, txport_);
-
+*/
     //tableListViewModel_->InserRops(buffer);
 }
 
 void MainWindow::on_noflush_clicked()
 {
+    /*
     std::array<uint8_t, EOMDiagnosticUdpMsg::getSize()> udpMsg;
     EOMDiagnosticUdpMsg msg;
     EOMDiagnosticRopMsg::Info rop;
@@ -159,7 +163,7 @@ void MainWindow::on_noflush_clicked()
     // Build a packet to send
     QByteArray buffer((char*)udpMsg.data(),EOMDiagnosticUdpMsg::getSize());
     txudpSocket_->writeDatagram(buffer.data(), EOMDiagnosticUdpMsg::getSize(),QHostAddress::LocalHost, txport_);
-
+*/
     //tableListViewModel_->InserRops(buffer);
 }
 
