@@ -2,7 +2,6 @@
 #define PARAMTABLEMODEL_H
 
 #include <QStandardItemModel>
-#include "RopParser.h"
 
 class ParamTableModel : public QStandardItemModel
 {
@@ -12,7 +11,7 @@ public:
     void ShowRop(const QModelIndex &index);
 
 private:
-    RopParser ropParser_;
+    //RopParser ropParser_;
 };
 
 #endif // PARAMTABLEMODEL_H

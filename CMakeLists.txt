@@ -9,7 +9,7 @@
 
 cmake_minimum_required(VERSION 3.12)
 
-project(DiagnosticDaemon
+project(diagnosticdaemon
         LANGUAGES C CXX
         VERSION 1.0.0)
 
@@ -17,24 +17,25 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 include(GNUInstallDirs)
 
+option(COMPILE_WITHYARP_DEF "Compile diagnosticdaemon for YARP connection" OFF)
+option(DIAGNOSTICDAEMON_USE_EXTERNAL_PUGIXML "Set to on if you want to use an external pugixml" OFF)
+
 set(Boost_NO_BOOST_CMAKE ON)
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREAD ON)
 
-option(COMPILE_WITHYARP_DEF "Compile diagnosticdaemon for YARP connection" OFF)
-
-find_package(Boost 1.65 REQUIRED COMPONENTS system REQUIRED)
+find_package(Boost 1.65.0 REQUIRED system)
 find_package(icub_firmware_shared REQUIRED)
 if(icub_firmware_shared_FOUND)
   # icub-firmware-shared 4.0.7 was actually a wrong version exported by icub-firmware-shared <= 1.15
   if(icub_firmware_shared_VERSION VERSION_GREATER 4 OR icub_firmware_shared_VERSION VERSION_LESS 1.16.100)
-    message(FATAL_ERROR "An old version of icub-firmware-shared has been detected, but at least 1.15.100 is required")
+    message(FATAL_ERROR "An old version of icub-firmware-shared has been detected, but at least 1.16.100 is required")
   endif()
 endif()
 
 # Control where libraries and executables are placed during the build.
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_LIBRARY_DIR}")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
 
 # Encourage user to specify a build type (e.g. Release, Debug, etc.), otherwise set it to Debug.
@@ -72,7 +73,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 else ()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
   set(CMAKE_EXE_LINKER_FLAGS  "-rdynamic")
-  set(Common_LIBRARIES dl pthread)
+  set(Common_LIBRARIES dl pthread stdc++fs)
 endif ()
 
 

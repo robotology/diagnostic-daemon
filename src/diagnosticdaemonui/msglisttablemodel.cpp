@@ -1,5 +1,5 @@
 #include "msglisttablemodel.h"
-#include "MsgDescription.h"
+
 #include <QTextCodec>
 
 MsgListTableModel::MsgListTableModel()
@@ -10,6 +10,7 @@ MsgListTableModel::MsgListTableModel()
 
 void MsgListTableModel::InsertRops(const QByteArray& buffer)
 {
+    /*
     EOMDiagnosticUdpMsg msg;
     msg.parse((uint8_t *)buffer.data(),buffer.size());
 
@@ -25,10 +26,12 @@ void MsgListTableModel::InsertRops(const QByteArray& buffer)
         QByteArray qRop((const char*)rop.data(),rop.getSize());
         InsertSingleRop(qRop);
     }
+    */
 }
 
 void MsgListTableModel::InsertSingleRop(const QByteArray& buffer)
 {
+    /*
     QTextCodec *codec=QTextCodec::codecForName("UTF-8");
     QString dataAsString = codec->toUnicode(buffer.toHex(':'));
     QStandardItem* ropItem = new QStandardItem(dataAsString);
@@ -59,5 +62,7 @@ void MsgListTableModel::InsertSingleRop(const QByteArray& buffer)
          ropItem->setIcon(QIcon(":/icons/debug.png"));
         break;
     }
-    insertRow(0,toInsert);
+    in
+    sertRow(0,toInsert);
+    */
 }

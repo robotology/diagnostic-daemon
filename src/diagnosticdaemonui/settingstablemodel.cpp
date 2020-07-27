@@ -1,5 +1,4 @@
 #include "settingstablemodel.h"
-#include "MsgDescription.h"
 #include <QTextCodec>
 
 SettingsTableModel::SettingsTableModel()

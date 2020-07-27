@@ -1,3 +1,13 @@
+/*
+ * Copyright (C) 2020 iCub Tech - Istituto Italiano di Tecnologia
+ * Author:  Luca Tricerri, Nicolo Genesio
+ * email:   luca.tricerri@iit.it
+*/
+
+// - brief
+//   Bit stream class
+//
+
 #pragma once
 #include <vector>
 #include <stdint.h>

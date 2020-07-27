@@ -11,6 +11,8 @@
 #pragma once
 
 #include <array>
+#define BOOST_ERROR_CODE_HEADER_ONLY
+#include <boost/system/error_code.hpp>
 #include "boost/asio.hpp"
 
 #include "Component.h"

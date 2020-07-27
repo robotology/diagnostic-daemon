@@ -3,8 +3,6 @@
 
 #include <QStandardItemModel>
 
-#include "EOMDiagnosticUdpMsg.h"
-
 class SettingsTableModel : public QStandardItemModel
 {
 public:

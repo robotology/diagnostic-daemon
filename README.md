@@ -15,6 +15,11 @@
   - [1.9. Use](#19-use)
   - [1.10. Message list](#110-message-list)
     - [1.10.1. filtermessageset](#1101-filtermessageset)
+  - [1.11. Time sync](#111-time-sync)
+    - [1.11.1. Configuration](#1111-configuration)
+  - [1.12. Changing the sent message](#112-changing-the-sent-message)
+  - [1.13. Advanced](#113-advanced)
+    - [1.13.1. Application log](#1131-application-log)
 
 <!-- /TOC -->
 
@@ -22,7 +27,7 @@
 
 ## 1.1. Introduction
 
-The DiagnosticDaemon (DD) application has been developed to get diagnostic messages from the RTOS boards, from yarprobotinterface and from any other udp source. DiagnosticDaemon redirects the message to other applications or write the messages to file or console. DD works with a list of preloadable components.
+The DiagnosticDaemon (DD) application has been developed to get diagnostic messages from the RTOS boards, from yarprobotinterface and any other UDP source. DiagnosticDaemon redirects the message to other applications or writes the messages to file or console. DD works with a list of preloadable components.
 
 
 <figure style="display:block;margin-left:auto;margin-right:auto;width:80%">
@@ -70,13 +75,13 @@ make
 ```
 
 ### 1.2.1. YarpLogger ready
-If you also need also the YarpLogger connection make sure to select in ccmake the following:
+If you also need the YarpLogger connection make sure to select in ccmake the following:
 
 ```                                       
 COMPILE_WITHYARP                 ON                                                     
 ```                                                
 
-In this case Yarp should be compiled and installed.  
+In this case, Yarp should be compiled and installed.  
 See https://github.com/robotology/yarp
 
 ## 1.3. Execution
@@ -90,7 +95,7 @@ cd diagnostic-daemon/build/bin
 ## 1.4. Default configuration
 
 The DiagnosticDaemon has a configuration file in xml called **config.xml**.
-The file must be located in the same folder of the diagnosticdaemon executable file.  
+The file must be located in the same folder as the diagnosticdaemon executable file.  
 Here is the default file:  
 
 
@@ -108,7 +113,7 @@ Here is the default file:
 </configuration>
 
 ```
-At the start the DiagnosticDaemon reads the file and create as many components as described in the
+At the start, the DiagnosticDaemon reads the file and create as many components as described in the
 config.xml file.  
 In this case the following UML diagram describe the created objects:
 
@@ -142,7 +147,7 @@ DD follows various flows.
 ### 1.4.2. Available components
 The following components are available.  
   
-**upd or udp-broadcast**: send and receive data on udp connection.  
+**upd or UDP-broadcast**: send and receive data on UDP connection.  
 **console**: write data on console and accept keyboard input.  
 **file**: write data on file.  
 **decoder**: decode message from byte format to string.  
@@ -187,17 +192,17 @@ Example:
     <component type="yarplogger"     name="yarp"       rxport=""      txport=""      address=""           mask=""              mode="copy-parser" rules="" enable="true"  value="" destination=""/>
 ```
 In this example three components are working:
-The component with name 'boards' receive messages from udp, then it sends the messages to the component 'dec' and at the end the component 'dec' send the messages to the component 'yarp'. The component 'yarp' send the messages to the yarplogger.  
+The component with name 'boards' receive messages from UDP, then it sends the messages to the component 'dec' and at the end the component 'dec' send the messages to the component 'yarp'. The component 'yarp' send the messages to the yarplogger.  
 Note that the component named 'dec' decode the bytes messages to string format messages.
 
-Also before execute DiagnosticDaemon use in the same shell or in your .bashrc:
+Also before executing DiagnosticDaemon use in the same shell or your .bashrc:
 
 ```bash
 export YARP_FORWARD_LOG_ENABLE=1
 export YARP_DEBUG_ENABLE=1
 ```
 
-Also the DiagnosticDaemon should be compiled with Yarp, see section [YarpLogger ready](#1.2.1.-yarplogger-ready)
+Also, the DiagnosticDaemon should be compiled with Yarp, see section [YarpLogger ready](#1.2.1.-yarplogger-ready)
 
 ## 1.7. Application structure
 
@@ -211,7 +216,7 @@ In figure the application class diagram.
 ## 1.8. Configuration messages
 
 ## 1.9. Use
-All the configuration messages should be send to port udp component connected to a config component.  
+All the configuration messages should be sent to port UDP component connected to a config component.  
 In default config.xml the port for configuration is 11001.
 
 ## 1.10. Message list
@@ -221,7 +226,7 @@ In default config.xml the port for configuration is 11001.
 |filtermanageset|It can be used for filters setting|none|
 
 ### 1.10.1. filtermessageset
-This message is used for set the filters in DiagnosticDaemon.
+This message is used to set the filters in DiagnosticDaemon.
 
 | parameter name | description |values | default |
 |---------|--------|--------|--------|
@@ -238,3 +243,26 @@ Example:
 <message name="filtermessageset" type="address" destinationaddress="10.0.1.1 9000" rules="x:10.0.1.4 x:10.0.1.5 i:10.0.1.6" propagatetoboard="false" persistence="false"/>
 ```
 
+## 1.11. Time sync
+DD can be used to perform time synch between the RTOS board and the machine on which DD is currently working.
+
+### 1.11.1. Configuration
+To perform the requested task you need to add the "synch" component to the config.xml files. Together with the synch component, you will need a UDP component to send the message on the desired port.
+
+```xml
+ <component type="udp" name="synchboard" rxport="11002" txport="11000" address="10.0.1.255" mask="255.255.255.0" mode="copy-raw" rules="" enable="true" value="" broadcast="true" destination=""/>  
+    <component type="synch" name="synchtime"  rxport="" txport="" address="" mask="" mode="copy-parser" rules="" enable="true"  value="" destination="synchboard" synchtime="2000"/> 
+```
+Note that the synch message will be sent every 2000msec (synchtime="2000") to the broadcast udp address with port 11000 (txport="11000").
+Add the above lines anywhere in the config.xml file.
+
+## 1.12. Changing the sent message
+If you need to change the sent message refer to folder msgready in the execution folder.
+Choose the roptime.xml file. In the file is described the sent message. Changing the file will result in a change the sending message.
+
+## 1.13. Advanced
+
+### 1.13.1. Application log
+On the screen, a consol log is always present.
+The application log can be written to file by adding, to the execution folder, an empty file called **pleaselogtofile**.
+In this case, it will appear a log.log file with the logs inside.

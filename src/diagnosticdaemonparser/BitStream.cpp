@@ -1,3 +1,13 @@
+/*
+ * Copyright (C) 2020 iCub Tech - Istituto Italiano di Tecnologia
+ * Author:  Luca Tricerri, Nicolo Genesio
+ * email:   luca.tricerri@iit.it
+*/
+
+// - brief
+//   Bit stream class
+//
+
 #include <iostream>
 #include <string.h>
 #include <math.h>
@@ -6,7 +16,8 @@
 #include <algorithm>
 
 #include "BitStream.h"
-#include "syntax.h"
+#include "Syntax.h"
+#include "Log.h"
 
 
 BitStream::BitStream(unsigned int size):data_(size),maxSize_(size)
@@ -19,7 +30,7 @@ bool BitStream::addBits(unsigned int toadd,uint8_t bitnumber)
 
     if(bitnumber>8)
     {
-        std::cout<<"Bit exceed size:"<<bitnumber<<std::endl;
+        Log(Severity::error)<<"Bit exceed size:"<<bitnumber<<std::endl;
         return false;
     }
 
@@ -32,7 +43,7 @@ bool BitStream::addBits(unsigned int toadd,uint8_t bitnumber)
 
         if(currentByte_>=maxSize_)
         {
-            std::cout<<"Byte exceed size:"<<maxSize_<<" Current byte:"<<currentByte_<<std::endl;
+            Log(Severity::error)<<"Byte exceed size:"<<maxSize_<<" Current byte:"<<currentByte_<<std::endl;
             return false;
         }
  
@@ -68,7 +79,7 @@ bool BitStream::addBytes(unsigned long toadd,uint8_t bytenumber,const std::strin
     bytesVect.assign(&bytes[0],&bytes[bytenumber]);
     std::reverse(bytesVect.begin(),bytesVect.end());
 
-    if(encoding==littleendian_)
+    if(encoding==parsersyntax::littleendian)
     {
         uint8_t swap{0};
         switch (bytenumber)
@@ -103,7 +114,7 @@ bool BitStream::addBytes(unsigned long toadd,uint8_t bytenumber,const std::strin
                 bytesVect[3]=swap;
             break;
             default:
-                std::cout<<"Littleendian error:"<<bytenumber<<std::endl;
+                Log(Severity::error)<<"Littleendian error:"<<bytenumber<<std::endl;
         }
     }
 

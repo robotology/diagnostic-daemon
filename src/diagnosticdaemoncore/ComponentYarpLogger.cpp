@@ -52,7 +52,6 @@ void ComponentYarpLogger::forewardtoYarpLogger(const std::string& data,Severity 
             break;
         default:
         case Severity::fatal:
-        case Severity::max:
             yFatal()<<data;;
             break;
     }

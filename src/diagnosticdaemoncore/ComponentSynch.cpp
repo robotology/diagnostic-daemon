@@ -8,8 +8,6 @@
 #include "ConfigurationDepot.h"
 #include "MsgPrepare.h"
 #include <iomanip>
-#include <boost/asio.hpp>
-
 
 
 ComponentSynch::ComponentSynch(const std::map<std::string,std::string>& attributes,ConfigurationDepot& depot):Component(attributes,depot)

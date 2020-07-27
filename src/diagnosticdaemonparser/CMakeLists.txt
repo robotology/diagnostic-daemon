@@ -9,24 +9,7 @@
 
 include(FetchContent)
 
-
-
-project(parser)
-
-#option(COMPILE_WITHUNITTEST "Compile also unittest for parser" OFF)
-#if(COMPILE_WITHUNITTEST)
-#  FetchContent_Declare(
-#    unittest
-#    GIT_REPOSITORY https://github.com/google/googletest.git
-#    GIT_TAG        origin/master
-#  )
-#  FetchContent_GetProperties(unittest)
-#  if(NOT unittest)
-#    FetchContent_Populate(unittest)
-#    add_subdirectory(unittest)
-#    #add_subdirectory(${unittest_SOURCE_DIR} ${unittest_BINARY_DIR})
-#  endif()
-#endif()
+project(diagnosticdaemonparser)
 
 set(ParserSrc     Parser.cpp
                   BitStream.cpp )
@@ -34,9 +17,24 @@ set(ParserHdr     Parser.h
                   BitStream.h)
 
 add_library(${PROJECT_NAME} ${ParserSrc} ${ParserHdr} )
-target_link_libraries(${PROJECT_NAME} pugixml::pugixml)
-target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>")
+target_link_libraries(${PROJECT_NAME} pugixml::pugixml diagnosticdaemonlog)
+target_include_directories(${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+                                                  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+
+
+set_target_properties(${PROJECT_NAME} PROPERTIES
+                                      VERSION ${CMAKE_PROJECT_VERSION}
+                                      PUBLIC_HEADER "${ParserHdr}"
+                                      OUTPUT_NAME "diagnosticdaemonparser")
 
 # install
-install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(
+TARGETS ${PROJECT_NAME}
+EXPORT ${CMAKE_PROJECT_NAME}
+LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+# install
 install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/msgdepot DESTINATION ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})

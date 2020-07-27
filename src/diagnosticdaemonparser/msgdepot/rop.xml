@@ -8,8 +8,8 @@
 
     <param name="ropc" size="1" uom="byte" value="" longdescription="ropc" show="true"/>
     <param name="datasize" size="2" uom="byte" value="" encoding="littleendian" longdescription="datasize" show="true"/>
-    <param name="id" size="4" uom="byte" value="" longdescription="id" show="true"/>
-    <param name="data" conditionorvalue="2 3 4 5" conditionname="ropc" conditionallevelup="0" conditionallength="datasize" conditionallengthuom="byte" size="" uom="byte" value="" longdescription="id" show="true"/>
+    <param name="id" size="4" uom="byte" value="" encoding='littleendian' longdescription="id" show="true"/>
+    <param name="data" conditionorvalue="2 3 4 5" conditionname="ropc" conditionallevelup="0" conditionallength="datasize" conditionallengthuom="byte" size="" uom="byte" value="" encoding='littleendian' longdescription="id" show="true"/>
     
     <param name="signature" conditionorvalue="1" conditionname="ctrl-plussign" conditionallevelup="0" size="1" uom="byte" value="" longdescription="signature" show="true"/>
     <param name="time" conditionorvalue="1" conditionname="ctrl-plustime" conditionallevelup="0" size="1" uom="byte" value="" longdescription="time" show="true"/>
