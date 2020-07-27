@@ -73,9 +73,8 @@ void ComponentUdp::send(const std::array<uint8_t,maxMsgLenght_>& message,unsigne
 {
     txSocket_.async_send_to(
       boost::asio::buffer(message,size), receiverEndpoint_,
-      boost::bind(&ComponentUdp::handleSendTo, this,
-      boost::asio::placeholders::error,
-      boost::asio::placeholders::bytes_transferred));
+      boost::bind(&ComponentUdp::handleSendTo, this,boost::asio::placeholders::error,boost::asio::placeholders::bytes_transferred));
+    Log(Severity::debug)<<getName()<<" Asynch send message"<<std::endl;      
 }
 
 void ComponentUdp::handleSendTo(const boost::system::error_code &err, size_t size)
@@ -129,4 +128,9 @@ bool ComponentUdp::discardMsgByFilter(const boost::asio::ip::address& address)
   if(!includededAddresses_.empty())
   {}
   return false;
+}
+
+std::array<uint8_t,ComponentUdp::maxMsgLenght_> ComponentUdp::getRxData() const
+{
+  return rxData_;
 }

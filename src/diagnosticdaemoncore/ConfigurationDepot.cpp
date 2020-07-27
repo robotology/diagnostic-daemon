@@ -106,7 +106,7 @@ Component_sptr ConfigurationDepot::createComponent(const std::map<std::string,st
         }                                    
         default:
         {
-            //TODO error
+            Log(Severity::error)<<"Unknown component to be created"<<std::endl;
         }     
     }
     return Component_sptr();

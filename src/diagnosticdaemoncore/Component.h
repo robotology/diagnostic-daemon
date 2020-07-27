@@ -48,4 +48,36 @@ class Component
 
 };
 
+
+inline bool asBool(const std::string& name,const std::map<std::string,std::string>& attributes)
+{
+    if(attributes.find(name)!=attributes.end())
+    {  
+        bool tmp;
+        std::istringstream(attributes.at(name)) >> std::boolalpha >> tmp;
+        return tmp;
+    }
+    Log(Severity::error)<< " Missing:"<<name<<" in xml"<<std::endl;
+    return false;
+}
+
+inline std::string asString(const std::string& name,const std::map<std::string,std::string>& attributes)
+{
+    if(attributes.find(name)!=attributes.end())
+        return attributes.at(name);
+    Log(Severity::error)<< " Missing:"<<name<<" in xml"<<std::endl;
+    return "";
+}
+
+inline int asInt(const std::string& name,const std::map<std::string,std::string>& attributes)
+{
+    if(attributes.find(name)!=attributes.end())
+    {
+        auto str=attributes.at(name);
+        return std::stoi(str);
+    }
+    Log(Severity::error)<< " Missing:"<<name<<" in xml"<<std::endl;    
+    return 0;
+}
+
 using Component_sptr=std::shared_ptr<Component>;
