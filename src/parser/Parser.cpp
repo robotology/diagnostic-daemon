@@ -1,6 +1,17 @@
+/*
+ * Copyright (C) 2020 iCub Tech - Istituto Italiano di Tecnologia
+ * Author:  Luca Tricerri
+ * email:   luca.tricerri@iit.it
+*/
+
+// - brief
+//   Bit stream class
+//
+
 #include "Parser.h"
 #include "BitStream.h"
-#include "syntax.h"
+#include "Syntax.h"
+#include "Log.h"
 
 #include <iostream>
 #include <iomanip>
@@ -9,61 +20,118 @@
 
 Parser::Parser()
 {
-    pugi::xml_parse_result result = doc_.load_file("msgdepot/udpheader.xml");
+    pugi::xml_parse_result result = doc_.load_file(msgroot_);
     if(result.status == pugi::status_file_not_found)
     {
-        std::cout<<"Parser config.xml not found"<<std::endl;
+        Log(Severity::error)<<"Parser config.xml not found"<<std::endl;
         return ;
     }
     if(result.status != pugi::status_ok)
     {
-        std::cout<<"Parser config.xml reading"<<std::endl;
+        Log(Severity::error)<<"Parser config.xml reading"<<std::endl;
         return ;
     }
 
     includePreparser();
 }
 
+std::list<std::tuple<std::string,std::string,std::string>> Parser::parse(const std::vector<uint8_t>& bytetData,pugi::xml_document& xmlSupportDoc/*supporto e debug*/)
+{
+    std::list<std::tuple<std::string,std::string,std::string>> out;
+    uint16_t byteindex{0};
+    uint8_t indexbit{0};
+    xmlSupportDoc.reset(doc_);
+    std::string nodeName{"//"};
+    nodeName+=parsersyntax::param;
+    pugi::xpath_node_set params = xmlSupportDoc.select_nodes(nodeName.c_str()); 
+
+    pugi::xml_node tmp=xmlSupportDoc.document_element();
+    visit(tmp, out,bytetData,byteindex,indexbit);
+
+    return out;
+}
+
+
+bool Parser::parse(const std::string& xmlStr,std::vector<uint8_t>& bytetData)
+{
+    pugi::xml_document doc;
+    doc.load_string(xmlStr.c_str());
+    return parse(doc,bytetData);
+}
+
+bool Parser::parse(const pugi::xml_document& xmlDoc,std::vector<uint8_t>& bytetData)
+{
+    BitStream out(maxMsgLen_);
+
+    //pugi::xml_node params = xmlDoc.child(udpheader_);
+    
+    std::string toFind{"//"};
+    toFind+=parsersyntax::param;
+    const pugi::xpath_node_set params = xmlDoc.select_nodes(toFind.c_str());
+
+
+    bool ret{true};
+    for (auto currentNodePath:params)
+    {
+        pugi::xml_node currentNode=currentNodePath.node();
+        std::string debug=currentNode.attribute(parsersyntax::namekey).value();
+        uint8_t size=currentNode.attribute(parsersyntax::sizekey).as_int();
+        std::string test=currentNode.attribute(parsersyntax::valuekey).value();
+        unsigned long value=currentNode.attribute(parsersyntax::valuekey).as_ullong();
+        std::string uom=currentNode.attribute(parsersyntax::uomkey).value();
+        std::string encoding=currentNode.attribute(parsersyntax::encodingkey).value();
+        if(uom==parsersyntax::bitkey)
+            ret=ret && out.addBits(value,size);
+        else
+            ret=ret && out.addBytes(value,size,encoding);
+    }
+
+    //out.dump(); 
+    bytetData=out.data_;
+    return ret;
+}
+
+
 bool Parser::checkIfParamIsToBeDeleted(const pugi::xml_node& node)
 {
-    std::string debug=node.attribute(namekey_).value();
+    std::string debug=node.attribute(parsersyntax::namekey).value();
     pugi::xml_attribute attr;
     std::string conditionalname;
     std::vector<std::string> conditionalvalues;
-    attr = node.attribute(conditionnamekey_);
+    attr = node.attribute(parsersyntax::conditionnamekey);
     if (attr)
     {
-        //std::cout<<"Check conditional"<<std::endl;
+        //Log(Severity::debug)<<"Check conditional"<<std::endl;
         conditionalname=attr.value();
-        if(conditionalname==std::string(nonekey_))
+        if(conditionalname==std::string(parsersyntax::nonekey))
             return false;
 
-        if((attr = node.attribute(conditionorvaluekey_)))
+        if((attr = node.attribute(parsersyntax::conditionorvaluekey)))
         {
             conditionalvalues=(tokenize(attr.value()));
         }
         else
         {
             //TODO error
-            //std::cout<<"Error:conditionvalue"<<std::endl;
+            //Log(Severity::error)<<"Error:conditionvalue"<<std::endl;
             return false;
         }
 
         //looking for conditional node
-        pugi::xml_node conditionalNode=node.parent().find_child_by_attribute(namekey_,conditionalname.c_str());
+        pugi::xml_node conditionalNode=node.parent().find_child_by_attribute(parsersyntax::namekey,conditionalname.c_str());
         if(conditionalNode.empty())
         {
             return true;
         }
 
-        if((attr = conditionalNode.attribute(valuekey_)))
+        if((attr = conditionalNode.attribute(parsersyntax::valuekey)))
         {
             auto out=std::find_if(conditionalvalues.begin(),conditionalvalues.end(),[&](const std::string& current){
                 return attr.value()==current;
                 });
             if(out!=conditionalvalues.end())
             {
-                //std::cout<<"hitconditional:"<<conditionalname<<std::endl;
+                //Log(Severity::debug)<<"hitconditional:"<<conditionalname<<std::endl;
                 return false;
             }
             else
@@ -75,7 +143,7 @@ bool Parser::checkIfParamIsToBeDeleted(const pugi::xml_node& node)
         else
         {
             //TODO error
-            std::cout<<"Error:value"<<std::endl;
+            Log(Severity::error)<<"Error:value"<<std::endl;
             return true;
         }        
     }
@@ -85,25 +153,26 @@ bool Parser::checkIfParamIsToBeDeleted(const pugi::xml_node& node)
 
 unsigned int Parser::checkRepetitionNumber(const pugi::xml_node& node)
 {
-    std::string debug=node.attribute(namekey_).value();
+    std::string debug=node.attribute(parsersyntax::namekey).value();
     pugi::xml_attribute attr;
     std::string repetitionname;
     std::string repetitionnamenode;
-    if ((attr = node.attribute(repetitionnamekey_)))
+    if ((attr = node.attribute(parsersyntax::repetitionnamekey)))
     {
         repetitionnamenode=attr.value();
-        if(repetitionnamenode==std::string(nonekey_))
+        if(repetitionnamenode==std::string(parsersyntax::nonekey))
             return 1;
 
         //looking for repetition node vale
-        pugi::xml_node repetitionNode=node.parent().find_child_by_attribute(namekey_,repetitionnamenode.c_str());
+        pugi::xml_node repetitionNode=node.parent().find_child_by_attribute(parsersyntax::namekey,repetitionnamenode.c_str());
         if(repetitionNode.empty())
         {
-            return true;
+            Log(Severity::error)<<"repetitionnamenode not found:"<<debug<<std::endl;
+            return 0;
         }
-        attr = repetitionNode.attribute(valuekey_);
+        attr = repetitionNode.attribute(parsersyntax::valuekey);
         std::string repetitions=repetitionnamenode=attr.value();
-        //std::cout<<"hitrepetition:"<<repetitions<<std::endl;
+        //Log(Severity::debug)<<"hitrepetition:"<<repetitions<<std::endl;
         return std::atoi(repetitions.c_str());
     }
     return 1;
@@ -111,49 +180,50 @@ unsigned int Parser::checkRepetitionNumber(const pugi::xml_node& node)
 
 void Parser::updateVariabileLength(pugi::xml_node& node)
 {
-    std::string debug=node.attribute(namekey_).value();
+    std::string debug=node.attribute(parsersyntax::namekey).value();
     pugi::xml_attribute attr;
-    pugi::xml_attribute conditionalLenght=node.attribute(conditionallengthkey_);
+    pugi::xml_attribute conditionalLenght=node.attribute(parsersyntax::conditionallengthkey);
     std::string variabilelengthname;
     std::string variabilelengthvalue;
     if (!conditionalLenght.empty())
     {
         variabilelengthname=conditionalLenght.value();
-        if(variabilelengthname==std::string(nonekey_))
+        if(variabilelengthname==std::string(parsersyntax::nonekey))
             return ;
 
-        //looking for repetition node vale
-        pugi::xml_node conditionalLengthNode=node.parent().find_child_by_attribute(namekey_,variabilelengthname.c_str());
+        //looking for conditional node vale
+        pugi::xml_node conditionalLengthNode=node.parent().find_child_by_attribute(parsersyntax::namekey,variabilelengthname.c_str());
         if(conditionalLengthNode.empty())
         {
+            Log(Severity::error)<<"conditionalLengthNode not found:"<<debug<<std::endl;
             return;
         }
-        attr = conditionalLengthNode.attribute(valuekey_);
+        attr = conditionalLengthNode.attribute(parsersyntax::valuekey);
         std::string length=attr.value();
         int lenValue=std::atoi(length.c_str());
-        node.attribute(sizekey_)=lenValue;
-        std::string debug=node.attribute(namekey_).value();
-        //int debug1=node.attribute(sizekey_).as_int();
-        std::cout<<"New size for:"<<debug<<":"<<node.attribute(sizekey_).as_int()<<std::endl;
+        node.attribute(parsersyntax::sizekey)=lenValue;
+        std::string debug=node.attribute(parsersyntax::namekey).value();
+        //int debug1=node.attribute(parsersyntax::sizekey).as_int();
+        Log(Severity::debug)<<"New size for:"<<debug<<":"<<node.attribute(parsersyntax::sizekey).as_int()<<std::endl;
         return;
     }
     return;
 }
 
-void Parser::fillNodeWithValue(std::list<std::tuple<std::string,std::string,std::string>>& msg,const std::array<uint8_t,maxMsgLenght_>& rop,pugi::xml_node& node,uint16_t &byteindex,uint8_t& bitindex)
+void Parser::fillNodeWithValue(std::list<std::tuple<std::string,std::string,std::string>>& outStruct,const std::vector<uint8_t>& bytetData,pugi::xml_node& node,uint16_t &byteindex,uint8_t& bitindex)
 {
-    uint16_t size=node.attribute(sizekey_).as_int();
-    std::string encoding=node.attribute(encodingkey_).value();
-    std::string uom=node.attribute(uomkey_).value();
+    uint16_t size=node.attribute(parsersyntax::sizekey).as_int();
+    std::string encoding=node.attribute(parsersyntax::encodingkey).value();
+    std::string uom=node.attribute(parsersyntax::uomkey).value();
     std::stringstream ss;
 
-    if(uom==bitkey_)
+    if(uom==parsersyntax::bitkey)
     {
-           uint8_t tmp=rop[byteindex];
+           uint8_t tmp=bytetData[byteindex];
                 tmp=(tmp>>(8-bitindex-size));
                 uint8_t mask=make_mask<uint8_t>(size);
                 tmp=tmp&mask;
-                node.attribute(valuekey_)=tmp;
+                node.attribute(parsersyntax::valuekey)=tmp;
 
                 bitindex+=size;
                 if(bitindex==8)
@@ -170,54 +240,54 @@ void Parser::fillNodeWithValue(std::list<std::tuple<std::string,std::string,std:
         {
             case 1:
             {
-                node.attribute(valuekey_)=rop[byteindex];
-                ss<<(std::to_string)(rop[byteindex]);
+                node.attribute(parsersyntax::valuekey)=bytetData[byteindex];
+                ss<<(std::to_string)(bytetData[byteindex]);
                 ++byteindex;
                 break;
             }
             case 2:
             {
-                uint16_t tmp=*(uint16_t*)&rop[byteindex];
-                /*if(encoding==littleendian_)
+                uint16_t tmp=*(uint16_t*)&bytetData[byteindex];
+                /*if(encoding==parsersyntax::littleendian)
                 {
                     tmp=swapBinary(tmp);
                 } */   
 
-                node.attribute(valuekey_)=tmp;
+                node.attribute(parsersyntax::valuekey)=tmp;
                 ss<<tmp;
                 byteindex+=2;
                 break;
             }
             case 4:
             {
-                uint32_t tmp=*(uint32_t*)&rop[byteindex];
+                uint32_t tmp=*(uint32_t*)&bytetData[byteindex];
                 byteindex+=4;
-                node.attribute(valuekey_)=tmp;
+                node.attribute(parsersyntax::valuekey)=tmp;
                 ss<<tmp;
                 break;
             }
             case 8:
             {
-                uint64_t tmp=*(uint64_t*)&rop[byteindex];
-                /*if(encoding==littleendian_)
+                uint64_t tmp=*(uint64_t*)&bytetData[byteindex];
+                /*if(encoding==parsersyntax::littleendian)
                 {
                     tmp=swapBinary(tmp);
                 } */   
                 byteindex+=8;
-                node.attribute(valuekey_)=tmp;
+                node.attribute(parsersyntax::valuekey)=tmp;
                 ss<<tmp;                
                 break;
             }
             case 0:
             break;
             default:
-            std::cout<<"Error in byte assign:"<<size<<std::endl;
+            Log(Severity::error)<<"Error in byte assign:"<<size<<std::endl;
             /*
             {
-                node.attribute(valuekey_)="..";
+                node.attribute(parsersyntax::valuekey)="..";
                 for(int t=0;t<size/8;++t)
                 {
-                    ss<<(char)(rop[byteindex]);                
+                    ss<<(char)(bytetData[byteindex]);                
                     byteindex++;
                 }
                 break;
@@ -225,12 +295,12 @@ void Parser::fillNodeWithValue(std::list<std::tuple<std::string,std::string,std:
         }
     }
 
-    std::string name=node.attribute(namekey_).value();
+    std::string name=node.attribute(parsersyntax::namekey).value();
     std::string value=ss.str();
-    std::string longdescription=node.attribute(longdescription_).value();
-    bool show=node.attribute(showkey_).as_bool();
-        if(show)
-            msg.push_back({name,value,longdescription});
+    std::string longdescription=node.attribute(parsersyntax::longdescription).value();
+    bool show=node.attribute(parsersyntax::showkey).as_bool();
+    if(show)
+        outStruct.push_back({name,value,longdescription});
 }
 
 void Parser::includePreparser()
@@ -250,14 +320,13 @@ void Parser::includePreparser()
     }
 }
 
-void Parser::dump(const std::list<std::tuple<std::string,std::string,std::string>>& msg)
+void Parser::dump(const std::list<std::tuple<std::string,std::string,std::string>>& outStruct)
 {
-    for(auto current:msg)
+    for(auto current:outStruct)
     {
-        std::cout<<"Parser:"<<std::setiosflags(std::ios::left)<<std::setfill('-')<<std::setw(20)<<std::get<0>(current)<<std::setfill('-')<<std::setw(20)<<std::get<1>(current)<<std::setfill('-')<<std::setw(20)<<std::get<2>(current)<<std::endl;
+        Log(Severity::debug)<<"Parser:"<<std::setiosflags(std::ios::left)<<std::setfill('-')<<std::setw(20)<<std::get<0>(current)<<std::setfill('-')<<std::setw(20)<<std::get<1>(current)<<std::setfill('-')<<std::setw(20)<<std::get<2>(current)<<std::endl;
     }
 }
-
 
 uint16_t Parser::swapBinary(uint16_t value)  const
 {
@@ -273,13 +342,11 @@ uint64_t Parser::swapBinary(uint64_t value)  const
     return value;
 }
 
-void Parser::visit(pugi::xml_node node,std::list<std::tuple<std::string,std::string,std::string>>& msg,const std::array<uint8_t,maxMsgLenght_>& rop,uint16_t &byteindex,uint8_t &bitindex)
+void Parser::visit(pugi::xml_node& node,std::list<std::tuple<std::string,std::string,std::string>>& outStruct,const std::vector<uint8_t>& bytetData,uint16_t &byteindex,uint8_t &bitindex)
 {
-    
     for (pugi::xml_node current = node.first_child(); current; current = current.next_sibling())
     {
-        //std::cout<<node.attribute(namekey_).value()<<"::"<<current.attribute(namekey_).value()<<std::endl;
-
+        std::string debug=current.attribute(parsersyntax::namekey).value();
         int repetition=checkRepetitionNumber(current);
 
         for(int repindex=0;repindex<repetition;++repindex)
@@ -288,71 +355,20 @@ void Parser::visit(pugi::xml_node node,std::list<std::tuple<std::string,std::str
             bool deleted=checkIfParamIsToBeDeleted(current);
             if(deleted)
             {
-                //std::cout<<"Erase"<<std::endl;
-                current.parent().remove_child(current);
+                //Code to be checked begin
+                auto toRemove=current;
+                current = current.previous_sibling();
+                current.parent().remove_child(toRemove);
+                //Code to be checked end
                 continue;
             }
 
             updateVariabileLength(current);
             
-            fillNodeWithValue(msg,rop,current,byteindex,bitindex);
+            fillNodeWithValue(outStruct,bytetData,current,byteindex,bitindex);
             
-            visit(current,msg,rop,byteindex,bitindex);
+            visit(current,outStruct,bytetData,byteindex,bitindex);
        }
 
     }
 }
-
-std::list<std::tuple<std::string,std::string,std::string>> Parser::parse(const std::array<uint8_t,maxMsgLenght_>& rop)
-{
-    std::list<std::tuple<std::string,std::string,std::string>> msg;
-    uint16_t byteindex{0};
-    uint8_t indexbit{0};
-    pugi::xml_document currentDoc_;
-    currentDoc_.reset(doc_);
-    std::string nodeName{"//"};
-    nodeName+=param_;
-    pugi::xpath_node_set params = currentDoc_.select_nodes(nodeName.c_str()); 
-
-    visit(currentDoc_.document_element(), msg,rop,byteindex,indexbit);
-
-    return msg;
-    //currentDoc_.save(std::cout);
-}
-
-
-bool Parser::parse(const std::string& xml,std::vector<uint8_t>& data)
-{
-    pugi::xml_document doc;
-    doc.load_string(xml.c_str());
-    return parse(doc,data);
-}
-
-
-bool Parser::parse(pugi::xml_document& doc,std::vector<uint8_t>& data)
-{
-    BitStream out(maxMsgLen_);
-
-    pugi::xml_node params = doc.child(udpheader_);
-    
-    bool ret{true};
-    for (auto currentNode:params)
-    {
-        std::string debug=currentNode.attribute(namekey_).value();
-        uint8_t size=currentNode.attribute(sizekey_).as_int();
-        std::string test=currentNode.attribute(valuekey_).value();
-        unsigned long value=currentNode.attribute(valuekey_).as_ullong();
-        std::string uom=currentNode.attribute(uomkey_).value();
-        std::string encoding=currentNode.attribute(encodingkey_).value();
-        if(uom==bitkey_)
-            ret=ret && out.addBits(value,size);
-        else
-            ret=ret && out.addBytes(value,size,encoding);
-    }
-
-    //out.dump(); 
-    data=out.data_;
-    return ret;
-}
-
-

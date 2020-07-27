@@ -5,12 +5,12 @@
     <param name="startcode" size="1" uom="byte" value="52" longdescription="start code byte3" show="true"/> 
     <param name="startcode" size="1" uom="byte" value="18" longdescription="start code byte4" show="true"/> 
 
-    <param name="sizeofbody" size="2" uom="byte" value="" longdescription="size of body" show="true"/> 
-    <param name="numberofrops" size="2" uom="byte" value="" longdescription="number of rops" show="true"/> 
-    <param name="sequencenum" size="8" uom="byte" value="" longdescription="sequence number" show="true"/> 
-    <param name="ageofframe" size="8" uom="byte" value="" longdescription="age of frame" show="true"/>
+    <param name="sizeofbody" size="2" uom="byte" value="" encoding='littleendian' longdescription="size of body" show="true"/> 
+    <param name="numberofrops" size="2" uom="byte" value="" encoding='littleendian' longdescription="number of rops" show="true"/> 
+    <param name="sequencenum" size="8" uom="byte" value="" encoding='littleendian' longdescription="sequence number" show="true"/> 
+    <param name="ageofframe" size="8" uom="byte" value="" encoding='littleendian' longdescription="age of frame" show="true"/>
     
-    <param name="roplist" repetitionname="numberofrops" size="0" uom="byte" value="" longdescription="rop list" show="true">
+    <param name="roplist" repetitionname="numberofrops" size="" uom="byte" value="" longdescription="rop list" show="true">
         <xi:include href="msgdepot/rop.xml" parse="xml" xpointer="title"/>
     </param>
     

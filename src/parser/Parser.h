@@ -1,33 +1,41 @@
+/*
+ * Copyright (C) 2020 iCub Tech - Istituto Italiano di Tecnologia
+ * Author:  Luca Tricerri
+ * email:   luca.tricerri@iit.it
+*/
+
+// - brief
+//   Bit stream class
+//
+
 #pragma once
 
 #include "pugixml.hpp"
 #include <list>
 #include <tuple>
-#include <array>
 #include <string>
 #include <vector>
 #include <sstream>
-
-class EOMDiagnosticRopMsg;
 
 class Parser
 {
     public:
         Parser();
         static constexpr unsigned int maxMsgLenght_{1500};
-        std::list<std::tuple<std::string,std::string,std::string>> parse(const std::array<uint8_t,maxMsgLenght_>&);
-        
-        bool parse(pugi::xml_document& doc,std::vector<uint8_t>&);
-        bool parse(const std::string& doc,std::vector<uint8_t>& data);
+
+        std::list<std::tuple<std::string,std::string,std::string>> parse(const std::vector<uint8_t>& bytetData,pugi::xml_document& xmlSupportDoc/*supporto e debug*/);//Bit to struct (and for debug xmlDoc)
+        bool parse(const std::string& xmlStr,std::vector<uint8_t>& bytetData);        //Xml string to byte
+        bool parse(const pugi::xml_document& xmlDoc,std::vector<uint8_t>& bytetData); //Xml document to byte
         
         static void dump(const std::list<std::tuple<std::string,std::string,std::string>>& msg);
 
     private:
         static constexpr unsigned int maxMsgLen_{50};
+        static constexpr char msgroot_[]{"msgdepot/udpheader.xml"};
         pugi::xml_document doc_;
 
-        void visit(pugi::xml_node node,std::list<std::tuple<std::string,std::string,std::string>>& msg,const std::array<uint8_t,maxMsgLenght_>& rop,uint16_t &byteindex,uint8_t &bitindex);
-        void fillNodeWithValue(std::list<std::tuple<std::string,std::string,std::string>>& msg,const std::array<uint8_t,maxMsgLenght_>& rop,pugi::xml_node& node,uint16_t &byteindex,uint8_t &bitindex);
+        void visit(pugi::xml_node& node,std::list<std::tuple<std::string,std::string,std::string>>& msg,const std::vector<uint8_t>& rop,uint16_t &byteindex,uint8_t &bitindex);
+        void fillNodeWithValue(std::list<std::tuple<std::string,std::string,std::string>>& msg,const std::vector<uint8_t>& rop,pugi::xml_node& node,uint16_t &byteindex,uint8_t &bitindex);
         bool checkIfParamIsToBeDeleted(const pugi::xml_node& node);
         unsigned int checkRepetitionNumber(const pugi::xml_node& node);
         void updateVariabileLength(pugi::xml_node& node);
