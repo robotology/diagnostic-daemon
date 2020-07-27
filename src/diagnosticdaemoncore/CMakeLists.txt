@@ -24,7 +24,7 @@ set(DiagnosticDaemonCoreSrc
                             MsgPrepare.cpp
                         )
 
-set(DiagnosticDaemonCoreHdr     ComponentUdp.h
+set(DiagnosticDaemonCoreHdr ComponentUdp.h
                             ComponentFile.h
                             ComponentConsole.h
                             Component.h
@@ -41,7 +41,8 @@ set(DiagnosticDaemonCoreHdr     ComponentUdp.h
                        )
 
 add_library(${PROJECT_NAME} ${DiagnosticDaemonCoreSrc} ${DiagnosticDaemonCoreHdr} )
-target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>")
+target_include_directories(${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+                                                  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 target_link_libraries(${PROJECT_NAME}  ${Common_LIBRARIES}
                                        diagnosticdaemonlog
                                        pugixml::pugixml
@@ -57,7 +58,19 @@ if (COMPILE_WITHYARP_DEF)
   target_link_libraries(${PROJECT_NAME} YARP::YARP_os YARP::YARP_conf YARP::YARP_init)
 endif()
 
+set_target_properties(${PROJECT_NAME} PROPERTIES
+                                      VERSION ${CMAKE_PROJECT_VERSION}
+                                      PUBLIC_HEADER "${DiagnosticDaemonCoreHdr}"
+                                      OUTPUT_NAME "diagnosticdaemoncore")
+
 # install
-install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(
+    TARGETS ${PROJECT_NAME}
+    EXPORT ${CMAKE_PROJECT_NAME}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
 install(FILES ${CMAKE_CURRENT_LIST_DIR}/config.xml DESTINATION ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/msgready DESTINATION ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})

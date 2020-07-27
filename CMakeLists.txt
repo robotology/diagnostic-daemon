@@ -9,7 +9,7 @@
 
 cmake_minimum_required(VERSION 3.12)
 
-project(DiagnosticDaemon
+project(diagnosticdaemon
         LANGUAGES C CXX
         VERSION 1.0.0)
 
@@ -17,13 +17,8 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 include(GNUInstallDirs)
 
-#set(Boost_NO_BOOST_CMAKE ON)
-#set(Boost_USE_STATIC_LIBS OFF)
-#set(Boost_USE_MULTITHREAD ON)
-
 option(COMPILE_WITHYARP_DEF "Compile diagnosticdaemon for YARP connection" OFF)
 
-#find_package(Boost 1.65 REQUIRED COMPONENTS system REQUIRED)
 find_package(icub_firmware_shared REQUIRED)
 if(icub_firmware_shared_FOUND)
   # icub-firmware-shared 4.0.7 was actually a wrong version exported by icub-firmware-shared <= 1.15
