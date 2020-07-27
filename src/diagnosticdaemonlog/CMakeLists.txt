@@ -16,7 +16,7 @@ set(LogHdr  Log.h
                        )
 add_library(${PROJECT_NAME} ${LogSrc} ${LogHdr} )
 
-target_link_libraries(${PROJECT_NAME}  ${Common_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}  ${Common_LIBRARIES} stdc++fs)
 target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>")
 
 # install

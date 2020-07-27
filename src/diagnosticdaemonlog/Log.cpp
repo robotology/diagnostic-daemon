@@ -7,13 +7,15 @@
 #include "Log.h"
 
 #include <fstream>
-#include <filesystem>
+#include <experimental/filesystem>
+
+namespace fs = std::experimental::filesystem;
 
 Log::Log(Severity severity):severity_(severity)
 {
     if(!alreadyReadConfig_)
     {
-        if(std::filesystem::exists(logfilekey_))
+        if(fs::exists(logfilekey_))
             logToFile_=true;
         alreadyReadConfig_=true;
     }
