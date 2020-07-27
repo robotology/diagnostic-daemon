@@ -49,6 +49,7 @@ target_link_libraries(${PROJECT_NAME}  ${Common_LIBRARIES}
                                        diagnosticdaemonparser
                                        icub_firmware_shared::embot
                                        icub_firmware_shared::embobj
+                                       Boost::system
                                        )
 
 if (COMPILE_WITHYARP_DEF)
