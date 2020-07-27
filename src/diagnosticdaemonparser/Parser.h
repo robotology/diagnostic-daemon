@@ -21,7 +21,7 @@ class Parser
 {
     public:
         Parser();
-        static constexpr unsigned int maxMsgLenght_{1500};
+        bool start();
 
         std::list<std::tuple<std::string,std::string,std::string>> parse(const std::vector<uint8_t>& bytetData,pugi::xml_document& xmlSupportDoc/*supporto e debug*/);//Bit to struct (and for debug xmlDoc)
         bool parse(const std::string& xmlStr,std::vector<uint8_t>& bytetData);        //Xml string to byte
@@ -33,6 +33,7 @@ class Parser
         static constexpr unsigned int maxMsgLen_{50};
         static constexpr char msgroot_[]{"msgdepot/udpheader.xml"};
         pugi::xml_document doc_;
+        bool started_{false};
 
         void visit(pugi::xml_node& node,std::list<std::tuple<std::string,std::string,std::string>>& msg,const std::vector<uint8_t>& rop,uint16_t &byteindex,uint8_t &bitindex);
         void fillNodeWithValue(std::list<std::tuple<std::string,std::string,std::string>>& msg,const std::vector<uint8_t>& rop,pugi::xml_node& node,uint16_t &byteindex,uint8_t &bitindex);
@@ -42,18 +43,18 @@ class Parser
         void includePreparser();
 
         uint64_t swapBinary(uint64_t value) const;
-        uint16_t swapBinary(uint16_t value)  const;
-        
-        static std::vector<std::string> tokenize(const std::string& value)
-        {
-            std::istringstream iss(value);
-            std::vector<std::string> results(std::istream_iterator<std::string>{iss},std::istream_iterator<std::string>());
-            return results;
-        }
-
-        template <class T>
-        constexpr T make_mask(std::size_t len)
-        {
-            return ((static_cast<T>(1) << len)-1);
-        }       
+        uint16_t swapBinary(uint16_t value)  const;   
 };
+
+template <typename T> static std::vector<T> tokenize(const std::string& toTokenize) 
+{
+    std::vector<T> out;
+    std::istringstream ss{ toTokenize };
+    out = std::vector<T>{ std::istream_iterator<T>{ss},std::istream_iterator<T>() };
+    return out;
+}
+
+template <class T> constexpr T makeMask(std::size_t len)
+{
+    return ((static_cast<T>(1) << len)-1);
+}    

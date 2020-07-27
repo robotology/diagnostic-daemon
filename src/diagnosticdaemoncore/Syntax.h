@@ -29,7 +29,6 @@ namespace confsyntax
     static constexpr char destination[]{"destination"};
     static constexpr char rules[]{"rules"};
     static constexpr char synchtime[]{"synchtime"};
-    
 
     static constexpr char udpbroadcast[]{"udp-broadcast"};
     static constexpr char udp[]{"udp"};

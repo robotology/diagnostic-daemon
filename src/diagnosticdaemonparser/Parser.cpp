@@ -20,23 +20,36 @@
 
 Parser::Parser()
 {
+}
+
+bool Parser::start()
+{
     pugi::xml_parse_result result = doc_.load_file(msgroot_);
     if(result.status == pugi::status_file_not_found)
     {
         Log(Severity::error)<<"Parser config.xml not found"<<std::endl;
-        return ;
+        return false;
     }
     if(result.status != pugi::status_ok)
     {
         Log(Severity::error)<<"Parser config.xml reading"<<std::endl;
-        return ;
+        return false;
     }
 
     includePreparser();
+    started_=true;
+    return true;
 }
 
 std::list<std::tuple<std::string,std::string,std::string>> Parser::parse(const std::vector<uint8_t>& bytetData,pugi::xml_document& xmlSupportDoc/*supporto e debug*/)
 {
+    if(!started_)
+    {
+        Log(Severity::error)<<"Parser not started"<<std::endl;
+        return std::list<std::tuple<std::string,std::string,std::string>>();
+    }
+
+
     std::list<std::tuple<std::string,std::string,std::string>> out;
     uint16_t byteindex{0};
     uint8_t indexbit{0};
@@ -54,6 +67,12 @@ std::list<std::tuple<std::string,std::string,std::string>> Parser::parse(const s
 
 bool Parser::parse(const std::string& xmlStr,std::vector<uint8_t>& bytetData)
 {
+    if(!started_)
+    {
+        Log(Severity::error)<<"Parser not started"<<std::endl;
+        return false;
+    }
+
     pugi::xml_document doc;
     doc.load_string(xmlStr.c_str());
     return parse(doc,bytetData);
@@ -61,10 +80,14 @@ bool Parser::parse(const std::string& xmlStr,std::vector<uint8_t>& bytetData)
 
 bool Parser::parse(const pugi::xml_document& xmlDoc,std::vector<uint8_t>& bytetData)
 {
-    BitStream out(maxMsgLen_);
+    if(!started_)
+    {
+        Log(Severity::error)<<"Parser not started"<<std::endl;
+        return false;
+    }
 
-    //pugi::xml_node params = xmlDoc.child(udpheader_);
-    
+    BitStream out(maxMsgLen_);
+   
     std::string toFind{"//"};
     toFind+=parsersyntax::param;
     const pugi::xpath_node_set params = xmlDoc.select_nodes(toFind.c_str());
@@ -108,7 +131,7 @@ bool Parser::checkIfParamIsToBeDeleted(const pugi::xml_node& node)
 
         if((attr = node.attribute(parsersyntax::conditionorvaluekey)))
         {
-            conditionalvalues=(tokenize(attr.value()));
+            conditionalvalues=(tokenize<std::string>(attr.value()));
         }
         else
         {
@@ -221,7 +244,7 @@ void Parser::fillNodeWithValue(std::list<std::tuple<std::string,std::string,std:
     {
            uint8_t tmp=bytetData[byteindex];
                 tmp=(tmp>>(8-bitindex-size));
-                uint8_t mask=make_mask<uint8_t>(size);
+                uint8_t mask=makeMask<uint8_t>(size);
                 tmp=tmp&mask;
                 node.attribute(parsersyntax::valuekey)=tmp;
 
@@ -282,16 +305,6 @@ void Parser::fillNodeWithValue(std::list<std::tuple<std::string,std::string,std:
             break;
             default:
             Log(Severity::error)<<"Error in byte assign:"<<size<<std::endl;
-            /*
-            {
-                node.attribute(parsersyntax::valuekey)="..";
-                for(int t=0;t<size/8;++t)
-                {
-                    ss<<(char)(bytetData[byteindex]);                
-                    byteindex++;
-                }
-                break;
-            }*/
         }
     }
 

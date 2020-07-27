@@ -7,7 +7,7 @@
 
 # @author Luca Tricerri <luca.tricerri@iit.it>
 
-project(log)
+project(diagnosticdaemonlog)
 
 set(LogSrc  Log.cpp
                         )

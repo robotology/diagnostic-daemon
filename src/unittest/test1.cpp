@@ -5,6 +5,8 @@
 
 TEST(CreateTimeMsg, test001) {
     Parser parser;
+    bool check=parser.start();
+    EXPECT_EQ(check,true);
 
     //**Get xml for roptime msg
     std::stringstream ssIn;
@@ -16,7 +18,7 @@ TEST(CreateTimeMsg, test001) {
 
     //**xml to bit
     std::vector<uint8_t> out;
-    bool check=parser.parse(ssIn.str().c_str(),out);
+    check=parser.parse(ssIn.str().c_str(),out);
     EXPECT_EQ(check,true);
 
     std::vector<uint8_t> in=out;
