@@ -123,7 +123,7 @@ jobs:
         mkdir -p build
         cd build
         cmake -DCMAKE_PREFIX_PATH=${GITHUB_WORKSPACE}/install -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-              -DCMAKE_INSTALL_PREFIX=${GITHUB_WORKSPACE}/install COMPILE_WITHYARP_DEF:BOOL=ON  COMPILE_WITHUNITTEST:BOOL=ON ..
+              -DCMAKE_INSTALL_PREFIX=${GITHUB_WORKSPACE}/install -DCOMPILE_WITHYARP_DEF:BOOL=ON  -DCOMPILE_WITHUNITTEST:BOOL=ON ..
       env:
         # This is necessary only on macOS/homebrew, but on Linux it should be ignored
         Qt5_DIR: /usr/local/opt/qt5/lib/cmake/Qt5
@@ -136,7 +136,7 @@ jobs:
         mkdir -p build
         cd build
         cmake -A x64 -DCMAKE_TOOLCHAIN_FILE=${VCPKG_ROBOTOLOGY_ROOT}/scripts/buildsystems/vcpkg.cmake -DCMAKE_PREFIX_PATH=${GITHUB_WORKSPACE}/install \
-              -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_INSTALL_PREFIX=${GITHUB_WORKSPACE}/install  COMPILE_WITHYARP_DEF:BOOL=ON  COMPILE_WITHUNITTEST:BOOL=ON ..
+              -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_INSTALL_PREFIX=${GITHUB_WORKSPACE}/install  -DCOMPILE_WITHYARP_DEF:BOOL=ON  -DCOMPILE_WITHUNITTEST:BOOL=ON ..
     - name: Build
       shell: bash
       run: |
@@ -150,7 +150,12 @@ jobs:
       run: |
         cd build
         cmake --build . --config ${{ matrix.build_type }} --target install
-    
+    - name: Test
+      if: matrix.os == 'ubuntu-latest'
+      shell: bash
+      run: |
+        cd build/bin
+        ./DD_tst
     ## TODO
         # - name: Test
         # Workaround for https://github.com/robotology/idyntree/issues/694

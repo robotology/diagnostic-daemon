@@ -52,25 +52,3 @@ namespace confmessage
     static constexpr char rules[]{"rules"}; 
     
 }
-
-
-inline bool asBool(const std::string& name,const std::map<std::string,std::string>& attributes)
-{
-    //TODO add check    
-    bool tmp;
-    std::istringstream(attributes.at(name)) >> std::boolalpha >> tmp;
-    return tmp;
-}
-
-inline std::string asString(const std::string& name,const std::map<std::string,std::string>& attributes)
-{
-    //TODO add check
-    return attributes.at(name);
-}
-
-inline int asInt(const std::string& name,const std::map<std::string,std::string>& attributes)
-{
-    //TODO add check
-    auto str=attributes.at(name);
-    return std::stoi(str);
-}

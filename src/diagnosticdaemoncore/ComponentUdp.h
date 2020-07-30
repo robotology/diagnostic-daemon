@@ -26,6 +26,7 @@ public:
     void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint,Severity severity) override;
     void acceptMsg(std::string&,unsigned int ,udp::endpoint,Severity) override ;
 
+    std::array<uint8_t,maxMsgLenght_> getRxData() const;
 private:
 
     unsigned int rxport_{11000}; 
@@ -37,10 +38,9 @@ private:
     udp::endpoint senderEndpoint_;
     udp::endpoint receiverEndpoint_;
 
-    std::array<uint8_t,maxMsgLenght_> rxData_;
-
-    void handleReceiveFrom(const boost::system::error_code &error, size_t bytes_recvd);
     void handleSendTo(const boost::system::error_code &error, size_t bytes_sent);
+    void handleReceiveFrom(const boost::system::error_code &error, size_t bytes_recvd);
+    std::array<uint8_t,maxMsgLenght_> rxData_;
 
     void send(const std::array<uint8_t,maxMsgLenght_>& message,unsigned int size);
 
