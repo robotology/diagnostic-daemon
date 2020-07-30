@@ -3,6 +3,7 @@
 
 #include "ComponentUdp.h"
 #include "ConfigurationDepot.h"
+#include <chrono>
 
 TEST(ComponentUdp, test002) {
     boost::asio::io_service ios;
@@ -13,7 +14,7 @@ TEST(ComponentUdp, test002) {
     std::string tosend{"test\n"};
     sender.acceptMsg(tosend,4,udp::endpoint(),Severity::none);
 
-    boost::asio::chrono::steady_clock::duration timeout{100000};
+    std::chrono::steady_clock::duration timeout{100000};
     ios.run_for(timeout);
 
     auto msg=receiver.getRxData();
