@@ -78,7 +78,7 @@ make
 If you also need the YarpLogger connection make sure to select in ccmake the following:
 
 ```                                       
-COMPILE_WITHYARP                 ON                                                     
+COMPILE_WITHYARP_DEF                 ON                                                     
 ```                                                
 
 In this case, Yarp should be compiled and installed.  
