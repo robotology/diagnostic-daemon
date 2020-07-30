@@ -150,17 +150,9 @@ jobs:
       run: |
         cd build
         cmake --build . --config ${{ matrix.build_type }} --target install
-    - name: Test
-      if: matrix.os == 'ubuntu-latest'
-      shell: bash
-      run: |
-        cd build/bin
-        ./DD_tst
-    ## TODO
-        # - name: Test
-        # Workaround for https://github.com/robotology/idyntree/issues/694
-        # if: matrix.os == 'ubuntu-latest'
-        # shell: bash
-        # run: |
-        #  cd build
-        #  ctest --output-on-failure -C ${{ matrix.build_type }} . 
+    # - name: Test
+    #  if: matrix.os == 'ubuntu-latest'
+    #  shell: bash
+    #  run: |
+    #    cd build/bin
+    #    ./DD_tst
