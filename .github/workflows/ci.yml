@@ -136,7 +136,7 @@ jobs:
         mkdir -p build
         cd build
         cmake -A x64 -DCMAKE_TOOLCHAIN_FILE=${VCPKG_ROBOTOLOGY_ROOT}/scripts/buildsystems/vcpkg.cmake -DCMAKE_PREFIX_PATH=${GITHUB_WORKSPACE}/install \
-              -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_INSTALL_PREFIX=${GITHUB_WORKSPACE}/install  -DCOMPILE_WITHYARP_DEF:BOOL=ON  -DCOMPILE_WITHUNITTEST:BOOL=ON ..
+              -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_INSTALL_PREFIX=${GITHUB_WORKSPACE}/install  -DCOMPILE_WITHYARP_DEF:BOOL=ON  -DCOMPILE_WITHUNITTEST:BOOL=OFF ..
     - name: Build
       shell: bash
       run: |
