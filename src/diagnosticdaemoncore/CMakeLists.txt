@@ -49,14 +49,14 @@ target_link_libraries(${PROJECT_NAME}  ${Common_LIBRARIES}
                                        diagnosticdaemonparser
                                        icub_firmware_shared::embot
                                        icub_firmware_shared::embobj
-                                       Boost::system
+                                       Boost::boost
                                        )
 
 if (COMPILE_WITHYARP_DEF)
   target_compile_definitions(${PROJECT_NAME} PRIVATE -DCOMPILE_WITHYARP_DEF)
   set(YARP_MINIMUM_REQUIRED_VERSION 3.0.102)
   find_package(YARP REQUIRED COMPONENTS os conf)
-  target_link_libraries(${PROJECT_NAME} YARP::YARP_os YARP::YARP_conf YARP::YARP_init)
+  target_link_libraries(${PROJECT_NAME} YARP::YARP_os YARP::YARP_conf YARP::YARP_init Boost::boost)
 endif()
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
