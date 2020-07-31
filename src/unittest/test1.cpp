@@ -3,7 +3,7 @@
 #include "Parser.h"
 #include "pugixml.hpp"
 
-TEST(CreateTimeMsg, test001) {
+TEST(Parser, test001) {
     Parser parser;
     bool check=parser.start();
     EXPECT_EQ(check,true);

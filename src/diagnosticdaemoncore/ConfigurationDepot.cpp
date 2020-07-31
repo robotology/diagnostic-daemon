@@ -144,3 +144,26 @@ void ConfigurationDepot::mapAttributeToXml(pugi::xml_node& node,const std::map<s
         mynode.append_attribute(current.first.c_str()) = current.second.c_str();
     }
 }
+
+bool ConfigurationDepot::addComponent(Component_sptr component)
+{
+    if(component)
+    {
+        depot_.push_back(component);
+        Log(Severity::debug)<<"Component added"<<std::endl;
+        return true;
+    }
+    Log(Severity::error)<<"Empty component"<<std::endl;
+    return false;
+}
+
+bool ConfigurationDepot::clearComponent()
+{
+    depot_.clear();
+    return true;
+}
+
+ConfigurationDepot::~ConfigurationDepot()
+{
+    Log(Severity::debug)<<"ConfigurationDepot destroyed:"<<std::endl;
+}

@@ -2,7 +2,8 @@ project(DD_tst)
 
 set(SOURCES main.cpp
             test1.cpp
-            test2.cpp)
+            test2.cpp
+            test3.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)

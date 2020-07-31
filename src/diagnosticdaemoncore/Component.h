@@ -28,7 +28,7 @@ class Component
 
     public:
         Component(const std::map<std::string,std::string>& attributes,ConfigurationDepot&);
-        virtual ~Component(){}
+        virtual ~Component();
 
         virtual void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint,Severity severity)=0;
         virtual void acceptMsg(std::string&,unsigned int ,udp::endpoint,Severity){};
@@ -40,7 +40,7 @@ class Component
         ConfigurationDepot& depot_;
         const std::map<std::string,std::string> parametersMap_;
 
-        std::string name_;
+        std::string name_{""};
         std::string type_;
         bool enable_;
         std::string mode_;

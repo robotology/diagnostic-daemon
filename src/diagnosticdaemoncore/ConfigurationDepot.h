@@ -27,7 +27,10 @@ class ConfigurationDepot
 {
     public:
         ConfigurationDepot(boost::asio::io_service &io_service);
+        ~ConfigurationDepot();
         bool createConfiguration();
+        bool addComponent(Component_sptr toAdd);
+        bool clearComponent();
 
         template <typename T> bool route(T&,unsigned int size,const std::string& destination,udp::endpoint senderEndPoint,Severity severity);
 

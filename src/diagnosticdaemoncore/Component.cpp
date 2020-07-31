@@ -23,3 +23,8 @@ const std::map<std::string,std::string> Component::getParameterMap() const
     return parametersMap_;
 }
 
+Component::~Component()
+{
+    Log(Severity::debug)<<"Component destroyed:"<<name_<<std::endl;
+}
+

@@ -20,7 +20,7 @@ class ComponentConsole: public Component
 {
     public:
         ComponentConsole(const std::map<std::string,std::string>& attributes,ConfigurationDepot& depot);
-        virtual ~ComponentConsole();
+        ~ComponentConsole() override;
 
         void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint,Severity severity) override;
         void acceptMsg(std::string& msg,unsigned int size,udp::endpoint senderEndPoint,Severity severity) override;

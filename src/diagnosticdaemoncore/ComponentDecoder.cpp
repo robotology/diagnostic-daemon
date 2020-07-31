@@ -41,3 +41,4 @@ void ComponentDecoder::acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned
     }
     decoder_.clear();
 }
+

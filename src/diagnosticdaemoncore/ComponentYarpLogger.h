@@ -28,14 +28,13 @@ class ComponentYarpLogger: public Component
 {
     public:
         ComponentYarpLogger(const std::map<std::string,std::string>& attributes,ConfigurationDepot& depot);
-        virtual ~ComponentYarpLogger() {}
 
         void acceptMsg(std::array<uint8_t,maxMsgLenght_>& msg,unsigned int size,udp::endpoint senderEndPoint,Severity severity) override;
         void acceptMsg(std::string& msg,unsigned int size,udp::endpoint senderEndPoint,Severity severity) override;
 
     private:
         bool active_{true};
-        void forewardtoYarpLogger(const std::string& data,Severity severity/*,embot::prot::eth::diagnostic::TYP severity*/); 
+        void forewardtoYarpLogger(const std::string& data,Severity severity); 
 };
 
 using ComponentYarpLogger_sptr=std::shared_ptr<ComponentYarpLogger>;
