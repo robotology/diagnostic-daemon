@@ -32,10 +32,10 @@ void ComponentYarpLogger::acceptMsg(std::array<uint8_t,maxMsgLenght_>&,unsigned 
     Log(Severity::error)<<"Todo"<<std::endl;
 }
 
+
+#ifdef COMPILE_WITHYARP_DEF
 void ComponentYarpLogger::forewardtoYarpLogger(const std::string& data,Severity severity)
 {
-    severity=severity;
-#ifdef COMPILE_WITHYARP_DEF
     switch (severity)
     {
         case Severity::info:
@@ -55,5 +55,8 @@ void ComponentYarpLogger::forewardtoYarpLogger(const std::string& data,Severity 
             yFatal()<<data;;
             break;
     }
-#endif    
+
 }
+#else
+void ComponentYarpLogger::forewardtoYarpLogger(const std::string& ,Severity ){};
+#endif    
