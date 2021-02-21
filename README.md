@@ -266,3 +266,11 @@ Choose the roptime.xml file. In the file is described the sent message. Changing
 On the screen, a consol log is always present.
 The application log can be written to file by adding, to the execution folder, an empty file called **pleaselogtofile**.
 In this case, it will appear a log.log file with the logs inside.
+
+## 👨🏻‍💻 Maintainers
+This repository is maintained by:
+
+| | |
+|:---:|:---:|
+| [<img src="https://github.com/triccyx.png" width="40">](https://github.com/triccyx) | [@triccyx](https://github.com/triccyx) |
+
