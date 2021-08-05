@@ -68,7 +68,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
   set(Common_LIBRARIES)
 else ()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
-  set(CMAKE_EXE_LINKER_FLAGS  "-rdynamic")
+  set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -rdynamic")
   set(Common_LIBRARIES dl pthread stdc++fs)
 endif ()
 
